@@ -1829,3 +1829,202 @@ h2 {
     margin-bottom: 30px;
   }
 }
+
+/* Blend the original logo into dark surfaces without altering its geometry. */
+.brand-logo {
+  display: block;
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: invert(1) hue-rotate(180deg) contrast(1.08);
+  mix-blend-mode: screen;
+}
+.wordmark-footer .brand-logo {
+  width: 88px;
+  height: 88px;
+}
+.statement-brand {
+  display: block;
+  width: 115px;
+  height: auto;
+  margin-top: 35px;
+  filter: invert(1) hue-rotate(180deg) contrast(1.08);
+  mix-blend-mode: screen;
+}
+.about-brand {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  width: 115px;
+  height: auto;
+  z-index: 2;
+  filter: invert(1) hue-rotate(180deg) contrast(1.08);
+  mix-blend-mode: screen;
+}
+.visit {
+  background: #1b3327;
+  color: var(--paper);
+}
+.visit h2 {
+  color: var(--paper);
+}
+.visit h2 em {
+  color: #bed0b5;
+}
+.visit-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  gap: 65px;
+  align-items: start;
+}
+.visit-gallery,
+.visit-directions {
+  min-width: 0;
+}
+.visit-photo {
+  margin: 0;
+}
+.visit-photo > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1024 / 535;
+  object-fit: contain;
+}
+.visit-photo figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-block: 17px;
+  color: #d5dfcf;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+.visit-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.visit-thumbnails button {
+  padding: 4px;
+  border: 1px solid transparent;
+  background: transparent;
+  min-width: 0;
+  min-height: 60px;
+}
+.visit-thumbnails button[aria-pressed="true"] {
+  border-color: #d7e5ce;
+  background: #d7e5ce17;
+}
+.visit-thumbnails button:hover {
+  border-color: #82967a;
+}
+.visit-thumbnails img {
+  display: block;
+  width: 100%;
+  height: 45px;
+  object-fit: cover;
+}
+.visit-thumbnails span {
+  display: block;
+  margin-top: 7px;
+  color: #e0e9db;
+  font-size: 10px;
+}
+.visit-directions h3 {
+  font-family: var(--display);
+  font-size: 43px;
+  margin: 20px 0 15px;
+}
+.visit-directions p:not(.eyebrow) {
+  font-size: 13px;
+  line-height: 1.85;
+  color: #d5dfcf;
+  margin-bottom: 24px;
+}
+.visit-directions .visit-building {
+  color: var(--paper);
+  font-size: 15px;
+}
+.visit-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+}
+.visit-steps li {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding-block: 14px;
+  border-top: 1px solid #80957566;
+  color: #e2eadd;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.visit-steps li > span {
+  color: #bed0b5;
+  font-size: 10px;
+}
+.visit-map-code {
+  display: block;
+  width: fit-content;
+  color: #d5dfcf;
+  font-size: 11px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  margin-top: 20px;
+}
+@media (max-width: 1100px) {
+  .visit-grid {
+    gap: 35px;
+  }
+  .visit-directions h3 {
+    font-size: 36px;
+  }
+}
+@media (max-width: 850px) {
+  .brand-logo {
+    width: 60px;
+    height: 60px;
+  }
+  .visit-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 45px;
+  }
+  .visit-directions {
+    max-width: 560px;
+  }
+}
+@media (max-width: 600px) {
+  .brand-logo {
+    width: 56px;
+    height: 56px;
+  }
+  .wordmark-footer .brand-logo {
+    width: 64px;
+    height: 64px;
+  }
+  .statement-brand {
+    width: 90px;
+    margin-top: 25px;
+  }
+  .about-brand {
+    top: 22px;
+    right: 22px;
+    width: 98px;
+  }
+  .visit-thumbnails {
+    grid-template-columns: repeat(7, 65px);
+    overflow-x: auto;
+    padding: 5px 4px 12px;
+    scroll-snap-type: x proximity;
+  }
+  .visit-thumbnails button {
+    scroll-snap-align: start;
+  }
+  .visit-directions h3 {
+    font-size: 39px;
+  }
+}

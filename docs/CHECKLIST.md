@@ -1,6 +1,6 @@
 # Client website checklist — content and review map
 
-Source: the uploaded **Website Checklist.pdf** for **RK NJOGU ADVOCATES**. The two supplied design files are style references; the website checklist is the source for firm facts. This map preserves every supplied requirement and distinguishes content ready for implementation from items requiring client input.
+Source: the latest uploaded **Website Checklist.pdf**, including its embedded logo, for **RK NJOGU ADVOCATES**. The two supplied design files are style references; the website checklist is the source for firm facts. This map preserves every supplied requirement and distinguishes content ready for implementation from items requiring client input.
 
 Implementation should be checked against this document before publication. A listed placement is an acceptance requirement, not a claim that an external service or client asset has already been supplied.
 
@@ -11,7 +11,7 @@ Implementation should be checked against this document before publication. A lis
 | Firm name | R. K. Njogu & Company Advocates | Wordmark, page title, overview, footer, and structured business data where used. |
 | Tagline | Legal Solutions Made Practical | Lead hero messaging; preserve the wording. |
 | Brand colours | Green / White / Grey / Black | Forest/near-black framing, ivory/white reading sections, grey supporting text; no financial-reference copper/purple palette. |
-| High-resolution logo | No asset supplied | Use a provisional typographic wordmark/monogram; request the approved logo before final brand sign-off. |
+| Logo | Embedded 291 × 290px JPEG; explicitly approved for use by the user. | Original extracted image in `public/firm-logo.jpg`; header, footer, supporting firm sections, favicon and sharing image. Dark-surface styling removes the visible white box as requested. |
 | About the firm | Kenyan law firm providing practical, commercially sound and responsive legal solutions to individuals, businesses and organizations. | Firm overview, concise hero summary, and suitable metadata. |
 | Approach | Translates legal issues into clear, workable solutions, taking into account the legal, commercial and practical realities of each matter. | Overview and approach copy. |
 | Practice overview | Commercial and corporate law, land and property, family law, dispute resolution, litigation and debt recovery. Negotiation, ADR or litigation is selected according to the circumstances and objectives of each matter. | Preserve in overview/approach; detailed service list below contains all nine supplied practice areas. |
@@ -70,12 +70,12 @@ Use meaningful accessible names for icon links. If external links open a new tab
 
 | Item | What the checklist supplies | Current handling / next input |
 | --- | --- | --- |
-| Logo | The high-resolution logo field is blank. | Provisional wordmark; obtain approved SVG or high-resolution transparent artwork. |
+| Higher-resolution logo master (optional) | The embedded logo is 291 × 290px. | The source image is preserved unchanged; its dark-surface presentation uses CSS blending. A vector master would support future larger-format use. |
 | Client testimonials | Marked **TBA**. Possible sources listed: Afriavo Orchards Ltd, Apple Orchards Ltd, Femuro Management Ltd, Outrival Human Resource Services Ltd, Google Reviews. | Do not publish fabricated quotes, logos, or implied endorsements. Obtain approved quotation text, attribution and permission; review any imported Google content and usage terms. |
 | Blog / news | No copy supplied. | No invented article bylines or publication dates. Any new educational copy is a draft for legal/editorial review. |
 | Special features | No feature is specified. | Use useful standard navigation, service discovery, and contact tools; avoid promising booking/payment features that lack integration. |
 | Advocate biographies and portraits | Not included. | No invented advocates, credentials, experience, or headshots. Obtain names, practising roles, approved biographies, and portraits if a team section is desired. |
-| Office photography | Not included. | `threshold.webp` and portrait-format `perspective.webp` are generated decorative architectural compositions. Neither depicts the firm's actual office, a courthouse, an advocate, or client premises. |
+| Office photography | Seven aerial approach/area photos supplied separately in `Downloads.zip`; no identified office-building photograph. | The seven original JPEGs appear in the Kamulu location gallery with attribution intact and a directions link using the supplied plus code. `threshold.webp` and `perspective.webp` remain decorative conceptual architecture; neither depicts the actual office. |
 | Email/form delivery | No provider, endpoint or secure delivery configuration supplied. | Direct email and WhatsApp contact are available. A form that prepares a draft must clearly say it opens the user's email app or WhatsApp; it cannot claim delivery. Configure and test a server endpoint before enabling a real sent state. |
 | Privacy and legal publication copy | Not included. | Ensure any drafted policy reflects actual hosting, data handling and integrations; obtain client review before publication. |
 | Domain hosting / final deployment | Checklist provides the domain in an email address, but no hosting configuration. | The local/cloud preview can be complete. Confirm destination and publish only through the authorized deployment workflow. |
@@ -93,4 +93,20 @@ Use meaningful accessible names for icon links. If external links open a new tab
 - Mobile and desktop layouts have no unintended horizontal overflow.
 - Motion works with CSS timelines and their passive-event fallback; reduced motion disables scrub effects and restores the three approach cards to normal flow. Browser scroll performance has a reproducible report tied to the tested revision.
 
-The missing logo, approved testimonial/article material, biography assets, delivery backend and deployment settings are client inputs or integration work. They do not prevent implementing and validating the current React site.
+All populated firm-information fields are implemented, including the supplied logo, complete overview, mission, vision, nine practice scopes, contacts, address, hours, map and social profiles. Testimonials remain TBA; blog/news and special-feature fields are blank. Approved testimonial/article material, biography assets and a delivery backend remain separate client inputs or integration work. GitHub Pages is the user-authorized publication target.
+
+## Logo provenance
+
+Extracted the original embedded JPEG from page 1 of the latest checklist without redrawing, recolouring or resampling. SHA-256: `f061ed9d676638b0348965ca3e7d7653413d8473e532d5ad80a126896ba5d2ba`.
+
+## Kamulu photo mapping
+
+| Gallery image | Original ZIP filename |
+| --- | --- |
+| `public/kamulu/view-01.jpg` | `1000685349.jpg` |
+| `public/kamulu/view-02.jpg` | `1000685350.jpg` |
+| `public/kamulu/view-03.jpg` | `1000685344.jpg` |
+| `public/kamulu/view-04.jpg` | `1000685345.jpg` |
+| `public/kamulu/view-05.jpg` | `1000685347.jpg` |
+| `public/kamulu/view-06.jpg` | `1000685342.jpg` |
+| `public/kamulu/view-07.jpg` | `1000685346.jpg` |

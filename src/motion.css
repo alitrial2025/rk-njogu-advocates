@@ -48,7 +48,6 @@ body.motion-fallback
     .kinetic-line,
     .practice-card > .card-top,
     .practice-card > .practice-description,
-    .practice-card > .practice-link,
     .insight-art,
     .step-illustration svg,
     .step-trace
@@ -198,9 +197,7 @@ body.motion-fallback .statement-word::after {
       animation-name: kinetic-backward;
     }
 
-    body.motion-ready
-      .practice-card
-      > :is(.card-top, .practice-description, .practice-link) {
+    body.motion-ready .practice-card > :is(.card-top, .practice-description) {
       animation: practice-slide-in linear both;
       animation-timeline: --practice-progress;
       animation-range: entry 0% cover 32%;
@@ -208,7 +205,7 @@ body.motion-fallback .statement-word::after {
 
     body.motion-ready
       .practice-card:focus-within
-      > :is(.card-top, .practice-description, .practice-link) {
+      > :is(.card-top, .practice-description) {
       animation: none;
       transform: none;
     }

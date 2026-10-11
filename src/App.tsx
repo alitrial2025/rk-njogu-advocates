@@ -25,6 +25,7 @@ import {
   practiceAreas,
   faqs,
   guides,
+  locationPhotos,
   type PracticeArea,
   type LegalGuide,
 } from "./data";
@@ -82,9 +83,13 @@ function Wordmark({ footer = false }: { footer?: boolean }) {
       href="#home"
       aria-label="R. K. Njogu & Company Advocates — home"
     >
-      <span className="brand-seal" aria-hidden="true">
-        R<span>K</span>
-      </span>
+      <img
+        className="brand-logo"
+        src={`${import.meta.env.BASE_URL}firm-logo.jpg`}
+        alt=""
+        width="291"
+        height="290"
+      />
       <span>
         <span className="brand-name">R. K. NJOGU</span>
         <span className="brand-subtitle">& COMPANY ADVOCATES</span>
@@ -152,6 +157,7 @@ export default function App() {
   const [practice, setPractice] = useState("");
   const [draft, setDraft] = useState<Draft | null>(null);
   const [copied, setCopied] = useState(false);
+  const [locationPhoto, setLocationPhoto] = useState(0);
   const menuButton = useRef<HTMLButtonElement>(null);
   const draftRef = useRef<HTMLDivElement>(null);
 
@@ -322,9 +328,14 @@ export default function App() {
           <div className="container statement-grid">
             <div className="statement-label">
               <span className="eyebrow light">A PRACTICAL PERSPECTIVE</span>
-              <span className="statement-symbol" aria-hidden="true">
-                R/K
-              </span>
+              <img
+                className="statement-brand"
+                src={`${import.meta.env.BASE_URL}firm-logo.jpg`}
+                alt=""
+                width="291"
+                height="290"
+                loading="lazy"
+              />
             </div>
             <div>
               <h2
@@ -459,13 +470,14 @@ export default function App() {
                   height="1448"
                   loading="lazy"
                 />
-                <div className="about-orbit" aria-hidden="true">
-                  <span className="orbit-r">R</span>
-                  <span className="orbit-k">K</span>
-                  <svg viewBox="0 0 300 300">
-                    <circle cx="150" cy="150" r="140" />
-                  </svg>
-                </div>
+                <img
+                  className="about-brand"
+                  src={`${import.meta.env.BASE_URL}firm-logo.jpg`}
+                  alt=""
+                  width="291"
+                  height="290"
+                  loading="lazy"
+                />
                 <div className="about-art-inner">
                   <span className="eyebrow light">OUR GUIDING PRINCIPLE</span>
                   <blockquote>
@@ -489,9 +501,10 @@ export default function App() {
                 <br />
                 <em>A practical partner.</em>
               </h2>
-              <p className="lead">{firm.description}</p>
-              <p>{firm.about[1]}</p>
-              <p>{firm.about[2]}</p>
+              <p className="lead">{firm.about[0]}</p>
+              {firm.about.slice(1).map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
               <div className="mission-vision">
                 <div>
                   <h3>Our mission</h3>
@@ -738,6 +751,115 @@ export default function App() {
         </section>
 
         <section
+          className="visit section-pad"
+          id="visit"
+          aria-labelledby="visit-title"
+        >
+          <div className="container">
+            <div className="section-heading" data-reveal>
+              <div>
+                <p className="eyebrow light">05 / ROOTED IN KAMULU</p>
+                <h2 id="visit-title">
+                  Find your way here.
+                  <br />
+                  <em>We’re in Kamulu.</em>
+                </h2>
+              </div>
+              <p className="section-intro inverse-copy">
+                Along Kangundo Road, serving Nairobi, Machakos and clients
+                across Kenya.
+              </p>
+            </div>
+            <div className="visit-grid">
+              <div className="visit-gallery" data-reveal>
+                <figure className="visit-photo">
+                  <img
+                    src={`${import.meta.env.BASE_URL}kamulu/${locationPhotos[locationPhoto].file}`}
+                    alt={locationPhotos[locationPhoto].alt}
+                    width="1024"
+                    height="535"
+                    loading="lazy"
+                  />
+                  <figcaption aria-live="polite">
+                    <span>Kamulu and its surroundings</span>
+                    <span>
+                      {String(locationPhoto + 1).padStart(2, "0")} / 07
+                    </span>
+                  </figcaption>
+                </figure>
+                <div
+                  className="visit-thumbnails"
+                  role="group"
+                  aria-label="Kamulu location photos"
+                >
+                  {locationPhotos.map((photo, index) => (
+                    <button
+                      key={photo.file}
+                      type="button"
+                      aria-label={`View Kamulu photo ${index + 1} of ${locationPhotos.length}`}
+                      aria-pressed={locationPhoto === index}
+                      onClick={() => setLocationPhoto(index)}
+                    >
+                      <img
+                        src={`${import.meta.env.BASE_URL}kamulu/${photo.file}`}
+                        alt=""
+                        width="1024"
+                        height="535"
+                        loading="lazy"
+                      />
+                      <span aria-hidden="true">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="visit-directions" data-reveal>
+                <p className="eyebrow light">OUR OFFICE</p>
+                <h3>Brettonwoods Square.</h3>
+                <p className="visit-building">
+                  Cooperative Bank Building
+                  <br />
+                  2nd Floor, Suite BW-213
+                </p>
+                <p>
+                  The photographs show the surrounding area. Open the map for
+                  the office location and a route from where you are.
+                </p>
+                <ol className="visit-steps">
+                  <li>
+                    <span>01</span>Head to Kamulu along Kangundo Road.
+                  </li>
+                  <li>
+                    <span>02</span>Find Brettonwoods Square (Cooperative Bank
+                    Building).
+                  </li>
+                  <li>
+                    <span>03</span>Visit the 2nd Floor, Suite BW-213.
+                  </li>
+                </ol>
+                <a
+                  className="button button-light"
+                  href="https://www.google.com/maps/dir/?api=1&destination=P397%2B2G%20Kamulu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Plan your route
+                </a>
+                <a
+                  className="visit-map-code"
+                  href={firm.maps.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Map location: {firm.maps.plusCode}
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
           className="contact section-pad"
           id="contact"
           aria-labelledby="contact-title"
@@ -745,7 +867,7 @@ export default function App() {
           <div className="container">
             <div className="section-heading" data-reveal>
               <div>
-                <p className="eyebrow">05 / LET’S TALK</p>
+                <p className="eyebrow">06 / LET’S TALK</p>
                 <h2 id="contact-title">
                   Your next chapter.
                   <br />
@@ -1003,6 +1125,7 @@ export default function App() {
               <a href="#practice">Practice areas</a>
               <a href="#approach">Our approach</a>
               <a href="#insights">Insights</a>
+              <a href="#visit">Visit us in Kamulu</a>
               <a href="#contact">Contact</a>
             </div>
             <div>

@@ -37,9 +37,13 @@ See [docs/PERFORMANCE.md](docs/PERFORMANCE.md) for measured results and their li
 - `src/data.ts` contains firm facts, nine practice areas, FAQs and original educational guides.
 - `src/App.tsx` contains the service discovery, dialogs, consultation flow and page composition.
 - `src/styles.css` contains the base interface, form, dialog and responsive styles; `src/editorial.css` defines the chapter layouts and visual direction.
-- `src/useScrollMotion.ts` manages entrances, newly filtered content, keyboard focus and live motion preferences. `src/motion.css` defines scroll-scrubbed type, image/overlay drift, service/guide movement and SVG traces; `src/editorial.css` also defines the three-card sticky stack. Reduced motion disables these effects and restores the cards to normal flow.
+- `src/useScrollMotion.ts` manages entrances, newly filtered content, keyboard focus and live motion preferences. `src/motion.css` defines scroll-scrubbed type, image drift, service/guide movement and SVG traces; `src/editorial.css` also defines the three-card sticky stack. Reduced motion disables these effects and restores the cards to normal flow.
 - `src/scrollFallback.ts` supports browsers without CSS scroll timelines. Passive scroll events schedule a single animation frame, with geometry reads grouped before style writes. Scrolling stays native; no animation library, wheel interception or scroll-driven React render loop is used.
-- `public/threshold.webp` and the lazy-loaded `public/perspective.webp` (1086 × 1448px, 199,352 bytes) are original generated decorative architectural compositions. Neither depicts the firm's actual premises or an advocate. The wordmark remains provisional because the checklist contains no logo asset.
+- `public/threshold.webp` and the lazy-loaded `public/perspective.webp` (1086 × 1448px, 199,352 bytes) are original generated decorative architectural compositions. Neither depicts the firm's actual premises or an advocate.
+
+`public/firm-logo.jpg` preserves the logo embedded in the latest client checklist, used at the user’s request. The original 291 × 290px JPEG is unchanged; it appears in the header, footer, supporting compositions, favicon and sharing image. CSS screen blending removes its visible white background on green surfaces and presents the lettering in a light colour.
+
+`public/kamulu/` contains all seven user-supplied approach photographs, preserved as JPEGs. A manual gallery and map-directions link appear in the location chapter; images describe the surrounding area without claiming to identify the office building.
 
 Directional arrows are reserved for the hero action, email-draft action, back-to-top control and scroll cue. Service details use a plus symbol; other editorial/contact actions use underlined text.
 
@@ -47,7 +51,7 @@ The form prepares an email draft. It does not send enquiries, persist form value
 
 ## Before public launch
 
-Obtain the approved logo and review the educational guides, privacy notice and website terms with the firm. Testimonials remain unpublished because the checklist marks them TBA. Add approved team biographies or office photography only when supplied. Configure and test a delivery service if a server-backed form is wanted.
+Review the educational guides, privacy notice and website terms with the firm. Testimonials remain unpublished because the checklist marks them TBA. Add approved team biographies or office photography only when supplied. Configure and test a delivery service if a server-backed form is wanted.
 
 The GitHub Pages target is `https://alitrial2025.github.io/rk-njogu-advocates/`. The canonical and social image URLs point there. Verify the map pin and public holiday hours. If moving to a custom domain, update the canonical/social metadata and the build base.
 

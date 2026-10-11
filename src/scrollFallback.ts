@@ -173,7 +173,7 @@ export function startScrollFallback() {
     add(".kinetic-band", ".kinetic-line", "kinetic");
     add(
       ".practice-card",
-      ":scope > .card-top, :scope > .practice-description, :scope > .practice-link",
+      ":scope > .card-top, :scope > .practice-description",
       "practice",
     );
     add(".insight-card", ".insight-art", "insight");

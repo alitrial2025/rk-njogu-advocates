@@ -17,7 +17,7 @@ This document combines the two supplied references, **Origin Financial** (`DESIG
 | Typography | Light display weight; an occasional italic word | Clear serif/sans division; Inter for UI | Self-hosted Cormorant Garamond for display, Inter for body and UI. This retains contrast without relying on commercial reference fonts. |
 | Palette | Monochrome foundation plus many feature colours | One tightly controlled copper accent | Green, white, grey, and black, as specified by the client. Violet, cyan, copper, and gold are excluded from interface tokens. |
 | Reading surfaces | Occasional inverted light card | Continuous dark page | Ivory light sections hold service descriptions and contact details; dark hero, navigation, selected callout, and footer provide rhythm. Long legal copy benefits from a reading-friendly light surface. |
-| Shape | 8px controls and generous rounded cards | 10px cards, pill controls | Sharp or modest corners on structural surfaces, pill actions and filters, and deliberate arch silhouettes for the mobile hero and guide illustrations. The firm chapter uses a tall rectangular architectural photograph with a small R/K overlay. |
+| Shape | 8px controls and generous rounded cards | 10px cards, pill controls | Sharp or modest corners on structural surfaces, pill actions and filters, and deliberate arch silhouettes for the mobile hero and guide illustrations. The firm chapter uses a tall rectangular architectural photograph with the supplied firm logo. |
 | Structure | Clean surface steps and restrained elevation | Hairline borders and curated grids | Hairline rules, whitespace, and surface changes establish hierarchy. Subtle shadows help distinguish the moving firm image and overlapping approach cards; ordinary service rows remain flat. |
 | Conversion | Bright primary action | A scarce high-contrast primary action | One dominant consultation action per section; direct call, email, and WhatsApp paths support it. |
 | Motion | Atmospheric entrances and border traces | Quiet state changes and editorial emphasis | Masked headlines, image drift, opposed kinetic type, continuous service/guide motion, sticky card stacking, SVG traces, and a reading-progress rule express the user's stronger-animation direction. Native CSS timelines have an event-driven fallback; browser scrolling remains native. |
@@ -96,7 +96,7 @@ The firm chapter adds `public/perspective.webp`, a generated decorative architec
 
 Avoid gavels, scales-of-justice stock photography, generic handshakes, invented advocate portraits, financial dashboards, and awards. Actual office photography and approved advocate portraits can replace supporting artwork later. Use intrinsic image dimensions, suitable compression, and responsive loading. Reserve eager/high-priority loading for the hero artwork; defer below-fold imagery.
 
-The uploaded checklist does not include a high-resolution logo asset. A typographic firm wordmark and an original, clearly provisional monogram may support the current build. Replace these when the client supplies its approved logo; do not present a placeholder as an established identity.
+The latest checklist contains the firm’s approved logo, and the user explicitly requested its use. `public/firm-logo.jpg` is the original embedded JPEG extracted without alteration (291 × 290px, 6,975 bytes). Preserve its lettering, proportions and source image. At the user’s request, CSS inversion, hue rotation and screen blending remove the visible white rectangle on dark surfaces and give the lettering a light treatment without redrawing the mark. Use it in the navigation, footer, supporting firm artwork, favicon and sharing image; adjacent typeset text keeps the firm name readable at small sizes.
 
 ## Page composition and interactions
 
@@ -120,7 +120,7 @@ A dark statement chapter follows the hero: **“Law can be complex. Your next st
 
 A light sage/ivory firm chapter opens with large **“Clarity.”** and italic **“Confidence.”** lines that slide in opposite directions as the visitor scrolls. Their repeated outlined text is decorative and hidden from assistive technology.
 
-Below, the supplied description balances the portrait-format architectural photograph and its R/K overlay. The frame scrubs through tilt, scale and vertical drift; the photograph has an independent subtle parallax movement, while the overlay letters and circle also move. The visual wrapper is sticky on desktop and returns to normal flow on smaller screens. Present mission, vision and values without generic filler cards; preserve all supplied wording.
+Below, the supplied description balances the portrait-format architectural photograph and the supplied logo. The frame scrubs through tilt, scale and vertical drift; the photograph has an independent subtle parallax movement, with the logo moving as part of the frame. The visual wrapper is sticky on desktop and returns to normal flow on smaller screens. Present mission, vision and values without generic filler cards; preserve all supplied wording.
 
 ### Practice areas
 
@@ -148,6 +148,10 @@ Keep a consultation form short: name, contact information, practice area if help
 
 **Current integration boundary:** no server email provider or form endpoint has been supplied. A form may prepare a `mailto:` draft or open a chosen WhatsApp conversation, but its CTA and feedback must describe that action accurately. Never display “message sent” without a confirmed backend response. A secure server integration requires separate configuration and tested delivery.
 
+### Kamulu location
+
+The user supplied seven aerial approach photographs in `Downloads.zip`. Use the original JPEGs in a manual, keyboard-accessible gallery next to the verified office address. Preserve the images and their visible attribution. These are approach/area views, not photographs identifying the office building. A Google Maps directions action uses `P397+2G Kamulu`; three short directions restate only the checklist’s road, building and suite. Do not invent distances, turn-by-turn guidance or travel times. Lazy loading and intrinsic dimensions keep the gallery from shifting the page.
+
 ### Footer
 
 A dark footer closes the page with the wordmark, full contact routes, practice/location navigation, the supplied social links, office hours where useful, and a concise general-information notice. Do not ship dead privacy/terms links. Any drafted privacy content must describe the actual site's data handling and remain subject to client review before publication.
@@ -165,8 +169,8 @@ Preserve browser-native scrolling while delivering the user's requested expressi
 | Statement emphasis | Word-by-word ivory wipe over a readable green base using a section view timeline | All words remain readable before the wipe and without timeline support. |
 | Chapter/grid reveal | Approximately 700ms transform entrance, 32px travel; sibling delays around 80ms capped at 300ms | Controls stay readable/operable; focus reveals pending ancestors immediately; first-viewport content is not hidden waiting for an observer. |
 | Kinetic type | Clarity/Confidence lines move horizontally in opposite directions across section progress | Decorative text; stationary under reduced motion. |
-| Firm image and R/K overlay | Frame tilt/scale/drift, image parallax, moving letters and circle | Static image/overlay under reduced motion; decorative photograph has empty alt text. |
-| Service and guide interiors | Alternating service entry translation; guide artwork drift/tilt/scale follows progress | Focus stabilizes service controls; motion disabled under reduced motion. |
+| Firm image and logo | Frame tilt/scale/drift and independent image parallax | Static image and logo under reduced motion; decorative images have empty alt text. |
+| Service and guide interiors | Alternating service entry translation; guide artwork drift/tilt/scale follows progress | Service buttons remain stationary during focus and pointer activation; only heading/copy scrub. Motion is disabled under reduced motion. |
 | Approach cards and illustrations | Three offset sticky cards; SVG graphics turn and trace | Reduced motion restores normal flow and fully drawn static illustrations. |
 | Hover/focus | Short colour, underline or plus-symbol changes, approximately 150–300ms | Equivalent visible focus indication; no essential information appears only on hover. |
 

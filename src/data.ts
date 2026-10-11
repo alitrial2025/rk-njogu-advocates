@@ -7,7 +7,8 @@ export const firm = {
   about: [
     "R. K. Njogu & Company Advocates is a Kenyan law firm providing practical, commercially sound and responsive legal solutions to individuals, businesses and organizations.",
     "We translate legal issues into clear, workable solutions, taking into account the legal, commercial and practical realities of each matter.",
-    "Our approach draws on negotiation, alternative dispute resolution or litigation according to the circumstances and objectives of your matter. From our Kamulu office, we serve clients in Nairobi, Machakos and across Kenya.",
+    "Our practice covers commercial and corporate law, land and property, family law, dispute resolution, litigation and debt recovery, with an approach that uses negotiation, alternative dispute resolution or litigation according to the circumstances and objectives of each matter.",
+    "The Firm is committed to clarity, responsiveness, confidentiality and professional integrity, and serves clients in Nairobi, Machakos and across Kenya from its office in Kamulu.",
   ],
   values: [
     {
@@ -213,6 +214,37 @@ export const practiceAreas = [
 ] as const;
 
 export type PracticeArea = (typeof practiceAreas)[number];
+
+export const locationPhotos = [
+  {
+    file: "view-01.jpg",
+    alt: "Aerial view of the road through the Kamulu area and the buildings alongside it.",
+  },
+  {
+    file: "view-02.jpg",
+    alt: "The road approaching Kamulu with neighbourhoods and green spaces on either side.",
+  },
+  {
+    file: "view-03.jpg",
+    alt: "A wide aerial view of buildings, roads and open land around Kamulu.",
+  },
+  {
+    file: "view-04.jpg",
+    alt: "Neighbourhood roads and homes in the area surrounding Kamulu.",
+  },
+  {
+    file: "view-05.jpg",
+    alt: "A panoramic view of the Kamulu surroundings and horizon.",
+  },
+  {
+    file: "view-06.jpg",
+    alt: "The road and roadside buildings in the supplied Kamulu approach photograph.",
+  },
+  {
+    file: "view-07.jpg",
+    alt: "A closer aerial view of the main road and roadside buildings in the Kamulu area.",
+  },
+] as const;
 
 export const faqs = [
   {
