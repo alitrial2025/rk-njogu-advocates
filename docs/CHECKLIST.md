@@ -75,7 +75,7 @@ Use meaningful accessible names for icon links. If external links open a new tab
 | Blog / news | No copy supplied. | No invented article bylines or publication dates. Any new educational copy is a draft for legal/editorial review. |
 | Special features | No feature is specified. | Use useful standard navigation, service discovery, and contact tools; avoid promising booking/payment features that lack integration. |
 | Advocate biographies and portraits | Not included. | No invented advocates, credentials, experience, or headshots. Obtain names, practising roles, approved biographies, and portraits if a team section is desired. |
-| Office photography | Not included. | Original architectural artwork is decorative and must not be captioned as the firm's office. |
+| Office photography | Not included. | The original generated conceptual limestone-colonnade photograph is decorative and must not be captioned as the firm's actual office, a courthouse, or client premises. |
 | Email/form delivery | No provider, endpoint or secure delivery configuration supplied. | Direct email and WhatsApp contact are available. A form that prepares a draft must clearly say it opens the user's email app or WhatsApp; it cannot claim delivery. Configure and test a server endpoint before enabling a real sent state. |
 | Privacy and legal publication copy | Not included. | Ensure any drafted policy reflects actual hosting, data handling and integrations; obtain client review before publication. |
 | Domain hosting / final deployment | Checklist provides the domain in an email address, but no hosting configuration. | The local/cloud preview can be complete. Confirm destination and publish only through the authorized deployment workflow. |

@@ -29,6 +29,7 @@ import {
   type PracticeArea,
   type LegalGuide,
 } from "./data";
+import { useScrollMotion } from "./useScrollMotion";
 
 const icons = {
   shield: ShieldCheck,
@@ -145,6 +146,7 @@ function Modal({
 }
 
 export default function App() {
+  useScrollMotion();
   const [menuOpen, setMenuOpen] = useState(false);
   const [filter, setFilter] = useState("All services");
   const [modal, setModal] = useState<ModalContent | null>(null);
@@ -166,31 +168,6 @@ export default function App() {
     return () => document.removeEventListener("keydown", close);
   }, [menuOpen]);
 
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.remove("reveal-pending");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.08, rootMargin: "0px 0px 30px 0px" },
-    );
-    document.querySelectorAll("[data-reveal]").forEach((element) => {
-      element.classList.add("reveal-pending");
-      observer.observe(element);
-    });
-    return () => {
-      observer.disconnect();
-      document
-        .querySelectorAll(".reveal-pending")
-        .forEach((element) => element.classList.remove("reveal-pending"));
-    };
-  }, []);
-
   const visibleAreas = practiceAreas.filter(
     (area) => filter === "All services" || filterIds[filter].includes(area.id),
   );
@@ -205,13 +182,11 @@ export default function App() {
     setModal(null);
     setDraft(null);
     window.location.hash = "contact";
-    document
-      .getElementById("contact")
-      ?.scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "instant"
-          : "smooth",
-      });
+    document.getElementById("contact")?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "instant"
+        : "smooth",
+    });
     window.setTimeout(
       () =>
         document
@@ -227,6 +202,7 @@ export default function App() {
         Skip to content
       </a>
       <header className="site-header">
+        <div className="reading-progress" aria-hidden="true" />
         <div className="container header-inner">
           <Wordmark />
           <button
@@ -272,54 +248,63 @@ export default function App() {
           <div className="container hero-grid">
             <div className="hero-copy">
               <p className="eyebrow light">
-                <span className="tiny-line" /> LEGAL SOLUTIONS MADE PRACTICAL
+                <span className="tiny-line" /> R. K. NJOGU & COMPANY ADVOCATES
               </p>
               <h1 id="hero-title">
-                Clear counsel.
-                <br />
-                <em>Confident</em>
-                <br />
-                next steps.
-              </h1>
-              <p className="hero-description">
-                Life and business move forward.
-                <br />
-                We help you navigate the legal questions along the way — with
-                clarity, care and practical advice.
-              </p>
-              <div className="hero-actions">
-                <a className="button button-light" href="#contact">
-                  Discuss your matter <ArrowUpRight size={19} />
-                </a>
-                <a className="text-link inverse" href="#practice">
-                  Explore our expertise <ArrowRight size={17} />
-                </a>
-              </div>
-              <div className="hero-location">
-                <MapPin size={14} />
-                <span>
-                  Kamulu, Kenya <span className="location-divider">/</span>{" "}
-                  Serving clients across Kenya
+                <span className="hero-line">
+                  <span>Legal solutions.</span>
                 </span>
+                <span className="hero-line">
+                  <span>
+                    <em>Made practical.</em>
+                  </span>
+                </span>
+              </h1>
+              <div className="hero-meta">
+                <p className="hero-description">
+                  Clear counsel for the moments that matter. Practical advice
+                  for your life, your business and what comes next.
+                </p>
+                <div className="hero-actions">
+                  <a className="button button-light" href="#contact">
+                    Discuss your matter <ArrowUpRight size={19} />
+                  </a>
+                  <a className="text-link inverse" href="#practice">
+                    Explore our expertise <ArrowRight size={17} />
+                  </a>
+                </div>
+                <div className="hero-location">
+                  <span className="location-marker" aria-hidden="true">
+                    <MapPin size={14} />
+                  </span>
+                  <span>
+                    ROOTED IN KAMULU
+                    <br />
+                    <span className="location-subline">
+                      Serving clients across Kenya
+                    </span>
+                  </span>
+                </div>
               </div>
             </div>
             <div className="hero-visual">
-              <div className="art-topline">
-                <span>GROUNDED IN PRINCIPLE</span>
-                <span>01 — RK</span>
-              </div>
               <div className="hero-art">
                 <img
-                  src={`${import.meta.env.BASE_URL}architecture.svg`}
-                  alt="Original architectural illustration of a stone colonnade, symbolizing clarity and a considered path forward"
-                  width="560"
-                  height="650"
+                  src={`${import.meta.env.BASE_URL}threshold.webp`}
+                  alt=""
+                  width="1672"
+                  height="941"
                   fetchPriority="high"
                 />
-                <div className="art-frame" aria-hidden="true" />
+                <div className="art-topline">
+                  <span>GROUNDED IN PRINCIPLE.</span>
+                  <span>GUIDED BY YOUR INTERESTS.</span>
+                </div>
               </div>
               <div className="art-caption">
-                <span>A considered path forward.</span>
+                <span>
+                  A considered path <em>forward.</em>
+                </span>
                 <MoveUpRight
                   className="art-symbol"
                   size={21}
@@ -337,6 +322,39 @@ export default function App() {
                 ↓
               </span>
             </a>
+          </div>
+        </section>
+
+        <section className="statement" aria-labelledby="statement-title">
+          <div className="container statement-grid">
+            <div className="statement-label">
+              <span className="eyebrow light">A PRACTICAL PERSPECTIVE</span>
+              <span className="statement-symbol" aria-hidden="true">
+                ↳
+              </span>
+            </div>
+            <div>
+              <h2
+                id="statement-title"
+                aria-label="Law can be complex. Your next step should feel clear."
+              >
+                {"Law can be complex. Your next step should feel clear."
+                  .split(" ")
+                  .map((word, index) => (
+                    <span
+                      className="statement-word"
+                      data-word={word}
+                      key={index}
+                    >
+                      {word}
+                    </span>
+                  ))}
+              </h2>
+              <p className="statement-note">
+                We bring the legal, commercial and practical realities together,
+                so you can make an informed decision.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -380,7 +398,7 @@ export default function App() {
             <p className="sr-only" aria-live="polite">
               Showing {visibleAreas.length} practice areas.
             </p>
-            <div className="practice-grid">
+            <div className="practice-grid" data-reveal-group>
               {visibleAreas.map((area) => {
                 const Icon = icons[area.icon];
                 return (
@@ -394,14 +412,16 @@ export default function App() {
                       </span>
                       <Icon strokeWidth={1.3} size={27} aria-hidden="true" />
                     </div>
-                    <h3>{area.shortTitle}</h3>
-                    <p>{area.summary}</p>
+                    <div className="practice-description">
+                      <h3>{area.shortTitle}</h3>
+                      <p>{area.summary}</p>
+                    </div>
                     <button
                       className="practice-link"
                       aria-label={`Explore practice: ${area.title}`}
                       onClick={() => setModal({ type: "practice", area })}
                     >
-                      Explore practice <ArrowUpRight size={19} />
+                      <span>Explore practice</span> <ArrowUpRight size={24} />
                     </button>
                   </article>
                 );
@@ -425,9 +445,15 @@ export default function App() {
         >
           <div className="container about-grid">
             <div className="about-art" data-reveal>
+              <div className="about-orbit" aria-hidden="true">
+                <span>R</span>
+                <span>K</span>
+                <svg viewBox="0 0 300 300">
+                  <circle cx="150" cy="150" r="140" />
+                </svg>
+              </div>
               <div className="about-art-inner">
                 <span className="eyebrow light">OUR GUIDING PRINCIPLE</span>
-                <Scale size={62} strokeWidth={0.85} aria-hidden="true" />
                 <blockquote>
                   Sound advice.
                   <br />
@@ -466,7 +492,7 @@ export default function App() {
               </a>
             </div>
           </div>
-          <div className="container values-row">
+          <div className="container values-row" data-reveal-group>
             {firm.values.map((value, index) => (
               <div key={value.title}>
                 <span className="value-number">0{index + 1}</span>
@@ -482,14 +508,16 @@ export default function App() {
           id="approach"
           aria-labelledby="approach-title"
         >
-          <div className="container">
+          <div className="container approach-layout">
             <div className="section-heading" data-reveal>
               <div>
                 <p className="eyebrow light">03 / OUR APPROACH</p>
                 <h2 id="approach-title">
-                  The right way forward
+                  First, we
                   <br />
-                  <em>starts with understanding.</em>
+                  <em>understand.</em>
+                  <br />
+                  Then, we act.
                 </h2>
               </div>
               <p className="section-intro inverse-copy">
@@ -516,14 +544,87 @@ export default function App() {
                   label: "ACT",
                 },
               ].map((step, index) => (
-                <article key={step.label}>
-                  <div className="step-top">
-                    <span className="step-number">0{index + 1}</span>
-                    <ArrowRight size={20} strokeWidth={1} aria-hidden="true" />
+                <article className="approach-step" data-reveal key={step.label}>
+                  <div
+                    className={`step-illustration step-illustration-${index}`}
+                    aria-hidden="true"
+                  >
+                    <svg viewBox="0 0 240 200" fill="none">
+                      {index === 0 ? (
+                        <>
+                          <circle
+                            className="step-track"
+                            cx="96"
+                            cy="95"
+                            r="57"
+                          />
+                          <circle
+                            className="step-track"
+                            cx="146"
+                            cy="95"
+                            r="57"
+                          />
+                          <circle
+                            className="step-trace"
+                            cx="96"
+                            cy="95"
+                            r="57"
+                            pathLength="1"
+                          />
+                          <circle
+                            className="step-trace"
+                            cx="146"
+                            cy="95"
+                            r="57"
+                            pathLength="1"
+                          />
+                        </>
+                      ) : index === 1 ? (
+                        <>
+                          <path
+                            className="step-track"
+                            d="M42 155L120 35L198 155Z M81 155L120 95L159 155"
+                          />
+                          <path
+                            className="step-trace"
+                            d="M42 155L120 35L198 155Z M81 155L120 95L159 155"
+                            pathLength="1"
+                          />
+                          <circle
+                            className="step-track"
+                            cx="120"
+                            cy="95"
+                            r="65"
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <path
+                            className="step-track"
+                            d="M50 150L178 50M105 50H178V123 M50 170H193"
+                          />
+                          <path
+                            className="step-trace"
+                            d="M50 150L178 50M105 50H178V123 M50 170H193"
+                            pathLength="1"
+                          />
+                        </>
+                      )}
+                    </svg>
                   </div>
-                  <span className="eyebrow light">{step.label}</span>
-                  <h3>{step.title}</h3>
-                  <p>{step.text}</p>
+                  <div className="step-content">
+                    <div className="step-top">
+                      <span className="step-number">0{index + 1}</span>
+                      <ArrowRight
+                        size={20}
+                        strokeWidth={1}
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <span className="eyebrow light">{step.label}</span>
+                    <h3>{step.title}</h3>
+                    <p>{step.text}</p>
+                  </div>
                 </article>
               ))}
             </div>
@@ -561,7 +662,7 @@ export default function App() {
                 in mind.
               </p>
             </div>
-            <div className="insights-grid">
+            <div className="insights-grid" data-reveal-group>
               {guides.map((guide, index) => (
                 <article className="insight-card" key={guide.id}>
                   <div
@@ -569,13 +670,9 @@ export default function App() {
                     aria-hidden="true"
                   >
                     <span className="illustration-index">0{index + 1}</span>
-                    {index === 0 ? (
-                      <Building2 />
-                    ) : index === 1 ? (
-                      <MessageCircle />
-                    ) : (
-                      <FileText />
-                    )}
+                    <span className="guide-glyph">
+                      {index === 0 ? "§" : index === 1 ? "&" : "¶"}
+                    </span>
                     <span className="illustration-word">
                       {index === 0
                         ? "FOUNDATIONS"

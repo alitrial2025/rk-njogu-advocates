@@ -19,9 +19,10 @@ const report = {
   measuredAt: new Date().toISOString(),
   baseURL,
   browser: browser.version(),
-  methodology: 'Headless Chromium in the cloud container. Native wheel scrolling, requestAnimationFrame intervals, PerformanceObserver long tasks and layout shifts. These are environment-specific measurements, not physical-device FPS or field Core Web Vitals.',
+  methodology: 'Headless Chromium in the execution environment. Native wheel scrolling, requestAnimationFrame intervals, PerformanceObserver long tasks and layout shifts. Motion checks observe actual rendered transforms, visible content, keyboard focus, and reduced-motion preference changes. These are environment-specific measurements, not physical-device FPS or field Core Web Vitals.',
   checks: [],
   accessibility: [],
+  motion: [],
   scroll: [],
   errors: [],
 };
@@ -67,6 +68,158 @@ async function accessibility(page, label) {
   report.accessibility.push({ label, violations, passes: results.passes.length });
   await check(`${label}: automated accessibility`, () => {
     expect(violations.length === 0, `${violations.length} accessibility violation(s): ${violations.map(v => v.id).join(', ')}`);
+  });
+}
+
+async function revealVisibility(page) {
+  return page.evaluate(() => {
+    const targets = [...new Set([
+      ...document.querySelectorAll('[data-reveal]'),
+      ...Array.from(document.querySelectorAll('[data-reveal-group]')).flatMap(group => Array.from(group.children)),
+    ])];
+    return targets.map(element => {
+      let opacity = 1;
+      let visible = true;
+      for (let ancestor = element; ancestor; ancestor = ancestor.parentElement) {
+        const style = getComputedStyle(ancestor);
+        opacity *= Number(style.opacity);
+        visible &&= style.visibility !== 'hidden' && style.display !== 'none';
+      }
+      const bounds = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      const transform = new DOMMatrixReadOnly(style.transform === 'none' ? undefined : style.transform);
+      return {
+        label: `${element.tagName.toLowerCase()}.${element.className}`,
+        opacity,
+        visible,
+        width: bounds.width,
+        height: bounds.height,
+        translateY: transform.m42,
+      };
+    });
+  });
+}
+
+async function motionChecks(page, label) {
+  await ready(page);
+  await check(`${label}: section entrance moves smoothly into its readable position`, async () => {
+    const selected = await page.evaluate(() => {
+      const nodes = [...new Set([
+        ...document.querySelectorAll('[data-reveal]'),
+        ...Array.from(document.querySelectorAll('[data-reveal-group]')).flatMap(group => Array.from(group.children)),
+      ])];
+      const candidates = nodes.map(element => {
+        const bounds = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        const matrix = new DOMMatrixReadOnly(style.transform === 'none' ? undefined : style.transform);
+        return { element, top: bounds.top, translateY: matrix.m42, width: bounds.width, height: bounds.height };
+      }).filter(candidate => candidate.top > innerHeight * 1.2 && candidate.width > 0 && candidate.height > 0 && candidate.translateY > 10);
+      const candidate = candidates.sort((a, b) => Math.abs(a.top - document.documentElement.scrollHeight * 0.45) - Math.abs(b.top - document.documentElement.scrollHeight * 0.45))[0];
+      if (!candidate) return null;
+      window.__motionProbe = { element: candidate.element, samples: [], raf: 0 };
+      const probe = window.__motionProbe;
+      function sample(timestamp) {
+        const style = getComputedStyle(probe.element);
+        const matrix = new DOMMatrixReadOnly(style.transform === 'none' ? undefined : style.transform);
+        const bounds = probe.element.getBoundingClientRect();
+        probe.samples.push({ timestamp, translateY: matrix.m42, opacity: Number(style.opacity), inViewport: bounds.bottom > 0 && bounds.top < innerHeight });
+        probe.raf = requestAnimationFrame(sample);
+      }
+      probe.raf = requestAnimationFrame(sample);
+      return { initialTranslateY: candidate.translateY, documentTop: candidate.top, text: candidate.element.textContent?.trim().slice(0, 100) };
+    });
+    expect(selected !== null, 'No below-fold section has a visible entrance displacement to exercise');
+    try {
+      for (let step = 0; step < 80; step++) {
+        const position = await page.evaluate(() => ({ top: window.__motionProbe.element.getBoundingClientRect().top, viewport: innerHeight }));
+        if (position.top < position.viewport * 0.7) break;
+        await page.mouse.wheel(0, Math.min(position.viewport * 0.65, position.top - position.viewport * 0.65));
+        await page.waitForTimeout(80);
+      }
+      await page.waitForFunction(() => {
+        const element = window.__motionProbe.element;
+        const bounds = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        const matrix = new DOMMatrixReadOnly(style.transform === 'none' ? undefined : style.transform);
+        return bounds.bottom > 0 && bounds.top < innerHeight && Math.abs(matrix.m42) < 0.5 && Number(style.opacity) >= 0.99;
+      }, undefined, { timeout: 4000 });
+      const samples = await page.evaluate(() => window.__motionProbe.samples);
+      expect(samples.some(sample => sample.inViewport && sample.translateY > 0.5 && sample.translateY < selected.initialTranslateY - 0.5), 'Section jumped directly to its final position without an observed intermediate animation frame');
+      expect(samples.at(-1).opacity >= 0.99, 'The revealed content remains translucent');
+      const details = { ...selected, observedIntermediateFrames: samples.filter(sample => sample.inViewport && sample.translateY > 0.5 && sample.translateY < selected.initialTranslateY - 0.5).length };
+      report.motion.push({ label, entrance: details });
+      return details;
+    } finally {
+      await page.evaluate(() => cancelAnimationFrame(window.__motionProbe.raf));
+    }
+  });
+
+  await check(`${label}: reading progress responds to real document scrolling`, async () => {
+    const supported = await page.evaluate(() => CSS.supports('animation-timeline', 'scroll(root block)'));
+    if (!supported) return { supported: false, reason: 'This browser does not support native CSS scroll timelines; section entrances remain tested.' };
+    const progress = page.locator('.reading-progress');
+    expect(await progress.count() === 1, 'Native scroll timeline is supported but no reading progress indicator is present');
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+    await page.waitForTimeout(100);
+    const initialScale = await progress.evaluate(element => new DOMMatrixReadOnly(getComputedStyle(element).transform).m11);
+    const distance = await page.evaluate(() => Math.min(innerHeight * 1.5, (document.documentElement.scrollHeight - innerHeight) * 0.5));
+    await page.mouse.wheel(0, distance);
+    await page.waitForTimeout(180);
+    const currentScale = await progress.evaluate(element => new DOMMatrixReadOnly(getComputedStyle(element).transform).m11);
+    expect(currentScale > initialScale + 0.01, `Reading progress did not grow after scrolling (${initialScale} → ${currentScale})`);
+    return { supported, initialScale, afterScrollScale: currentScale };
+  });
+
+  await check(`${label}: keyboard navigation never focuses visually hidden content`, async () => {
+    await ready(page);
+    await page.locator('body').click({ position: { x: 2, y: 2 } });
+    let checked = 0;
+    for (let index = 0; index < 32; index++) {
+      await page.keyboard.press('Tab');
+      await page.waitForTimeout(50);
+      // Native focus scrolling follows the site's smooth-scroll preference.
+      // Wait for the movement to settle before sending the next Tab; seeing
+      // the target enter the viewport does not mean its scroll has finished.
+      await page.evaluate(() => new Promise(resolve => {
+        let previous = scrollY;
+        let lastChange = performance.now();
+        const started = lastChange;
+        function sample(timestamp) {
+          if (Math.abs(scrollY - previous) > 0.2) lastChange = timestamp;
+          previous = scrollY;
+          if (timestamp - lastChange >= 120 || timestamp - started > 1500) {
+            resolve();
+            return;
+          }
+          requestAnimationFrame(sample);
+        }
+        requestAnimationFrame(sample);
+      }));
+      await page.waitForFunction(() => {
+        const element = document.activeElement;
+        if (!element || element === document.body) return true;
+        const bounds = element.getBoundingClientRect();
+        return bounds.bottom > 0 && bounds.top < innerHeight && bounds.right > 0 && bounds.left < innerWidth;
+      }, undefined, { timeout: 1500 });
+      const focus = await page.evaluate(() => {
+        const element = document.activeElement;
+        if (!element || element === document.body) return null;
+        let opacity = 1;
+        let visible = true;
+        for (let ancestor = element; ancestor; ancestor = ancestor.parentElement) {
+          const style = getComputedStyle(ancestor);
+          opacity *= Number(style.opacity);
+          visible &&= style.visibility !== 'hidden' && style.display !== 'none';
+        }
+        const bounds = element.getBoundingClientRect();
+        return { text: element.textContent?.trim().slice(0, 80), opacity, visible, width: bounds.width, height: bounds.height, inViewport: bounds.bottom > 0 && bounds.top < innerHeight && bounds.right > 0 && bounds.left < innerWidth };
+      });
+      if (!focus) continue;
+      checked++;
+      expect(focus.visible && focus.opacity >= 0.99 && focus.width > 0 && focus.height > 0 && focus.inViewport, `Keyboard focus reached visually hidden content: ${JSON.stringify(focus)}`);
+    }
+    expect(checked >= 20, `Only ${checked} keyboard focus targets were exercised`);
+    return { focusTargetsChecked: checked };
   });
 }
 
@@ -358,8 +511,16 @@ async function measureScroll(page, label, cpuSlowdown = 1) {
   };
   report.scroll.push(result);
   console.log(`SCROLL ${label}: p95 ${frameStats.p95}ms; delayed ${result.delayedFramePercent}%; long tasks ${metrics.longTasks.length}; CLS ${result.scrollWindowCLS}`);
+  await check(`${label}: full wheel traversal leaves every section readable`, async () => {
+    const targets = await revealVisibility(page);
+    expect(targets.length >= 5, `Only ${targets.length} reveal targets were exercised`);
+    const hidden = targets.filter(target => !target.visible || target.opacity < 0.99 || target.width <= 0 || target.height <= 0 || Math.abs(target.translateY) > 0.5);
+    expect(hidden.length === 0, `${hidden.length} section(s) remain hidden or displaced after traversal: ${JSON.stringify(hidden)}`);
+    return { readableTargets: targets.length };
+  });
   if (label === 'desktop' || label === 'mobile') {
     // Traversal lets every section's IntersectionObserver reveal finish before capture.
+    await accessibility(page, `${label} fully revealed`);
     await page.screenshot({ path: resolve(artifacts, `${label}.png`), fullPage: true });
   }
 }
@@ -369,12 +530,14 @@ try {
   const desktop = await desktopContext.newPage();
   desktop.on('pageerror', error => report.errors.push({ label: 'desktop', error: error.message }));
   await functional(desktop, 'desktop', false);
+  await motionChecks(desktop, 'desktop');
   await check('desktop: native wheel scroll traverses page', () => measureScroll(desktop, 'desktop'));
 
   const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
   const mobile = await mobileContext.newPage();
   mobile.on('pageerror', error => report.errors.push({ label: 'mobile', error: error.message }));
   await functional(mobile, 'mobile', true);
+  await motionChecks(mobile, 'mobile');
   await check('mobile: native wheel scroll traverses page', () => measureScroll(mobile, 'mobile'));
   await check('mobile: scroll with 4x CPU slowdown traverses page', () => measureScroll(mobile, 'mobile-cpu-4x', 4));
 
@@ -406,6 +569,28 @@ try {
     expect(styles.violations.length === 0, `${styles.violations.length} elements retain substantial animation under reduced motion`);
     return styles;
   });
+  await check('reduced motion: all content is readable before scrolling', async () => {
+    const targets = await revealVisibility(reducedPage);
+    expect(targets.length >= 5, `Only ${targets.length} content targets found`);
+    const hidden = targets.filter(target => !target.visible || target.opacity < 0.99 || target.width <= 0 || target.height <= 0 || Math.abs(target.translateY) > 0.5);
+    expect(hidden.length === 0, `Reduced-motion content remains hidden or displaced: ${JSON.stringify(hidden)}`);
+    await reducedPage.screenshot({ path: resolve(artifacts, 'mobile-reduced-motion.png'), fullPage: true });
+    return { readableTargets: targets.length };
+  });
+  await check('changing motion preference during a visit restores content immediately', async () => {
+    await ready(desktop);
+    await desktop.emulateMedia({ reducedMotion: 'reduce' });
+    await desktop.waitForTimeout(100);
+    let targets = await revealVisibility(desktop);
+    expect(targets.length >= 5, 'No content targets found after changing the preference');
+    const hidden = targets.filter(target => !target.visible || target.opacity < 0.99 || target.width <= 0 || target.height <= 0 || Math.abs(target.translateY) > 0.5);
+    expect(hidden.length === 0, `Changing the preference leaves content hidden or displaced: ${JSON.stringify(hidden)}`);
+    await desktop.emulateMedia({ reducedMotion: 'no-preference' });
+    await desktop.waitForTimeout(100);
+    targets = await revealVisibility(desktop);
+    expect(targets.every(target => target.visible && target.opacity >= 0.99), 'Restoring motion hides content that was already shown');
+    return { readableTargets: targets.length };
+  });
   await check('no browser JavaScript exceptions', () => expect(report.errors.length === 0, JSON.stringify(report.errors)));
 } catch (error) {
   report.errors.push({ label: 'harness', error: error.message });
@@ -423,7 +608,7 @@ try {
     const rows = report.scroll.map(measurement => `| ${measurement.label} | ${measurement.baselineFrameIntervalMs.median} | ${measurement.scrollFrameIntervalMs.mean} | ${measurement.scrollFrameIntervalMs.p95} | ${measurement.scrollFrameIntervalMs.max} | ${measurement.delayedFramePercent}% | ${measurement.longTasks.count} / ${measurement.longTasks.maxDurationMs}ms | ${measurement.scrollWindowCLS} |`).join('\n');
     const warnings = report.scroll.flatMap(measurement => measurement.warnings.map(warning => `- ${measurement.label}: ${warning}.`));
     const failures = report.checks.filter(check => check.status === 'failed').map(check => `- ${check.name}: ${check.error}`).join('\n');
-    await writeFile(resolve(docs, 'PERFORMANCE.md'), `# Browser and scroll validation\n\nMeasured ${report.measuredAt} using Chromium ${report.browser} against ${baseURL}.\n\n## What was exercised\n\nThe production preview was tested at 1440 × 1000 and 390 × 844 CSS pixels, with additional horizontal-overflow checks at 320, 768 and 1024 CSS pixels. Native wheel input moved the full document down and back up. requestAnimationFrame intervals were sampled throughout each traversal; an idle baseline was collected separately in the same browser session. A mobile-sized repeat used Chrome DevTools 4× CPU slowdown. PerformanceObserver recorded tasks over 50ms and layout shifts during traversal.\n\n| Profile | Idle median ms | Scroll mean ms | Scroll p95 ms | Scroll max ms | Intervals > 1.5× idle | Long tasks / longest | Scroll-window CLS |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |\n${rows}\n\nA delayed interval is greater than 1.5 times that profile's measured idle median. This flags missed presentation opportunities; it does not identify their cause. The JSON report also includes a derived skipped-frame estimate and the raw timing samples. CLS uses the largest session window, with up to one second between shifts and a maximum five-second window.\n\n${warnings.length ? `## Observations\n\n${warnings.join('\n')}\n\n` : 'No profile crossed the harness warning thresholds (p95 > 2× idle, delayed intervals > 10%, a task > 200ms, or CLS > 0.1).\n\n'}## Functional and accessibility checks\n\n${report.summary.passed} checks passed; ${report.summary.failed} failed. ${report.summary.accessibilityViolations} automated WCAG A/AA violations were reported by axe across desktop, mobile, open practice dialogs and the open mobile menu. Checks cover section links, all four practice filters and pressed states, mobile menu state/Escape/link activation, practice-dialog dismissal and focus return, consultation selection and contact keyboard focus, substantive legal guides, expandable FAQ, horizontal overflow, reduced-motion preference, and contact email-draft preparation. Contact checks verify native required-field validation, RFC 6068 mailto encoding, removal of stale drafts after edits, and absence of a claim that a backend delivered the message. Screenshots are captured after full scroll traversal so section reveals have been exercised.\n\n${failures ? `Failed checks:\n\n${failures}\n\n` : ''}## Limits and reproduction\n\nThese measurements come from a headless cloud container with software-rendered Chromium. They are useful regression evidence, not physical-phone performance, touch-scroll validation, a guarantee of frame rate, or field Core Web Vitals. CPU slowdown simulates constrained main-thread execution; it does not emulate a complete mobile device or slow network. Automated accessibility does not replace manual assistive-technology testing.\n\nRun \`npm run build\`, start \`npm run preview -- --host 0.0.0.0\`, then run \`BASE_URL=http://127.0.0.1:4173 node scripts/browser-check.mjs\`. Use \`CHROMIUM_EXECUTABLE\` to select another installed Chromium binary.\n\nEvidence: [JSON report](../artifacts/browser-report.json), [desktop screenshot](../artifacts/desktop.png), [mobile screenshot](../artifacts/mobile.png).\n`);
+    await writeFile(resolve(docs, 'PERFORMANCE.md'), `# Browser and scroll validation\n\nMeasured ${report.measuredAt} using Chromium ${report.browser} against ${baseURL}.\n\n## What was exercised\n\nThe production preview was tested at 1440 × 1000 and 390 × 844 CSS pixels, with additional horizontal-overflow checks at 320, 768 and 1024 CSS pixels. Native wheel input moved the full document down and back up. requestAnimationFrame intervals were sampled throughout each traversal; an idle baseline was collected separately in the same browser session. A mobile-sized repeat used Chrome DevTools 4× CPU slowdown. PerformanceObserver recorded tasks over 50ms and layout shifts during traversal.\n\n| Profile | Idle median ms | Scroll mean ms | Scroll p95 ms | Scroll max ms | Intervals > 1.5× idle | Long tasks / longest | Scroll-window CLS |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |\n${rows}\n\nA delayed interval is greater than 1.5 times that profile's measured idle median. This flags missed presentation opportunities; it does not identify their cause. The JSON report also includes a derived skipped-frame estimate and the raw timing samples. CLS uses the largest session window, with up to one second between shifts and a maximum five-second window.\n\n${warnings.length ? `## Observations\n\n${warnings.join('\n')}\n\n` : 'No profile crossed the harness warning thresholds (p95 > 2× idle, delayed intervals > 10%, a task > 200ms, or CLS > 0.1).\n\n'}## Functional and accessibility checks\n\n${report.summary.passed} checks passed; ${report.summary.failed} failed. ${report.summary.accessibilityViolations} automated WCAG A/AA violations were reported by axe across desktop, mobile, open practice dialogs and the open mobile menu. Checks cover section links, all four practice filters and pressed states, mobile menu state/Escape/link activation, practice-dialog dismissal and focus return, consultation selection and contact keyboard focus, substantive legal guides, expandable FAQ, horizontal overflow, visible intermediate section entrance frames, native reading-progress response to wheel scrolling where supported, visible keyboard focus, complete reveals after full traversal, reduced-motion preference at page load and during a visit, and contact email-draft preparation. Contact checks verify native required-field validation, RFC 6068 mailto encoding, removal of stale drafts after edits, and absence of a claim that a backend delivered the message. Screenshots are captured after full scroll traversal so section reveals have been exercised.\n\n${failures ? `Failed checks:\n\n${failures}\n\n` : ''}## Limits and reproduction\n\nThese measurements come from a headless cloud container with headless Chromium. They are useful regression evidence, not physical-phone performance, touch-scroll validation, a guarantee of frame rate, or field Core Web Vitals. CPU slowdown simulates constrained main-thread execution; it does not emulate a complete mobile device or slow network. Automated accessibility does not replace manual assistive-technology testing.\n\nRun \`npm run build\`, start \`npm run preview -- --host 0.0.0.0\`, then run \`BASE_URL=http://127.0.0.1:4173 node scripts/browser-check.mjs\`. Use \`CHROMIUM_EXECUTABLE\` to select another installed Chromium binary.\n\nEvidence: [JSON report](../artifacts/browser-report.json), [desktop screenshot](../artifacts/desktop.png), [mobile screenshot](../artifacts/mobile.png), [reduced-motion screenshot](../artifacts/mobile-reduced-motion.png).\n`);
   }
   console.log(`RESULT ${report.summary.passed} passed, ${report.summary.failed} failed; report: artifacts/browser-report.json`);
   if (report.summary.failed || report.summary.javascriptErrors) process.exitCode = 1;

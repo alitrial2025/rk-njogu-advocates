@@ -71,7 +71,7 @@ jobs:
           node-version: '24'
           cache: npm
       - name: Clear previous browser evidence
-        run: rm -f artifacts/desktop.png artifacts/mobile.png artifacts/browser-report.json docs/PERFORMANCE.md
+        run: rm -f artifacts/desktop.png artifacts/mobile.png artifacts/mobile-reduced-motion.png artifacts/browser-report.json docs/PERFORMANCE.md
       - name: Install locked dependencies
         run: npm ci --no-audit
       - name: Install Playwright Chromium and system dependencies
@@ -122,6 +122,7 @@ jobs:
           path: |
             artifacts/desktop.png
             artifacts/mobile.png
+            artifacts/mobile-reduced-motion.png
             artifacts/browser-report.json
             docs/PERFORMANCE.md
           if-no-files-found: warn
