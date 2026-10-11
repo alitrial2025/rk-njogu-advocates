@@ -75,7 +75,7 @@ Use meaningful accessible names for icon links. If external links open a new tab
 | Blog / news | No copy supplied. | No invented article bylines or publication dates. Any new educational copy is a draft for legal/editorial review. |
 | Special features | No feature is specified. | Use useful standard navigation, service discovery, and contact tools; avoid promising booking/payment features that lack integration. |
 | Advocate biographies and portraits | Not included. | No invented advocates, credentials, experience, or headshots. Obtain names, practising roles, approved biographies, and portraits if a team section is desired. |
-| Office photography | Not included. | The original generated conceptual limestone-colonnade photograph is decorative and must not be captioned as the firm's actual office, a courthouse, or client premises. |
+| Office photography | Not included. | `threshold.webp` and portrait-format `perspective.webp` are generated decorative architectural compositions. Neither depicts the firm's actual office, a courthouse, an advocate, or client premises. |
 | Email/form delivery | No provider, endpoint or secure delivery configuration supplied. | Direct email and WhatsApp contact are available. A form that prepares a draft must clearly say it opens the user's email app or WhatsApp; it cannot claim delivery. Configure and test a server endpoint before enabling a real sent state. |
 | Privacy and legal publication copy | Not included. | Ensure any drafted policy reflects actual hosting, data handling and integrations; obtain client review before publication. |
 | Domain hosting / final deployment | Checklist provides the domain in an email address, but no hosting configuration. | The local/cloud preview can be complete. Confirm destination and publish only through the authorized deployment workflow. |
@@ -91,6 +91,6 @@ Use meaningful accessible names for icon links. If external links open a new tab
 - Form labels, validation, feedback and delivery wording match the implemented integration.
 - No fabricated testimonials, reviews, awards, outcomes, advocate biographies, or office claims appear.
 - Mobile and desktop layouts have no unintended horizontal overflow.
-- Reduced-motion preferences are respected, and browser scroll performance has a reproducible report.
+- Motion works with CSS timelines and their passive-event fallback; reduced motion disables scrub effects and restores the three approach cards to normal flow. Browser scroll performance has a reproducible report tied to the tested revision.
 
 The missing logo, approved testimonial/article material, biography assets, delivery backend and deployment settings are client inputs or integration work. They do not prevent implementing and validating the current React site.

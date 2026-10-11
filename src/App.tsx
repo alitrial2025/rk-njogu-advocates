@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   ArrowUpRight,
-  ArrowRight,
+  ArrowUp,
   Scale,
   ShieldCheck,
   FileText,
@@ -19,7 +19,6 @@ import {
   MessageCircle,
   Plus,
   Check,
-  MoveUpRight,
 } from "lucide-react";
 import {
   firm,
@@ -237,7 +236,7 @@ export default function App() {
               href="#contact"
               onClick={() => setMenuOpen(false)}
             >
-              Let’s talk <ArrowUpRight size={17} />
+              Let’s talk
             </a>
           </nav>
         </div>
@@ -270,7 +269,7 @@ export default function App() {
                     Discuss your matter <ArrowUpRight size={19} />
                   </a>
                   <a className="text-link inverse" href="#practice">
-                    Explore our expertise <ArrowRight size={17} />
+                    Explore our expertise
                   </a>
                 </div>
                 <div className="hero-location">
@@ -305,12 +304,6 @@ export default function App() {
                 <span>
                   A considered path <em>forward.</em>
                 </span>
-                <MoveUpRight
-                  className="art-symbol"
-                  size={21}
-                  strokeWidth={1}
-                  aria-hidden="true"
-                />
               </div>
             </div>
           </div>
@@ -330,7 +323,7 @@ export default function App() {
             <div className="statement-label">
               <span className="eyebrow light">A PRACTICAL PERSPECTIVE</span>
               <span className="statement-symbol" aria-hidden="true">
-                ↳
+                R/K
               </span>
             </div>
             <div>
@@ -421,7 +414,8 @@ export default function App() {
                       aria-label={`Explore practice: ${area.title}`}
                       onClick={() => setModal({ type: "practice", area })}
                     >
-                      <span>Explore practice</span> <ArrowUpRight size={24} />
+                      <span>View details</span>{" "}
+                      <Plus size={20} aria-hidden="true" />
                     </button>
                   </article>
                 );
@@ -432,7 +426,7 @@ export default function App() {
                 Not sure where to begin? A conversation is a good first step.
               </p>
               <a href="#contact" className="text-link">
-                Talk to our team <ArrowRight size={17} />
+                Talk to our team
               </a>
             </div>
           </div>
@@ -443,28 +437,49 @@ export default function App() {
           id="about"
           aria-labelledby="about-title"
         >
+          <div className="kinetic-band" aria-hidden="true">
+            <div className="kinetic-line">
+              Clarity.<span>Clarity.</span>
+            </div>
+            <div className="kinetic-line">
+              <em>Confidence.</em>
+              <span>
+                <em>Confidence.</em>
+              </span>
+            </div>
+          </div>
           <div className="container about-grid">
-            <div className="about-art" data-reveal>
-              <div className="about-orbit" aria-hidden="true">
-                <span>R</span>
-                <span>K</span>
-                <svg viewBox="0 0 300 300">
-                  <circle cx="150" cy="150" r="140" />
-                </svg>
-              </div>
-              <div className="about-art-inner">
-                <span className="eyebrow light">OUR GUIDING PRINCIPLE</span>
-                <blockquote>
-                  Sound advice.
-                  <br />
-                  Practical solutions.
-                  <br />
-                  <em>Your interests first.</em>
-                </blockquote>
-                <span className="about-art-rule" />
-                <span className="about-art-bottom">
-                  R. K. NJOGU & COMPANY ADVOCATES
-                </span>
+            <div className="about-visual" data-reveal>
+              <div className="about-art">
+                <img
+                  className="about-photo"
+                  src={`${import.meta.env.BASE_URL}perspective.webp`}
+                  alt=""
+                  width="1086"
+                  height="1448"
+                  loading="lazy"
+                />
+                <div className="about-orbit" aria-hidden="true">
+                  <span className="orbit-r">R</span>
+                  <span className="orbit-k">K</span>
+                  <svg viewBox="0 0 300 300">
+                    <circle cx="150" cy="150" r="140" />
+                  </svg>
+                </div>
+                <div className="about-art-inner">
+                  <span className="eyebrow light">OUR GUIDING PRINCIPLE</span>
+                  <blockquote>
+                    Sound advice.
+                    <br />
+                    Practical solutions.
+                    <br />
+                    <em>Your interests first.</em>
+                  </blockquote>
+                  <span className="about-art-rule" />
+                  <span className="about-art-bottom">
+                    R. K. NJOGU & COMPANY ADVOCATES
+                  </span>
+                </div>
               </div>
             </div>
             <div className="about-copy" data-reveal>
@@ -488,7 +503,7 @@ export default function App() {
                 </div>
               </div>
               <a className="text-link" href="#approach">
-                Get to know our approach <ArrowRight size={17} />
+                Get to know our approach
               </a>
             </div>
           </div>
@@ -601,11 +616,11 @@ export default function App() {
                         <>
                           <path
                             className="step-track"
-                            d="M50 150L178 50M105 50H178V123 M50 170H193"
+                            d="M45 155H95V115H145V75H195 M45 175H195"
                           />
                           <path
                             className="step-trace"
-                            d="M50 150L178 50M105 50H178V123 M50 170H193"
+                            d="M45 155H95V115H145V75H195 M45 175H195"
                             pathLength="1"
                           />
                         </>
@@ -615,11 +630,6 @@ export default function App() {
                   <div className="step-content">
                     <div className="step-top">
                       <span className="step-number">0{index + 1}</span>
-                      <ArrowRight
-                        size={20}
-                        strokeWidth={1}
-                        aria-hidden="true"
-                      />
                     </div>
                     <span className="eyebrow light">{step.label}</span>
                     <h3>{step.title}</h3>
@@ -635,7 +645,7 @@ export default function App() {
                 <span>Care in every decision.</span>
               </p>
               <a className="button button-light" href="#contact">
-                Start a conversation <ArrowUpRight size={18} />
+                Start a conversation
               </a>
             </div>
           </div>
@@ -687,7 +697,7 @@ export default function App() {
                   </div>
                   <h3>
                     <button onClick={() => setModal({ type: "guide", guide })}>
-                      {guide.title} <ArrowUpRight size={20} />
+                      {guide.title}
                     </button>
                   </h3>
                   <p>{guide.description}</p>
@@ -710,7 +720,7 @@ export default function App() {
                 Knowing what to expect makes the first step easier.
               </p>
               <a className="text-link" href="#contact">
-                Ask us a question <ArrowRight size={17} />
+                Ask us a question
               </a>
             </div>
             <div className="faq-list">
@@ -752,11 +762,9 @@ export default function App() {
               <div className="contact-details">
                 <a className="contact-phone" href={firm.phoneLinks.mobile}>
                   {firm.phones.mobile}
-                  <ArrowUpRight size={22} />
                 </a>
                 <a className="contact-email" href={`mailto:${firm.email}`}>
                   {firm.email}
-                  <ArrowUpRight size={17} />
                 </a>
                 <div className="contact-quick">
                   <a
@@ -765,7 +773,6 @@ export default function App() {
                     rel="noopener noreferrer"
                   >
                     <MessageCircle size={18} /> WhatsApp{" "}
-                    <ArrowUpRight size={15} />
                   </a>
                   <a href={firm.phoneLinks.office}>
                     <Phone size={17} /> Office: {firm.phones.office}
@@ -786,7 +793,7 @@ export default function App() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Get directions <ArrowUpRight size={16} />
+                      Get directions
                     </a>
                     <span className="plus-code">{firm.maps.plusCode}</span>
                   </div>
@@ -803,16 +810,13 @@ export default function App() {
                   ))}
                 </div>
                 <div className="alternate-contact">
-                  <a href={`mailto:${firm.emails[1]}`}>
-                    {firm.emails[1]} <ArrowUpRight size={14} />
-                  </a>
+                  <a href={`mailto:${firm.emails[1]}`}>{firm.emails[1]}</a>
                   <a
                     href={firm.officeWhatsappLink}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     Office WhatsApp: {firm.phones.office}{" "}
-                    <ArrowUpRight size={14} />
                   </a>
                 </div>
               </div>
@@ -937,7 +941,7 @@ export default function App() {
                     <pre>{draftText}</pre>
                     <div className="draft-actions">
                       <a className="button button-green" href={mailto}>
-                        Open email app <ArrowUpRight size={17} />
+                        Open email app
                       </a>
                       <button
                         className="text-link"
@@ -980,7 +984,7 @@ export default function App() {
               <em>Made Practical.</em>
             </p>
             <a className="footer-back" href="#home" aria-label="Back to top">
-              <MoveUpRight size={23} />
+              <ArrowUp size={23} />
             </a>
           </div>
           <div className="footer-grid">
@@ -1011,7 +1015,6 @@ export default function App() {
                   rel="noopener noreferrer"
                 >
                   {link.name}
-                  <ArrowUpRight size={13} />
                 </a>
               ))}
             </div>
@@ -1027,7 +1030,7 @@ export default function App() {
                 Nairobi, Kenya
               </p>
               <a href={firm.maps.url} target="_blank" rel="noopener noreferrer">
-                Find our office <ArrowUpRight size={13} />
+                Find our office
               </a>
             </div>
           </div>
@@ -1058,7 +1061,6 @@ export default function App() {
       >
         <MessageCircle size={20} />
         <span>Let’s talk</span>
-        <ArrowUpRight size={15} />
       </a>
 
       {modal && (
@@ -1094,7 +1096,7 @@ export default function App() {
                 className="button button-green"
                 onClick={() => consult(modal.area)}
               >
-                Discuss this matter <ArrowUpRight size={18} />
+                Discuss this matter
               </button>
             </>
           )}
@@ -1108,7 +1110,7 @@ export default function App() {
               ))}
               <p className="dialog-note">{modal.guide.disclaimer}</p>
               <button className="button button-green" onClick={() => consult()}>
-                Discuss your situation <ArrowUpRight size={18} />
+                Discuss your situation
               </button>
             </>
           )}

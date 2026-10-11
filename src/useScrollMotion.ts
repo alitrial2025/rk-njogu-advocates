@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { startScrollFallback } from "./scrollFallback";
 
 const revealSelector = "[data-reveal], [data-reveal-group] > *";
 const interactiveSelector =
@@ -11,6 +12,9 @@ export function useScrollMotion() {
     const registered = new Set<HTMLElement>();
     const statementWords = new Set<HTMLElement>();
     let intersection: IntersectionObserver | null = null;
+    let introStarted = false;
+    let introTimer: number | undefined;
+    let fallback: ReturnType<typeof startScrollFallback> | undefined;
 
     const reveal = (element: HTMLElement) => {
       element.classList.add("is-visible");
@@ -19,6 +23,12 @@ export function useScrollMotion() {
     };
 
     const register = () => {
+      registered.forEach((element) => {
+        if (!element.isConnected) {
+          intersection?.unobserve(element);
+          registered.delete(element);
+        }
+      });
       document
         .querySelectorAll<HTMLElement>(".statement")
         .forEach((section) => {
@@ -74,12 +84,18 @@ export function useScrollMotion() {
           intersection.observe(element);
           element.classList.add("motion-pending");
         });
+      fallback?.refresh();
     };
 
     const configure = () => {
+      const playIntro = !introStarted && !preference.matches;
+      introStarted = true;
+      window.clearTimeout(introTimer);
+      fallback?.destroy();
+      fallback = undefined;
       intersection?.disconnect();
       intersection = null;
-      document.body.classList.remove("motion-ready");
+      document.body.classList.remove("motion-ready", "motion-intro");
 
       if (preference.matches || !("IntersectionObserver" in window)) {
         registered.forEach(reveal);
@@ -104,6 +120,16 @@ export function useScrollMotion() {
       });
       register();
       document.body.classList.add("motion-ready");
+      if (!CSS.supports("animation-timeline", "scroll()")) {
+        fallback = startScrollFallback();
+      }
+      if (playIntro) {
+        document.body.classList.add("motion-intro");
+        introTimer = window.setTimeout(
+          () => document.body.classList.remove("motion-intro"),
+          1800,
+        );
+      }
     };
 
     const focusContent = (event: FocusEvent) => {
@@ -126,9 +152,11 @@ export function useScrollMotion() {
     return () => {
       intersection?.disconnect();
       changes.disconnect();
+      fallback?.destroy();
+      window.clearTimeout(introTimer);
       preference.removeEventListener("change", configure);
       document.removeEventListener("focusin", focusContent);
-      document.body.classList.remove("motion-ready");
+      document.body.classList.remove("motion-ready", "motion-intro");
       registered.forEach((element) => {
         element.classList.remove(
           "motion-pending",

@@ -1,6 +1,6 @@
 # R. K. Njogu & Company Advocates
 
-A responsive React and TypeScript website built from the client's website checklist and the combined design references. The visual system pairs forest green and ivory, monumental editorial typography, original architectural imagery, and a scroll-driven reading experience.
+A responsive React and TypeScript website built from the client's website checklist and the combined design references. Forest green and ivory frame monumental typography, moving conceptual architecture, opposed sliding Clarity/Confidence text, and three sticky approach cards.
 
 ## Develop
 
@@ -37,8 +37,11 @@ See [docs/PERFORMANCE.md](docs/PERFORMANCE.md) for measured results and their li
 - `src/data.ts` contains firm facts, nine practice areas, FAQs and original educational guides.
 - `src/App.tsx` contains the service discovery, dialogs, consultation flow and page composition.
 - `src/styles.css` contains the base interface, form, dialog and responsive styles; `src/editorial.css` defines the chapter layouts and visual direction.
-- `src/useScrollMotion.ts` progressively enhances section entrances, observes new filtered content, and handles keyboard focus and motion preferences. `src/motion.css` defines masked hero entrances, native scroll timelines for the photograph and text, and SVG stroke drawing. Scrolling stays native; no animation library or scroll-driven React render loop is required. Browsers without scroll timelines retain readable content and section entrances.
-- `public/threshold.webp` is an original generated architectural image used for atmosphere. It does not depict the firm's premises. The current wordmark is provisional because the checklist contains no logo asset.
+- `src/useScrollMotion.ts` manages entrances, newly filtered content, keyboard focus and live motion preferences. `src/motion.css` defines scroll-scrubbed type, image/overlay drift, service/guide movement and SVG traces; `src/editorial.css` also defines the three-card sticky stack. Reduced motion disables these effects and restores the cards to normal flow.
+- `src/scrollFallback.ts` supports browsers without CSS scroll timelines. Passive scroll events schedule a single animation frame, with geometry reads grouped before style writes. Scrolling stays native; no animation library, wheel interception or scroll-driven React render loop is used.
+- `public/threshold.webp` and the lazy-loaded `public/perspective.webp` (1086 × 1448px, 199,352 bytes) are original generated decorative architectural compositions. Neither depicts the firm's actual premises or an advocate. The wordmark remains provisional because the checklist contains no logo asset.
+
+Directional arrows are reserved for the hero action, email-draft action, back-to-top control and scroll cue. Service details use a plus symbol; other editorial/contact actions use underlined text.
 
 The form prepares an email draft. It does not send enquiries, persist form values, or claim delivery. Visitors review and send the draft through their email application; direct telephone, both WhatsApp numbers and both email addresses are also available. Editing the form invalidates an old draft. No credentials or backend service are required for this workflow.
 

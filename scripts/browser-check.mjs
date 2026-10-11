@@ -100,6 +100,109 @@ async function revealVisibility(page) {
   });
 }
 
+async function settleScroll(page) {
+  await page.evaluate(() => new Promise(resolve => {
+    let previous = scrollY;
+    let lastChange = performance.now();
+    const started = lastChange;
+    function sample(timestamp) {
+      if (Math.abs(scrollY - previous) > 0.2) lastChange = timestamp;
+      previous = scrollY;
+      if (timestamp - lastChange >= 120 || timestamp - started > 1500) {
+        resolve();
+        return;
+      }
+      requestAnimationFrame(sample);
+    }
+    requestAnimationFrame(sample);
+  }));
+}
+
+async function wheelTo(page, desired) {
+  const movement = await page.evaluate(value => {
+    const destination = Math.min(document.documentElement.scrollHeight - innerHeight, Math.max(0, value));
+    return destination - scrollY;
+  }, desired);
+  if (Math.abs(movement) > 0.5) await page.mouse.wheel(0, movement);
+  await settleScroll(page);
+}
+
+async function strongScrollMotion(page, label) {
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await settleScroll(page);
+  const geometry = await page.locator('.about-visual').evaluate(element => {
+    const bounds = element.getBoundingClientRect();
+    return { top: bounds.top + scrollY, height: bounds.height, viewport: innerHeight };
+  });
+  const samples = [];
+  for (const position of [geometry.top - geometry.viewport * 0.85, geometry.top - geometry.viewport * 0.3, geometry.top + geometry.height * 0.2]) {
+    await wheelTo(page, position);
+    samples.push(await page.evaluate(() => {
+      const frame = document.querySelector('.about-art');
+      const bounds = frame.getBoundingClientRect();
+      const style = getComputedStyle(frame);
+      const matrix = new DOMMatrixReadOnly(style.transform === 'none' ? undefined : style.transform);
+      const rows = Array.from(document.querySelectorAll('.kinetic-line')).map(element => {
+        const transform = getComputedStyle(element).transform;
+        return new DOMMatrixReadOnly(transform === 'none' ? undefined : transform).m41;
+      });
+      return {
+        scrollY, translateY: matrix.m42,
+        rotationDegrees: Math.atan2(matrix.m12, matrix.m11) * 180 / Math.PI,
+        scale: Math.hypot(matrix.m11, matrix.m12),
+        frameInViewport: bounds.bottom > 0 && bounds.top < innerHeight,
+        kineticRowX: rows,
+      };
+    }));
+  }
+  const range = property => Math.max(...samples.map(sample => sample[property])) - Math.min(...samples.map(sample => sample[property]));
+  expect(samples.filter(sample => sample.frameInViewport).length >= 2, 'Moving firm artwork was not visible at two sampled scroll positions');
+  expect(range('translateY') >= 25, `Firm artwork travel is too small to observe (${range('translateY').toFixed(2)}px)`);
+  expect(range('rotationDegrees') >= 2 || range('scale') >= 0.04, 'Firm artwork does not visibly change its rotation or scale with scrolling');
+  expect(samples.every(sample => sample.kineticRowX.length === 2), 'Expected two decorative kinetic text rows');
+  const first = samples[0].kineticRowX;
+  const last = samples.at(-1).kineticRowX;
+  const deltas = [last[0] - first[0], last[1] - first[1]];
+  expect(deltas.every(delta => Math.abs(delta) >= 24) && deltas[0] * deltas[1] < 0, `Kinetic text does not move visibly in opposite directions: ${JSON.stringify(deltas)}`);
+  const details = { artworkTravelPx: Number(range('translateY').toFixed(2)), artworkRotationRangeDegrees: Number(range('rotationDegrees').toFixed(2)), kineticTravelPx: deltas.map(value => Number(value.toFixed(2))), samples };
+  report.motion.push({ label, strongScrollMotion: details });
+  return details;
+}
+
+async function mobileApproach(page) {
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await settleScroll(page);
+  const geometry = await page.locator('.approach-step').evaluateAll(elements => elements.map(element => ({ top: element.getBoundingClientRect().top + scrollY, height: element.getBoundingClientRect().height })));
+  expect(geometry.length === 3, `Expected three approach cards, found ${geometry.length}`);
+  const headerHeight = await page.locator('header').evaluate(element => element.getBoundingClientRect().height);
+  const results = [];
+  for (let index = 0; index < geometry.length; index++) {
+    await wheelTo(page, geometry[index].top - headerHeight - 36);
+    await page.waitForTimeout(750);
+    const card = page.locator('.approach-step').nth(index);
+    const content = await card.evaluate(element => {
+      const headerBottom = document.querySelector('header').getBoundingClientRect().bottom;
+      return Array.from(element.querySelectorAll('h3, .step-content > p')).map(part => {
+        const bounds = part.getBoundingClientRect();
+        const top = document.elementFromPoint(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
+        return { text: part.textContent.trim(), top: bounds.top, bottom: bounds.bottom, viewport: innerHeight, headerBottom, uncovered: Boolean(top && (top === part || part.contains(top))) };
+      });
+    });
+    expect(content.length === 2, `Approach card ${index + 1} is missing its heading or explanation`);
+    expect(content.every(part => part.top >= part.headerBottom && part.bottom <= part.viewport && part.uncovered), `Approach card ${index + 1} cannot be read before the next card covers it: ${JSON.stringify(content)}`);
+    if (index === 0) {
+      const before = await card.evaluate(element => ({ top: element.getBoundingClientRect().top, scrollY }));
+      await page.mouse.wheel(0, 100);
+      await settleScroll(page);
+      const after = await card.evaluate(element => ({ top: element.getBoundingClientRect().top, scrollY }));
+      const scrolled = after.scrollY - before.scrollY;
+      expect(scrolled >= 70 && Math.abs(after.top - before.top) < scrolled * 0.5, 'Approach card does not remain pinned while the document advances');
+      results.push({ card: index + 1, content, stickyScrollDelta: scrolled, cardTopDelta: after.top - before.top });
+    } else results.push({ card: index + 1, content });
+  }
+  return { readableCards: results.length, cards: results };
+}
+
 async function motionChecks(page, label) {
   await ready(page);
   await check(`${label}: section entrance moves smoothly into its readable position`, async () => {
@@ -170,6 +273,8 @@ async function motionChecks(page, label) {
     return { supported, initialScale, afterScrollScale: currentScale };
   });
 
+  await check(`${label}: firm artwork and kinetic text visibly respond to scrolling`, () => strongScrollMotion(page, label));
+
   await check(`${label}: keyboard navigation never focuses visually hidden content`, async () => {
     await ready(page);
     await page.locator('body').click({ position: { x: 2, y: 2 } });
@@ -180,21 +285,7 @@ async function motionChecks(page, label) {
       // Native focus scrolling follows the site's smooth-scroll preference.
       // Wait for the movement to settle before sending the next Tab; seeing
       // the target enter the viewport does not mean its scroll has finished.
-      await page.evaluate(() => new Promise(resolve => {
-        let previous = scrollY;
-        let lastChange = performance.now();
-        const started = lastChange;
-        function sample(timestamp) {
-          if (Math.abs(scrollY - previous) > 0.2) lastChange = timestamp;
-          previous = scrollY;
-          if (timestamp - lastChange >= 120 || timestamp - started > 1500) {
-            resolve();
-            return;
-          }
-          requestAnimationFrame(sample);
-        }
-        requestAnimationFrame(sample);
-      }));
+      await settleScroll(page);
       await page.waitForFunction(() => {
         const element = document.activeElement;
         if (!element || element === document.body) return true;
@@ -212,11 +303,20 @@ async function motionChecks(page, label) {
           visible &&= style.visibility !== 'hidden' && style.display !== 'none';
         }
         const bounds = element.getBoundingClientRect();
-        return { text: element.textContent?.trim().slice(0, 80), opacity, visible, width: bounds.width, height: bounds.height, inViewport: bounds.bottom > 0 && bounds.top < innerHeight && bounds.right > 0 && bounds.left < innerWidth };
+        const centerX = Math.min(innerWidth - 1, Math.max(0, bounds.left + bounds.width / 2));
+        const centerY = Math.min(innerHeight - 1, Math.max(0, bounds.top + bounds.height / 2));
+        const topElement = document.elementFromPoint(centerX, centerY);
+        return {
+          text: element.textContent?.trim().slice(0, 80), opacity, visible,
+          width: bounds.width, height: bounds.height,
+          inViewport: bounds.bottom > 0 && bounds.top < innerHeight && bounds.right > 0 && bounds.left < innerWidth,
+          uncovered: Boolean(topElement && (topElement === element || element.contains(topElement))),
+          covering: topElement ? `${topElement.tagName}.${topElement.className}` : null,
+        };
       });
       if (!focus) continue;
       checked++;
-      expect(focus.visible && focus.opacity >= 0.99 && focus.width > 0 && focus.height > 0 && focus.inViewport, `Keyboard focus reached visually hidden content: ${JSON.stringify(focus)}`);
+      expect(focus.visible && focus.opacity >= 0.99 && focus.width > 0 && focus.height > 0 && focus.inViewport && focus.uncovered, `Keyboard focus reached visually hidden or covered content: ${JSON.stringify(focus)}`);
     }
     expect(checked >= 20, `Only ${checked} keyboard focus targets were exercised`);
     return { focusTargetsChecked: checked };
@@ -231,6 +331,32 @@ async function functional(page, label, mobile) {
     }
     const count = await page.locator('#practice').getByRole('button', { name: /explore practice/i }).count();
     expect(count === 9, `Expected nine practice detail buttons, found ${count}`);
+  });
+
+  await check(`${label}: interface uses at most four arrows`, async () => {
+    const arrows = await page.evaluate(() => {
+      const rendered = element => {
+        if (element.closest('.step-illustration')) return false;
+        for (let ancestor = element; ancestor; ancestor = ancestor.parentElement) {
+          const style = getComputedStyle(ancestor);
+          if (style.display === 'none' || style.visibility === 'hidden') return false;
+        }
+        const bounds = element.getBoundingClientRect();
+        return bounds.width > 0 && bounds.height > 0;
+      };
+      const icons = Array.from(document.querySelectorAll('svg.lucide')).filter(element => Array.from(element.classList).some(name => /arrow|move-(?:up|down|left|right)/.test(name)) && rendered(element));
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      const glyphs = [];
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        if (!node.parentElement || !rendered(node.parentElement)) continue;
+        const matches = node.textContent.match(/[←↑→↓↖↗↘↙⇢⇡]/g);
+        if (matches) glyphs.push(...matches);
+      }
+      return { count: icons.length + glyphs.length, icons: icons.map(element => element.getAttribute('class')), glyphs };
+    });
+    expect(arrows.count <= 4, `${arrows.count} interface arrows exceed the requested maximum of four: ${JSON.stringify(arrows)}`);
+    return arrows;
   });
 
   await check(`${label}: no horizontal overflow`, async () => {
@@ -538,6 +664,7 @@ try {
   mobile.on('pageerror', error => report.errors.push({ label: 'mobile', error: error.message }));
   await functional(mobile, 'mobile', true);
   await motionChecks(mobile, 'mobile');
+  await check('mobile: each stacked approach card can be read before the next arrives', () => mobileApproach(mobile));
   await check('mobile: native wheel scroll traverses page', () => measureScroll(mobile, 'mobile'));
   await check('mobile: scroll with 4x CPU slowdown traverses page', () => measureScroll(mobile, 'mobile-cpu-4x', 4));
 
@@ -591,6 +718,51 @@ try {
     expect(targets.every(target => target.visible && target.opacity >= 0.99), 'Restoring motion hides content that was already shown');
     return { readableTargets: targets.length };
   });
+
+  const fallbackContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  await fallbackContext.addInitScript(() => {
+    const original = CSS.supports.bind(CSS);
+    CSS.supports = (...args) => {
+      if (args[0] === 'animation-timeline' || (args.length === 1 && /animation-timeline\s*:/.test(args[0]))) return false;
+      return original(...args);
+    };
+  });
+  const fallbackPage = await fallbackContext.newPage();
+  fallbackPage.on('pageerror', error => report.errors.push({ label: 'fallback', error: error.message }));
+  await ready(fallbackPage);
+  await check('unsupported scroll timelines: fallback artwork and text visibly move', async () => {
+    expect(!await fallbackPage.evaluate(() => CSS.supports('animation-timeline', 'scroll()')), 'Fallback browser did not receive the unsupported-feature simulation');
+    const animation = await fallbackPage.locator('.about-art').evaluate(element => getComputedStyle(element).animationName);
+    expect(animation === 'none', `Native CSS animation remains active while testing the fallback (${animation})`);
+    return strongScrollMotion(fallbackPage, 'fallback-mobile');
+  });
+  await check('fallback mobile: native wheel scroll traverses page', () => measureScroll(fallbackPage, 'fallback-mobile'));
+  await accessibility(fallbackPage, 'fallback fully revealed');
+  await check('fallback: reduced motion restores inline styles and later motion resumes', async () => {
+    const selector = '.about-art, .about-photo, .about-orbit svg, .about-orbit > span, .kinetic-line, .practice-card > .card-top, .practice-description, .practice-link, .insight-art, .step-illustration svg, .step-trace, .reading-progress, .hero-art img, .statement-word';
+    const active = await fallbackPage.locator(selector).evaluateAll(elements => elements.filter(element => element.style.transform || element.style.getPropertyValue('stroke-dashoffset') || element.style.getPropertyValue('--fallback-word-inset')).length);
+    expect(active >= 5, `Only ${active} fallback elements received an active rendered style`);
+    await fallbackPage.emulateMedia({ reducedMotion: 'reduce' });
+    await fallbackPage.waitForTimeout(120);
+    const inspect = () => fallbackPage.locator(selector).evaluateAll(elements => elements.map(element => ({
+      label: `${element.tagName}.${element.getAttribute('class')}`,
+      inlineTransform: element.style.transform,
+      inlineStroke: element.style.getPropertyValue('stroke-dashoffset'),
+      inlineInset: element.style.getPropertyValue('--fallback-word-inset'),
+      transform: getComputedStyle(element).transform,
+      animation: getComputedStyle(element).animationName,
+    })));
+    const stopped = await inspect();
+    expect(stopped.every(element => !element.inlineTransform && !element.inlineStroke && !element.inlineInset && element.transform === 'none' && element.animation === 'none'), `Fallback styles remain after reduced motion: ${JSON.stringify(stopped.filter(element => element.inlineTransform || element.inlineStroke || element.inlineInset || element.transform !== 'none' || element.animation !== 'none'))}`);
+    await fallbackPage.mouse.wheel(0, 700);
+    await settleScroll(fallbackPage);
+    const afterScroll = await inspect();
+    expect(JSON.stringify(stopped) === JSON.stringify(afterScroll), 'Scrolling under reduced motion restarted fallback transforms');
+    await fallbackPage.emulateMedia({ reducedMotion: 'no-preference' });
+    await fallbackPage.waitForTimeout(120);
+    const resumed = await strongScrollMotion(fallbackPage, 'fallback-resumed');
+    return { styledElementsBeforeReduction: active, restoredElements: stopped.length, resumedArtworkTravelPx: resumed.artworkTravelPx };
+  });
   await check('no browser JavaScript exceptions', () => expect(report.errors.length === 0, JSON.stringify(report.errors)));
 } catch (error) {
   report.errors.push({ label: 'harness', error: error.message });
@@ -608,7 +780,7 @@ try {
     const rows = report.scroll.map(measurement => `| ${measurement.label} | ${measurement.baselineFrameIntervalMs.median} | ${measurement.scrollFrameIntervalMs.mean} | ${measurement.scrollFrameIntervalMs.p95} | ${measurement.scrollFrameIntervalMs.max} | ${measurement.delayedFramePercent}% | ${measurement.longTasks.count} / ${measurement.longTasks.maxDurationMs}ms | ${measurement.scrollWindowCLS} |`).join('\n');
     const warnings = report.scroll.flatMap(measurement => measurement.warnings.map(warning => `- ${measurement.label}: ${warning}.`));
     const failures = report.checks.filter(check => check.status === 'failed').map(check => `- ${check.name}: ${check.error}`).join('\n');
-    await writeFile(resolve(docs, 'PERFORMANCE.md'), `# Browser and scroll validation\n\nMeasured ${report.measuredAt} using Chromium ${report.browser} against ${baseURL}.\n\n## What was exercised\n\nThe production preview was tested at 1440 × 1000 and 390 × 844 CSS pixels, with additional horizontal-overflow checks at 320, 768 and 1024 CSS pixels. Native wheel input moved the full document down and back up. requestAnimationFrame intervals were sampled throughout each traversal; an idle baseline was collected separately in the same browser session. A mobile-sized repeat used Chrome DevTools 4× CPU slowdown. PerformanceObserver recorded tasks over 50ms and layout shifts during traversal.\n\n| Profile | Idle median ms | Scroll mean ms | Scroll p95 ms | Scroll max ms | Intervals > 1.5× idle | Long tasks / longest | Scroll-window CLS |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |\n${rows}\n\nA delayed interval is greater than 1.5 times that profile's measured idle median. This flags missed presentation opportunities; it does not identify their cause. The JSON report also includes a derived skipped-frame estimate and the raw timing samples. CLS uses the largest session window, with up to one second between shifts and a maximum five-second window.\n\n${warnings.length ? `## Observations\n\n${warnings.join('\n')}\n\n` : 'No profile crossed the harness warning thresholds (p95 > 2× idle, delayed intervals > 10%, a task > 200ms, or CLS > 0.1).\n\n'}## Functional and accessibility checks\n\n${report.summary.passed} checks passed; ${report.summary.failed} failed. ${report.summary.accessibilityViolations} automated WCAG A/AA violations were reported by axe across desktop, mobile, open practice dialogs and the open mobile menu. Checks cover section links, all four practice filters and pressed states, mobile menu state/Escape/link activation, practice-dialog dismissal and focus return, consultation selection and contact keyboard focus, substantive legal guides, expandable FAQ, horizontal overflow, visible intermediate section entrance frames, native reading-progress response to wheel scrolling where supported, visible keyboard focus, complete reveals after full traversal, reduced-motion preference at page load and during a visit, and contact email-draft preparation. Contact checks verify native required-field validation, RFC 6068 mailto encoding, removal of stale drafts after edits, and absence of a claim that a backend delivered the message. Screenshots are captured after full scroll traversal so section reveals have been exercised.\n\n${failures ? `Failed checks:\n\n${failures}\n\n` : ''}## Limits and reproduction\n\nThese measurements come from a headless cloud container with headless Chromium. They are useful regression evidence, not physical-phone performance, touch-scroll validation, a guarantee of frame rate, or field Core Web Vitals. CPU slowdown simulates constrained main-thread execution; it does not emulate a complete mobile device or slow network. Automated accessibility does not replace manual assistive-technology testing.\n\nRun \`npm run build\`, start \`npm run preview -- --host 0.0.0.0\`, then run \`BASE_URL=http://127.0.0.1:4173 node scripts/browser-check.mjs\`. Use \`CHROMIUM_EXECUTABLE\` to select another installed Chromium binary.\n\nEvidence: [JSON report](../artifacts/browser-report.json), [desktop screenshot](../artifacts/desktop.png), [mobile screenshot](../artifacts/mobile.png), [reduced-motion screenshot](../artifacts/mobile-reduced-motion.png).\n`);
+    await writeFile(resolve(docs, 'PERFORMANCE.md'), `# Browser and scroll validation\n\nMeasured ${report.measuredAt} using Chromium ${report.browser} against ${baseURL}.\n\n## What was exercised\n\nThe production preview was tested at 1440 × 1000 and 390 × 844 CSS pixels, with additional horizontal-overflow checks at 320, 768 and 1024 CSS pixels. Native wheel input moved the full document down and back up. requestAnimationFrame intervals were sampled throughout each traversal; an idle baseline was collected separately in the same browser session. A mobile-sized repeat used Chrome DevTools 4× CPU slowdown. A separate mobile browser overrides JavaScript scroll-timeline feature detection to exercise the production fallback; its native-wheel traversal appears as the fallback-mobile profile. PerformanceObserver recorded tasks over 50ms and layout shifts during traversal.\n\n| Profile | Idle median ms | Scroll mean ms | Scroll p95 ms | Scroll max ms | Intervals > 1.5× idle | Long tasks / longest | Scroll-window CLS |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |\n${rows}\n\nA delayed interval is greater than 1.5 times that profile's measured idle median. This flags missed presentation opportunities; it does not identify their cause. The JSON report also includes a derived skipped-frame estimate and the raw timing samples. CLS uses the largest session window, with up to one second between shifts and a maximum five-second window.\n\n${warnings.length ? `## Observations\n\n${warnings.join('\n')}\n\n` : 'No profile crossed the harness warning thresholds (p95 > 2× idle, delayed intervals > 10%, a task > 200ms, or CLS > 0.1).\n\n'}## Functional and accessibility checks\n\n${report.summary.passed} checks passed; ${report.summary.failed} failed. ${report.summary.accessibilityViolations} automated WCAG A/AA violations were reported by axe across desktop, mobile, open practice dialogs and the open mobile menu. Checks cover section links, all four practice filters and pressed states, mobile menu state/Escape/link activation, practice-dialog dismissal and focus return, consultation selection and contact keyboard focus, substantive legal guides, expandable FAQ, horizontal overflow, visible intermediate section entrance frames, native reading-progress response to wheel scrolling where supported, measured artwork translation/rotation/scale and decorative text rows moving in opposite directions, readable mobile sticky cards before each handoff, a maximum of four interface arrows, visible and unobscured keyboard focus, complete reveals after full traversal, reduced-motion preference at page load and during a visit, and contact email-draft preparation. Contact checks verify native required-field validation, RFC 6068 mailto encoding, removal of stale drafts after edits, and absence of a claim that a backend delivered the message. The forced unsupported-timeline browser verifies actual fallback artwork/text movement, full-page accessibility, restoration of original inline motion styles under reduced motion, absence of new motion styles after scrolling with that preference, and motion resumption when the preference changes back. Screenshots are captured after full scroll traversal so section reveals have been exercised.\n\n${failures ? `Failed checks:\n\n${failures}\n\n` : ''}## Limits and reproduction\n\nThese measurements come from a cloud execution environment running headless Chromium. They are useful regression evidence, not physical-phone performance, touch-scroll validation, a guarantee of frame rate, or field Core Web Vitals. CPU slowdown simulates constrained main-thread execution; it does not emulate a complete mobile device or slow network. Forced feature detection exercises the fallback in Chromium and does not constitute a physical Safari or Firefox device test. Automated accessibility does not replace manual assistive-technology testing.\n\nRun \`npm run build\`, start \`npm run preview -- --host 0.0.0.0\`, then run \`BASE_URL=http://127.0.0.1:4173 node scripts/browser-check.mjs\`. Use \`CHROMIUM_EXECUTABLE\` to select another installed Chromium binary.\n\nEvidence: [JSON report](../artifacts/browser-report.json), [desktop screenshot](../artifacts/desktop.png), [mobile screenshot](../artifacts/mobile.png), [reduced-motion screenshot](../artifacts/mobile-reduced-motion.png).\n`);
   }
   console.log(`RESULT ${report.summary.passed} passed, ${report.summary.failed} failed; report: artifacts/browser-report.json`);
   if (report.summary.failed || report.summary.javascriptErrors) process.exitCode = 1;
