@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" fill="none">
+  <title>Quiet geometry in stone</title>
+  <desc>Original artwork of a sculptural limestone arch and sunlit steps, an imagined architectural detail.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="720" y2="480" gradientUnits="userSpaceOnUse"><stop stop-color="#9da88f"/><stop offset="1" stop-color="#d2d2bd"/></linearGradient>
+    <linearGradient id="facade" x1="85" y1="80" x2="520" y2="410" gradientUnits="userSpaceOnUse"><stop stop-color="#e8e4d2"/><stop offset="1" stop-color="#bbc5ab"/></linearGradient>
+    <linearGradient id="inner" x1="190" y1="250" x2="460" y2="250" gradientUnits="userSpaceOnUse"><stop stop-color="#264533"/><stop offset="1" stop-color="#617758"/></linearGradient>
+    <linearGradient id="ground" x1="380" y1="295" x2="370" y2="480" gradientUnits="userSpaceOnUse"><stop stop-color="#86997e"/><stop offset="1" stop-color="#e2e2cd"/></linearGradient>
+    <pattern id="stonegrain" width="29" height="37" patternUnits="userSpaceOnUse"><path d="M5 9h2m13 19h2m-12 6h1m17-32h1" stroke="#57644c" stroke-opacity=".1" stroke-width=".8"/></pattern>
+  </defs>
+  <path fill="url(#background)" d="M0 0h720v480H0z"/>
+  <path fill="#526e51" d="M557 0h163v385l-163-49Z"/>
+  <path fill="#748866" d="m535 0 22 0v336l-22 16Z"/>
+  <path fill="url(#ground)" d="m0 370 393-104 327 85v129H0Z"/>
+  <path fill="#50694b" d="m85 328 102-17 283 169H247Z"/>
+  <path fill="#9dab90" d="m0 418 395-109 325 86v14l-325-83L0 439Z"/>
+  <path fill="#e7e5cf" d="m0 418 395-109 325 86-25 6-300-78L0 430Z"/>
+  <path fill="#778c6a" d="m0 439 395-113 325 83v9l-325-80L0 449Z"/>
+  <path fill="#b7c3a5" d="m0 463 405-121 315 81v18l-315-78L74 480H0Z"/>
+  <path fill="#ede9d3" d="m0 463 405-121 315 81-20 7-295-74L0 476Z"/>
+  <path fill="#c3c8ac" d="m490 0 70 22v342l-70-19Z"/>
+  <path fill="url(#facade)" fill-rule="evenodd" d="M66 0h424v345l-118 32V199a84 84 0 0 0-168 0v215l-138 38Zm138 198a84 84 0 0 1 168 0v179l-168 38Z"/>
+  <path fill="#eae6d0" d="M66 0h424v10H66Z"/>
+  <path fill="url(#inner)" d="M204 199a84 84 0 0 1 168 0v178l-168 38Z"/>
+  <path fill="#182f22" d="M227 205a61 61 0 0 1 122 0v170l-122 34Z"/>
+  <path fill="#b1bda0" d="M204 199a84 84 0 0 1 168 0v178l-23-2V205a61 61 0 0 0-122 0v204l-23 6Z"/>
+  <path fill="#7e9273" d="M227 205a61 61 0 0 1 122 0v170l-19 6V211a42 42 0 0 0-84 0v193l-19 5Z"/>
+  <path fill="#203d29" d="M246 212a42 42 0 0 1 84 0v169l-84 23Z"/>
+  <path fill="#59764f" d="m289 242 41-18v157l-41 11Z"/>
+  <path fill="#99ac8a" d="m288 242 9 3v144l-9 3Z"/>
+  <path fill="#acb99d" d="m249 312 81-22v10l-81 23Z"/>
+  <path fill="#d2d6bb" d="m249 312 81-22v4l-81 22Z"/>
+  <path stroke="#a6b096" stroke-opacity=".5" d="M66 74h424M66 141h147m147 0h130M66 211h138m168 0h118M66 280h138m168 0h118M66 349h138m168 0h118M124 0v74m201-74v74m89-74v74M182 74v67m251-67v67M116 141v70m309-70v70M160 211v69m293-69v69M113 280v69m310-69v69M165 349v70"/>
+  <path stroke="#f6f0d9" stroke-opacity=".65" d="M66 73h424M66 140h147m147 0h130M66 210h138m168 0h118M66 279h138m168 0h118M66 348h138m168 0h118"/>
+  <path fill="url(#stonegrain)" fill-rule="evenodd" d="M66 0h424v345l-118 32V199a84 84 0 0 0-168 0v215l-138 38Z"/>
+  <path fill="#405d41" d="m489 345 71 19 160-12v45l-177-27-171 7Z"/>
+  <path fill="#bec7ab" d="m490 338 70 19 160-12v7l-160 12-70-19Z"/>
+  <path stroke="#a9b398" stroke-opacity=".7" d="m36 480 369-117m-81 117 124-106m199 106-136-89"/>
+  <path fill="#142b24" opacity=".05" d="M0 0h720v480H0z"/>
+</svg>

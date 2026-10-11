@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 650" fill="none">
+  <title>A colonnade in the afternoon light</title>
+  <desc>Original architectural artwork of a limestone colonnade, with fluted columns, deep green shadows and warm afternoon light. An imagined structure, not a depiction of the firm's offices.</desc>
+  <defs>
+    <linearGradient id="sky" x1="70" y1="0" x2="470" y2="580" gradientUnits="userSpaceOnUse"><stop stop-color="#b6bcab"/><stop offset=".55" stop-color="#d8d5c9"/><stop offset="1" stop-color="#8b9d8c"/></linearGradient>
+    <linearGradient id="stone" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#adafa0"/><stop offset=".16" stop-color="#e4e0d3"/><stop offset=".55" stop-color="#ded9cb"/><stop offset=".82" stop-color="#c1c3b2"/><stop offset="1" stop-color="#879a88"/></linearGradient>
+    <linearGradient id="shaft" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#d1cfc0"/><stop offset=".18" stop-color="#f0ebdd"/><stop offset=".46" stop-color="#e3dece"/><stop offset=".73" stop-color="#abb4a2"/><stop offset="1" stop-color="#778e7d"/></linearGradient>
+    <linearGradient id="floor" x1="105" y1="435" x2="450" y2="650" gradientUnits="userSpaceOnUse"><stop stop-color="#8a9a87"/><stop offset=".3" stop-color="#b8c0ac"/><stop offset="1" stop-color="#e2dfd1"/></linearGradient>
+    <linearGradient id="wall" x1="30" y1="260" x2="288" y2="280" gradientUnits="userSpaceOnUse"><stop stop-color="#233e32"/><stop offset=".45" stop-color="#3c5140"/><stop offset="1" stop-color="#6d806b"/></linearGradient>
+    <linearGradient id="beam" x1="295" y1="35" x2="295" y2="192" gradientUnits="userSpaceOnUse"><stop stop-color="#ece7d8"/><stop offset=".6" stop-color="#c8cabb"/><stop offset="1" stop-color="#809582"/></linearGradient>
+    <linearGradient id="shade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#193c2b"/><stop offset="1" stop-color="#101f18"/></linearGradient>
+    <pattern id="grain" width="31" height="39" patternUnits="userSpaceOnUse"><path d="M5 9h2m16 15h1m-14 9h1m17-30h2" stroke="#53614a" stroke-opacity=".1" stroke-width=".7"/><path d="M14 5h2m-11 21h1m19 7h2" stroke="#f9f4e5" stroke-opacity=".2" stroke-width=".7"/></pattern>
+    <clipPath id="frame"><path d="M0 0h550v650H0z"/></clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <path fill="url(#sky)" d="M0 0h550v650H0z"/>
+    <path fill="#8ca08a" d="M0 415c33-24 51-20 81-41 12-9 22-24 47-27 47-6 66 46 127 53l-3 126H0Z"/>
+    <path fill="#718d73" d="M0 416c30-11 55 5 90-20 27-20 70-5 111 35l24 106H0Z"/>
+    <path fill="#526f53" d="M0 446c40-27 54-24 93-12 39 12 59 1 90-8l57 112H0Z"/>
+    <path fill="url(#wall)" d="M0 182 296 115v421L0 552Z"/>
+    <path fill="#182c21" d="m51 232 76-14v254l-76 10Z"/>
+    <path fill="#172f22" d="m150 207 59-12v267l-59 7Z"/>
+    <path fill="#233d2b" d="m232 190 47-11v271l-47 8Z"/>
+    <path stroke="#869781" stroke-opacity=".35" d="m0 276 297-56M0 356l296-44M0 435l296-30"/>
+    <path fill="#294933" d="m47 234 6-1v249l-6 4Zm99-25 5-1v260l-5 3Zm83-19 4-1v269l-4 2Z"/>
+    <path fill="url(#floor)" d="m0 514 294-83 256 68v151H0Z"/>
+    <path fill="#3e5d43" d="m0 507 298-70 252 64-62 16-232-58L0 535Z"/>
+    <path fill="#596e54" d="m112 448 25 2-24 188H51Zm119-20 33 5-14 217h-80Zm142 15 47 13 109 194H394Z"/>
+    <path stroke="#75836e" stroke-opacity=".6" d="m0 585 326-96 224 69M0 625l353-117 197 71M118 650l269-129M290 650l135-117M483 650l-12-104"/>
+    <path fill="#c2c7b5" d="m0 537 293-82 257 67v16l-257-67L0 556Z"/>
+    <path fill="#dde0ce" d="m0 537 293-82 257 67-19 5-238-61L0 549Z"/>
+    <path fill="#405c44" d="m0 555 293-84 257 67v8l-257-63L0 564Z"/>
+    <path fill="#c7cebb" d="m0 581 302-90 248 65v15l-248-64L0 600Z"/>
+    <path fill="#e3e5d5" d="m0 581 302-90 248 65-20 5-228-59L0 593Z"/>
+    <path fill="#61735b" d="m0 600 302-93 248 64v7l-248-59L0 609Z"/>
+    <path fill="#d2d5c2" d="m0 627 313-102 237 61v23l-237-61L0 650Z"/>
+    <path fill="#e9e8d7" d="m0 627 313-102 237 61-20 6-217-56L0 640Z"/>
+    <path fill="url(#shade)" d="m0 100 351-80 199 61v128l-226-51L0 250Z"/>
+    <path fill="#526a54" d="m0 153 327-82 223 69v25L326 102 0 189Z"/>
+    <path fill="#6d7e65" d="m0 103 351-83 199 61-3 13-196-59L0 119Z"/>
+    <path fill="#344e38" d="m32 196 12-3 282-78 224 58v8l-224-56L44 203Z"/>
+    <path fill="url(#stone)" d="m18 237 26-7v286l-26 8Z"/>
+    <path fill="#a9b6a1" d="m44 230 9 5v278l-9 3Z"/>
+    <path fill="#c6ccbb" d="m11 224 36-9 11 10v12l-36 10-11-8Z"/>
+    <path fill="#e0e2cf" d="m11 224 36-9 11 10-36 10Z"/>
+    <path fill="#8d9f85" d="m11 239 36-10 11 8-36 10Z"/>
+    <path stroke="#899b82" stroke-opacity=".7" d="m24 237 1 280m6-282 1 280m6-282 1 280"/>
+    <path stroke="#e2e5d3" stroke-opacity=".5" d="m22 238 1 280m6-282 1 280m6-282 1 280"/>
+    <path fill="#b0bca5" d="m11 517 34-10 13 10v13l-35 12-12-10Z"/>
+    <path fill="#d5dac6" d="m11 517 34-10 13 10-35 12Z"/>
+    <path fill="url(#stone)" d="m104 211 36-9v304l-36 11Z"/>
+    <path fill="#91a58f" d="m140 202 11 5v296l-11 3Z"/>
+    <path fill="#bdc6b0" d="m96 194 48-12 15 11v14l-49 14-14-10Z"/>
+    <path fill="#e7e6d5" d="m96 194 48-12 15 11-49 13Z"/>
+    <path fill="#8c9f85" d="m96 210 48-13 15 10-49 14Z"/>
+    <path stroke="#7e9278" stroke-opacity=".6" d="m111 211 1 302m7-304 1 302m7-304 1 302m7-304 1 302"/>
+    <path stroke="#f5f1df" stroke-opacity=".6" d="m108 212 1 301m7-304 1 302m7-304 1 302m7-304 1 302"/>
+    <path fill="#b3bea5" d="m94 508 48-15 17 12v19l-49 15-16-12Z"/>
+    <path fill="#e3e4cf" d="m94 508 48-15 17 12-49 15Z"/>
+    <path fill="#859779" d="m94 527 16 12 49-15v9l-49 16-16-13Z"/>
+    <path fill="url(#shaft)" d="m211 176 51-13 2 347-54 16Z"/>
+    <path fill="#869c83" d="m262 163 14 9v334l-12 4Z"/>
+    <path fill="#c0c8b1" d="m198 157 70-18 18 14v20l-70 21-18-15Z"/>
+    <path fill="#eeead9" d="m198 157 70-18 18 14-70 20Z"/>
+    <path fill="#99a88c" d="m198 178 18 16 70-21v-8l-70 20-18-16Z"/>
+    <path stroke="#83957b" stroke-opacity=".6" d="m220 178-1 343m10-346-1 343m10-346-1 343m10-346-1 343m10-346-1 343"/>
+    <path stroke="#f6f1df" stroke-opacity=".8" d="m217 179-1 343m10-346-1 343m10-346-1 343m10-346-1 343m10-346-1 343"/>
+    <path fill="#b4bea4" d="m194 511 72-21 23 18v22l-72 23-23-20Z"/>
+    <path fill="#e7e5d0" d="m194 511 72-21 23 18-72 22Z"/>
+    <path fill="#879777" d="m194 533 23 20 72-23v10l-72 24-23-20Z"/>
+    <path fill="#324e38" d="m299 139 66-17v403l-65-15Z"/>
+    <path fill="#3a5940" d="m300 150 23 7v350l-23 3Z"/>
+    <path fill="#718970" d="m323 157 9 2v347l-9 1Z"/>
+    <path fill="#b5c1a9" d="m318 129 16 6v24l-16-6Z"/>
+    <path fill="#8a9e82" d="m290 121 46 12v18l-46-12Z"/>
+    <path fill="#aebb9f" d="m298 505 39 9v21l-39-10Z"/>
+    <path fill="#d1d5ba" d="m298 505 11-4 36 10-8 3Z"/>
+    <path fill="url(#shaft)" d="m409 124 83-21 1 462-87 25Z"/>
+    <path fill="#798f76" d="m492 103 36 18-2 429-33 15Z"/>
+    <path fill="#a3b198" d="m528 121 8-3-4 429-6 3Z"/>
+    <path fill="#d7d8c0" d="m392 94 109-29 47 26v24l-109 34-47-29Z"/>
+    <path fill="#f0ebd6" d="m392 94 109-29 47 26-109 32Z"/>
+    <path fill="#a1b095" d="m392 120 47 29 109-34v-10l-109 34-47-29Z"/>
+    <path fill="#c6ceb2" d="m402 126 36 21 96-28v12l-95 30-37-23Z"/>
+    <path stroke="#7b9073" stroke-opacity=".7" stroke-width="1.1" d="m421 128-3 450m15-454-3 450m15-454-3 450m15-454-3 450m15-454-3 450m15-454-3 450"/>
+    <path stroke="#f7f0db" stroke-opacity=".8" stroke-width="1.2" d="m416 129-3 450m15-454-3 450m15-454-3 450m15-454-3 450m15-454-3 450m15-454-3 450"/>
+    <path stroke="#cad0b6" stroke-opacity=".4" d="m504 141-1 415m11-410-1 404m10-399-2 389"/>
+    <path fill="#b7c1a4" d="m383 572 118-35 51 32v29l-119 39-50-36Z"/>
+    <path fill="#ece9d1" d="m383 572 118-35 51 32-119 37Z"/>
+    <path fill="#90a080" d="m383 601 50 36 119-39v12l-119 40-50-35Z"/>
+    <path fill="#ced4b7" d="m368 614 128-40 54 31v31l-100 14h-36l-46-25Z"/>
+    <path fill="#e8e7cc" d="m368 614 128-40 54 31-130 41Z"/>
+    <path fill="url(#beam)" d="m-22 101 377-99 236 63v50L352 58-22 163Z"/>
+    <path fill="#edf0dc" d="M-22 101 355 2l236 63-23 7L352 15-22 115Z"/>
+    <path fill="#84987d" d="m-22 155 374-105 239 58v7L352 58-22 163Z"/>
+    <path fill="#bcc6ae" d="m-22 128 374-105 239 60v8L352 31-22 136Z"/>
+    <path fill="#d7dbc4" d="m-22 129 374-104 239 61v3L352 28-22 133Z"/>
+    <path stroke="#afbaa2" stroke-opacity=".4" d="m9 99 1 26m91-50 1 26m90-51 1 24m90-50 1 24m100-9 1 31m92-10 1 34"/>
+    <path fill="url(#grain)" d="M-22 101 355 2l236 63v50L352 58-22 163Zm431 23 83-21 1 462-87 25Zm-198 52 51-13 2 347-54 16Zm-107 35 36-9v304l-36 11ZM0 537l293-82 257 67v128H0Z"/>
+    <path stroke="#f2edd9" stroke-opacity=".4" d="m412 183 10-3m17 25 14-4m24 73 13-3m-70 24 6-2m22 112 17-5m-40 88 15-4m-3-80 12-3m-233-74 12-3m16 118 10-3m-19-183 8-2m-129 40 7-2m14 137 9-2"/>
+    <path fill="#142b24" opacity=".08" d="M0 0h550v650H0z"/>
+  </g>
+</svg>
