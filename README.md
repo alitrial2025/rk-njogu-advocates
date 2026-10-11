@@ -64,4 +64,6 @@ Test the repository path with:
 BASE_URL=http://127.0.0.1:4173/rk-njogu-advocates/ npm run test:browser
 ```
 
-Once GitHub reports a successful deployment, inspect the same public URL in Chromium. The browser harness can also run against that public URL by changing `BASE_URL`. This exercises the real hosted assets, navigation, contact drafting and scrolling. Save fresh evidence for each deployed version; a successful local build alone does not prove publication.
+After deployment, the workflow runs Chromium browser, accessibility and scroll checks against the public site and uploads screenshots and reports as a workflow artifact. It verifies the deployed build revision matches the commit being released, so a cached older page cannot count as successful verification.
+
+The browser harness can also run against the public URL by changing `BASE_URL`. Set `EXPECTED_COMMIT` to the full deployed SHA to require the same revision check. This exercises the real hosted assets, navigation, contact drafting and scrolling. Save fresh evidence for each deployed version; a successful local build alone does not prove publication.

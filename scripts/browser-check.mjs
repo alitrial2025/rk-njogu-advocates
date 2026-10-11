@@ -43,6 +43,10 @@ async function check(name, callback) {
 
 async function ready(page) {
   await page.goto(baseURL, { waitUntil: 'networkidle' });
+  if (process.env.EXPECTED_COMMIT) {
+    const revision = await page.locator('meta[name="build-revision"]').getAttribute('content');
+    expect(revision === process.env.EXPECTED_COMMIT, `Deployed build ${revision} does not match expected commit ${process.env.EXPECTED_COMMIT}`);
+  }
   await page.evaluate(() => document.fonts.ready);
   await page.locator('main').waitFor();
 }
