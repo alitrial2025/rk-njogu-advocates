@@ -51,7 +51,7 @@ The form prepares an email draft. It does not send enquiries, persist form value
 
 ## Before public launch
 
-Review the educational guides, privacy notice and website terms with the firm. Testimonials remain unpublished because the checklist marks them TBA. Add approved team biographies or office photography only when supplied. Configure and test a delivery service if a server-backed form is wanted.
+Review the educational guides, privacy notice and website terms with the firm. The Client Testimonials section shows all four listed client names and Google Reviews; written quotations remain forthcoming because the PDF marks them TBA. Add approved team biographies or office photography only when supplied. Configure and test a delivery service if a server-backed form is wanted.
 
 The GitHub Pages target is `https://alitrial2025.github.io/rk-njogu-advocates/`. The canonical and social image URLs point there. Verify the map pin and public holiday hours. If moving to a custom domain, update the canonical/social metadata and the build base.
 
@@ -75,3 +75,7 @@ BASE_URL=http://127.0.0.1:4173/rk-njogu-advocates/ npm run test:browser
 After deployment, the workflow runs Chromium browser, accessibility and scroll checks against the public site and uploads screenshots and reports as a workflow artifact. It verifies the deployed build revision matches the commit being released, so a cached older page cannot count as successful verification.
 
 The browser harness can also run against the public URL by changing `BASE_URL`. Set `EXPECTED_COMMIT` to the full deployed SHA to require the same revision check. This exercises the real hosted assets, navigation, contact drafting and scrolling. Save fresh evidence for each deployed version; a successful local build alone does not prove publication.
+
+## Checklist sections
+
+The page includes a visible Client Testimonials section, prominent Facebook/LinkedIn/X/Google Business profiles, Blog & News with three substantive legal guides and factual office notices, and Client Tools & Special Features with a working consultation preparation checklist. The checklist is held only in browser memory; it does not upload documents or send an enquiry. All contact and service scopes remain mapped in docs/CHECKLIST.md.

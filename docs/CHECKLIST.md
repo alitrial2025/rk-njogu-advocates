@@ -71,9 +71,9 @@ Use meaningful accessible names for icon links. If external links open a new tab
 | Item | What the checklist supplies | Current handling / next input |
 | --- | --- | --- |
 | Higher-resolution logo master (optional) | The embedded logo is 291 × 290px. | The source image is preserved unchanged; its dark-surface presentation uses CSS blending. A vector master would support future larger-format use. |
-| Client testimonials | Marked **TBA**. Possible sources listed: Afriavo Orchards Ltd, Apple Orchards Ltd, Femuro Management Ltd, Outrival Human Resource Services Ltd, Google Reviews. | Do not publish fabricated quotes, logos, or implied endorsements. Obtain approved quotation text, attribution and permission; review any imported Google content and usage terms. |
-| Blog / news | No copy supplied. | No invented article bylines or publication dates. Any new educational copy is a draft for legal/editorial review. |
-| Special features | No feature is specified. | Use useful standard navigation, service discovery, and contact tools; avoid promising booking/payment features that lack integration. |
+| Client testimonials | Marked **TBA**. Possible sources listed: Afriavo Orchards Ltd, Apple Orchards Ltd, Femuro Management Ltd, Outrival Human Resource Services Ltd, Google Reviews. | At the user’s explicit request, display all four listed names in the Client Testimonials section with forthcoming status, plus the supplied Google Reviews link. Written quotations remain TBA; no quotations, client logos or ratings are fabricated. |
+| Blog / news | No copy supplied. | Visible Blog & News section contains original educational guides and office notices grounded in the supplied address and hours. No invented bylines, dates or firm announcements. |
+| Special features | No feature is specified. | At the user’s request, show Client Tools & Special Features: an interactive five-item consultation preparation checklist, practice discovery, enquiry preparation, WhatsApp and visit/directions shortcuts. No unsupported booking or payment claims. |
 | Advocate biographies and portraits | Not included. | No invented advocates, credentials, experience, or headshots. Obtain names, practising roles, approved biographies, and portraits if a team section is desired. |
 | Office photography | Seven aerial approach/area photos supplied separately in `Downloads.zip`; no identified office-building photograph. | The seven original JPEGs appear in the Kamulu location gallery with attribution intact and a directions link using the supplied plus code. `threshold.webp` and `perspective.webp` remain decorative conceptual architecture; neither depicts the actual office. |
 | Email/form delivery | No provider, endpoint or secure delivery configuration supplied. | Direct email and WhatsApp contact are available. A form that prepares a draft must clearly say it opens the user's email app or WhatsApp; it cannot claim delivery. Configure and test a server endpoint before enabling a real sent state. |
@@ -93,7 +93,7 @@ Use meaningful accessible names for icon links. If external links open a new tab
 - Mobile and desktop layouts have no unintended horizontal overflow.
 - Motion works with CSS timelines and their passive-event fallback; reduced motion disables scrub effects and restores the three approach cards to normal flow. Browser scroll performance has a reproducible report tied to the tested revision.
 
-All populated firm-information fields are implemented, including the supplied logo, complete overview, mission, vision, nine practice scopes, contacts, address, hours, map and social profiles. Testimonials remain TBA; blog/news and special-feature fields are blank. Approved testimonial/article material, biography assets and a delivery backend remain separate client inputs or integration work. GitHub Pages is the user-authorized publication target.
+All populated firm-information fields are implemented, including the supplied logo, complete overview, mission, vision, nine practice scopes, contacts, address, hours, map and social profiles. The user requested visible sections for every checklist heading. Client Testimonials displays all four listed names with forthcoming status and Google Reviews; prominent Social Media includes every supplied profile and @RKNjoguAdv. Blog & News and Client Tools & Special Features are implemented despite the PDF supplying no article copy or feature specifications. Approved testimonial/article material, biography assets and a delivery backend remain separate client inputs or integration work. GitHub Pages is the user-authorized publication target.
 
 ## Logo provenance
 
@@ -110,3 +110,17 @@ Extracted the original embedded JPEG from page 1 of the latest checklist without
 | `public/kamulu/view-05.jpg` | `1000685347.jpg` |
 | `public/kamulu/view-06.jpg` | `1000685342.jpg` |
 | `public/kamulu/view-07.jpg` | `1000685346.jpg` |
+
+## Visible section map
+
+| Checklist heading | Website location |
+| --- | --- |
+| Firm identity, logo, tagline | Header, hero, footer and metadata |
+| About, mission, vision, values | `#about` |
+| All nine practice areas and full scopes | `#practice` and service dialogs |
+| Client Testimonials, four named clients, Google Reviews | `#testimonials` |
+| Social Media: Facebook, LinkedIn, Twitter/X, Google Business | `#social` and footer |
+| Blog / News | `#insights`, legal guide dialogs and `#news` office notices |
+| Any Special Features Required | `#tools`: working preparation checklist and client shortcuts |
+| Kamulu approach photos and directions | `#visit` |
+| Address, both phones/emails/WhatsApp routes, hours and map | `#contact` |

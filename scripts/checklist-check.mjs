@@ -255,6 +255,173 @@ export async function checklistChecks(page, label, check, expect) {
   );
 
   await check(
+    `${label}: testimonial section includes all four checklist clients and Google Reviews`,
+    async () => {
+      const section = page.locator('#testimonials');
+      const clients = await section.locator('.client-list li').allInnerTexts();
+      expect(
+        clients.length === 4,
+        'The visible testimonials section is missing client entries',
+      );
+      for (const name of [
+        'Afriavo Orchards Ltd',
+        'Apple Orchards Ltd',
+        'Femuro Management Ltd',
+        'Outrival Human Resource Services Ltd',
+      ]) {
+        expect(
+          clients.some((client) => client.includes(name)),
+          `Missing checklist client: ${name}`,
+        );
+      }
+      expect(
+        clients.every((client) =>
+          normalize(client).includes('testimonial forthcoming'),
+        ),
+        'Testimonials marked TBA in the PDF are not identified as forthcoming',
+      );
+      expect(
+        (await section
+          .getByRole('link', { name: 'Read Google Reviews', exact: true })
+          .getAttribute('href')) === 'https://share.google/ylvoiONkW36RoPiQF',
+        'Google Reviews does not use the supplied business profile',
+      );
+    },
+  );
+
+  await check(
+    `${label}: prominent social profiles include Facebook, LinkedIn and the supplied X handle`,
+    async () => {
+      const social = page.locator('#social');
+      const links = await social
+        .locator('a')
+        .evaluateAll((elements) =>
+          elements.map((element) => element.getAttribute('href')),
+        );
+      expect(
+        links.length === 4 && socialLinks.every((link) => links.includes(link)),
+        'Prominent social links do not match all four supplied profiles',
+      );
+      const text = await social.innerText();
+      for (const name of [
+        'Facebook',
+        'LinkedIn',
+        'X / Twitter',
+        '@RKNjoguAdv',
+        'Google Business',
+      ])
+        expect(text.includes(name), `Social section is missing ${name}`);
+    },
+  );
+
+  await check(
+    `${label}: Blog and News has readable articles and checklist-grounded firm notices`,
+    async () => {
+      const menuButton = page.getByRole('button', {
+        name: 'Open menu',
+        exact: true,
+      });
+      const mobileMenu = await menuButton.isVisible();
+      if (mobileMenu) await menuButton.click();
+      expect(
+        (await page
+          .locator('header')
+          .getByRole('link', { name: 'Blog & News', exact: true })
+          .getAttribute('href')) === '#insights',
+        'Blog and News is not discoverable in navigation',
+      );
+      if (mobileMenu)
+        await page
+          .getByRole('button', { name: 'Close menu', exact: true })
+          .click();
+      const blog = page.locator('#insights');
+      expect(
+        (await blog.innerText()).includes('BLOG & NEWS'),
+        'Blog and News section has no visible label',
+      );
+      expect(
+        (await blog.locator('.insight-card').count()) === 3,
+        'Blog articles are missing',
+      );
+      const notices = await blog.locator('#news').innerText();
+      expect(
+        notices.includes('Suite BW-213') &&
+          notices.includes('8:00 am–5:00 pm') &&
+          notices.includes('8:00 am–1:00 pm') &&
+          notices.includes('public holidays'),
+        'Firm notices are missing the supplied location or hours',
+      );
+    },
+  );
+
+  await check(
+    `${label}: special features include a working consultation preparation checklist`,
+    async () => {
+      const tools = page.locator('#tools');
+      expect(
+        (await tools.innerText()).includes('SPECIAL FEATURES'),
+        'Special features section is not visibly identified',
+      );
+      const inputs = tools.getByRole('checkbox');
+      expect(
+        (await inputs.count()) === 5,
+        'Consultation preparation is missing checklist items',
+      );
+      const progress = tools.getByRole('progressbar', {
+        name: 'Consultation preparation progress',
+      });
+      expect(
+        (await progress.getAttribute('value')) === '0',
+        'Preparation does not start empty',
+      );
+      for (let index = 0; index < 5; index++) {
+        await inputs.nth(index).check();
+        expect(
+          await inputs.nth(index).isChecked(),
+          `Preparation item ${index + 1} cannot be selected`,
+        );
+        expect(
+          (await progress.getAttribute('value')) === String(index + 1),
+          'Preparation progress did not update',
+        );
+      }
+      expect(
+        (await tools.innerText()).includes('5 / 5 prepared'),
+        'Complete preparation is not announced',
+      );
+      for (let index = 0; index < 5; index++) await inputs.nth(index).uncheck();
+      expect(
+        (await progress.getAttribute('value')) === '0',
+        'Preparation items cannot be cleared',
+      );
+    },
+  );
+
+  await check(
+    `${label}: client tool shortcuts reach real services, consultation and directions`,
+    async () => {
+      const hrefs = await page
+        .locator('#tools a')
+        .evaluateAll((links) => links.map((link) => link.getAttribute('href')));
+      for (const target of [
+        '#practice',
+        '#contact',
+        '#visit',
+        'https://wa.me/254704652614',
+      ])
+        expect(
+          hrefs.includes(target),
+          `Missing working client-tool destination: ${target}`,
+        );
+      for (const target of ['#practice', '#contact', '#visit'])
+        expect(
+          (await page.locator(target).count()) === 1,
+          `Client-tool destination ${target} is missing`,
+        );
+    },
+  );
+
+  await check(
     `${label}: all seven Kamulu photos can be viewed and directions use the supplied map location`,
     async () => {
       const visit = page.locator('#visit');

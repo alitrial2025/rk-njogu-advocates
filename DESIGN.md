@@ -138,7 +138,7 @@ These are editorial explanations, not promises of a fixed response time, free co
 
 The checklist provides no article copy or testimonial quotations. Do not fabricate attributed articles, dates, bylines, quotations, or client outcomes. The build includes original general educational guides, with a general-information notice and no claim that they were written or endorsed by a named advocate. The copy remains subject to legal/editorial review before publication. Three offset arch illustrations drift, tilt and scale continuously with their cards' scroll progress; offset spacing collapses on mobile. Underlined titles open real readable guide content.
 
-A genuine Google Business link can offer an external route to reviews. Listed organizations in the checklist are possible future testimonial sources; their names are not permission to publish endorsements or client logos.
+A genuine Google Business link can offer an external route to reviews. The user explicitly requested the testimonial heading and listed client names. Display the four names as typographic entries with forthcoming testimonial status and a Google Reviews link. Written quotations remain TBA; do not invent quotations, ratings or client logos.
 
 ### Contact
 
@@ -200,3 +200,7 @@ Approved portraits and biographies, genuine client testimonials, reviewed legal 
 - Premium presentation should make legal help easier to understand and contact, with readable mobile content and prompt interaction.
 - Do not publish unverified achievements, outcome guarantees, fake endorsements, invented team members, or misleading form confirmations.
 - Record missing client assets and integration requirements in the checklist so final publication review has clear next steps.
+
+## Requested checklist sections
+
+Make each checklist heading visible and easy to discover. Client Testimonials follows the firm overview and includes all four supplied names, a clear forthcoming status and Google Reviews. The adjacent Social Media grid exposes all supplied profiles and the exact X handle. Blog & News contains the original educational guides plus office notices using verified address/hours; omit invented dates and bylines. Client Tools & Special Features provides an interactive consultation preparation checklist and functional service, enquiry, WhatsApp and location shortcuts. These additions follow the user’s request; the PDF leaves article copy and special-feature specifications blank.

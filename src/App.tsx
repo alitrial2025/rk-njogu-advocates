@@ -26,6 +26,8 @@ import {
   faqs,
   guides,
   locationPhotos,
+  testimonialClients,
+  consultationPreparation,
   type PracticeArea,
   type LegalGuide,
 } from "./data";
@@ -158,6 +160,7 @@ export default function App() {
   const [draft, setDraft] = useState<Draft | null>(null);
   const [copied, setCopied] = useState(false);
   const [locationPhoto, setLocationPhoto] = useState(0);
+  const [preparedItems, setPreparedItems] = useState<number[]>([]);
   const menuButton = useRef<HTMLButtonElement>(null);
   const draftRef = useRef<HTMLDivElement>(null);
 
@@ -235,7 +238,7 @@ export default function App() {
               Our approach
             </a>
             <a href="#insights" onClick={() => setMenuOpen(false)}>
-              Insights
+              Blog & News
             </a>
             <a
               className="nav-contact"
@@ -518,6 +521,9 @@ export default function App() {
               <a className="text-link" href="#approach">
                 Get to know our approach
               </a>
+              <a className="text-link client-voices-link" href="#testimonials">
+                Client testimonials
+              </a>
             </div>
           </div>
           <div className="container values-row" data-reveal-group>
@@ -528,6 +534,84 @@ export default function App() {
                 <p>{value.description}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section
+          className="testimonials section-pad"
+          id="testimonials"
+          aria-labelledby="testimonials-title"
+        >
+          <div className="container">
+            <div className="section-heading" data-reveal>
+              <div>
+                <p className="eyebrow">CLIENT TESTIMONIALS</p>
+                <h2 id="testimonials-title">
+                  Client voices.
+                  <br />
+                  <em>Community perspectives.</em>
+                </h2>
+              </div>
+              <div className="testimonial-intro">
+                <p>
+                  Written testimonials will be added here. You can view public
+                  feedback on our Google Business profile.
+                </p>
+                <a
+                  className="text-link"
+                  href={firm.maps.businessUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Read Google Reviews
+                </a>
+              </div>
+            </div>
+            <ul className="client-list" data-reveal-group>
+              {testimonialClients.map((client, index) => (
+                <li key={client}>
+                  <span className="client-number">0{index + 1}</span>
+                  <h3>{client}</h3>
+                  <span className="client-feedback-status">
+                    Testimonial forthcoming
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div
+              className="social-profiles"
+              id="social"
+              aria-labelledby="social-title"
+              data-reveal
+            >
+              <div className="social-heading">
+                <p className="eyebrow">SOCIAL MEDIA</p>
+                <h3 id="social-title">Connect with the firm.</h3>
+              </div>
+              <div className="social-profile-grid">
+                {firm.socialLinks.map((link, index) => (
+                  <a
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span className="social-platform">
+                      {link.name === "X" ? "X / Twitter" : link.name}
+                    </span>
+                    <span className="social-profile-label">
+                      {index === 0
+                        ? "Follow our Facebook page"
+                        : index === 1
+                          ? "R. K. Njogu Advocates"
+                          : index === 2
+                            ? "@RKNjoguAdv"
+                            : "Business profile & reviews"}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
@@ -672,7 +756,7 @@ export default function App() {
           <div className="container">
             <div className="section-heading" data-reveal>
               <div>
-                <p className="eyebrow">04 / PRACTICAL PERSPECTIVES</p>
+                <p className="eyebrow">04 / BLOG & NEWS</p>
                 <h2 id="insights-title">
                   A little clarity.
                   <br />
@@ -717,6 +801,39 @@ export default function App() {
                 </article>
               ))}
             </div>
+            <div
+              className="firm-news"
+              id="news"
+              aria-labelledby="news-title"
+              data-reveal
+            >
+              <div>
+                <p className="eyebrow">FROM THE FIRM</p>
+                <h3 id="news-title">Firm notices.</h3>
+              </div>
+              <article>
+                <span className="news-category">OFFICE INFORMATION</span>
+                <h4>Planning a visit?</h4>
+                <p>
+                  Find us at Brettonwoods Square (Cooperative Bank Building),
+                  2nd Floor, Suite BW-213, Kamulu, along Kangundo Road.
+                </p>
+                <a className="text-link" href="#visit">
+                  Location photos & directions
+                </a>
+              </article>
+              <article>
+                <span className="news-category">OFFICE HOURS</span>
+                <h4>When you can reach us.</h4>
+                <p>
+                  Monday–Friday, 8:00 am–5:00 pm. Saturday, 8:00 am–1:00 pm.
+                  Closed on Sundays and public holidays.
+                </p>
+                <a className="text-link" href="#contact">
+                  Arrange a consultation
+                </a>
+              </article>
+            </div>
           </div>
         </section>
 
@@ -746,6 +863,106 @@ export default function App() {
                   <p>{item.answer}</p>
                 </details>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section
+          className="client-tools section-pad"
+          id="tools"
+          aria-labelledby="tools-title"
+        >
+          <div className="container">
+            <div className="section-heading" data-reveal>
+              <div>
+                <p className="eyebrow">CLIENT TOOLS & SPECIAL FEATURES</p>
+                <h2 id="tools-title">
+                  A prepared first step.
+                  <br />
+                  <em>A clearer conversation.</em>
+                </h2>
+              </div>
+              <p className="section-intro">
+                Useful ways to prepare, find the right service and get in touch
+                with the firm.
+              </p>
+            </div>
+            <div className="client-tools-grid">
+              <div className="preparation-checklist" data-reveal>
+                <div className="preparation-heading">
+                  <h3>Consultation checklist</h3>
+                  <span aria-live="polite">
+                    {preparedItems.length} / {consultationPreparation.length}{" "}
+                    prepared
+                  </span>
+                </div>
+                <progress
+                  value={preparedItems.length}
+                  max={consultationPreparation.length}
+                  aria-label="Consultation preparation progress"
+                />
+                <fieldset>
+                  <legend className="sr-only">
+                    Prepare for your first consultation
+                  </legend>
+                  {consultationPreparation.map((item, index) => (
+                    <label key={item}>
+                      <input
+                        type="checkbox"
+                        checked={preparedItems.includes(index)}
+                        onChange={(event) =>
+                          setPreparedItems((previous) =>
+                            event.target.checked
+                              ? [...previous, index]
+                              : previous.filter((value) => value !== index),
+                          )
+                        }
+                      />
+                      <span>{item}</span>
+                    </label>
+                  ))}
+                </fieldset>
+                <p>
+                  Keep documents ready for your meeting. Ask the firm how to
+                  share sensitive information securely.
+                </p>
+                <a className="button button-green" href="#contact">
+                  Prepare a consultation enquiry
+                </a>
+              </div>
+              <div className="tool-links" data-reveal>
+                <a href="#practice">
+                  <span className="tool-icon">
+                    <Scale size={24} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <h3>Find your practice area</h3>
+                    <p>Browse nine services and filter by your needs.</p>
+                  </div>
+                </a>
+                <a
+                  href={firm.whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="tool-icon">
+                    <MessageCircle size={24} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <h3>Speak to us on WhatsApp</h3>
+                    <p>Start a conversation on {firm.phones.mobile}.</p>
+                  </div>
+                </a>
+                <a href="#visit">
+                  <span className="tool-icon">
+                    <MapPin size={24} aria-hidden="true" />
+                  </span>
+                  <div>
+                    <h3>Plan your visit</h3>
+                    <p>Explore the Kamulu photos and open map directions.</p>
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
         </section>
@@ -1124,7 +1341,10 @@ export default function App() {
               <a href="#about">The firm</a>
               <a href="#practice">Practice areas</a>
               <a href="#approach">Our approach</a>
-              <a href="#insights">Insights</a>
+              <a href="#testimonials">Client testimonials</a>
+              <a href="#social">Social profiles</a>
+              <a href="#insights">Blog & News</a>
+              <a href="#tools">Client tools</a>
               <a href="#visit">Visit us in Kamulu</a>
               <a href="#contact">Contact</a>
             </div>

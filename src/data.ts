@@ -215,6 +215,21 @@ export const practiceAreas = [
 
 export type PracticeArea = (typeof practiceAreas)[number];
 
+export const testimonialClients = [
+  "Afriavo Orchards Ltd",
+  "Apple Orchards Ltd",
+  "Femuro Management Ltd",
+  "Outrival Human Resource Services Ltd",
+] as const;
+
+export const consultationPreparation = [
+  "A brief timeline of your matter",
+  "Names of the people or organizations involved",
+  "Relevant agreements, correspondence or notices",
+  "Important dates and upcoming deadlines",
+  "Questions you would like to discuss",
+] as const;
+
 export const locationPhotos = [
   {
     file: "view-01.jpg",

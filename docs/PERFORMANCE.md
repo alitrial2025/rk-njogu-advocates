@@ -1,6 +1,6 @@
 # Browser and scroll validation
 
-Measured 2026-10-11T16:37:06.924Z using Chromium 154.0.8037.57 against http://127.0.0.1:4173/rk-njogu-advocates/.
+Measured 2026-10-11T16:56:08.227Z using Chromium 154.0.8037.57 against http://127.0.0.1:4173/rk-njogu-advocates/.
 
 ## What was exercised
 
@@ -8,10 +8,10 @@ The production preview was tested at 1440 × 1000 and 390 × 844 CSS pixels, wit
 
 | Profile | Idle median ms | Scroll mean ms | Scroll p95 ms | Scroll max ms | Intervals > 1.5× idle | Long tasks / longest | Scroll-window CLS |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| desktop | 16.7 | 16.78 | 16.8 | 33.3 | 0.68% | 0 / 0ms | 0 |
-| mobile | 16.7 | 16.74 | 16.7 | 33.4 | 0.45% | 0 / 0ms | 0 |
-| mobile-cpu-4x | 16.7 | 16.82 | 16.8 | 33.4 | 0.91% | 0 / 0ms | 0 |
-| fallback-mobile | 16.7 | 16.67 | 16.7 | 16.8 | 0% | 0 / 0ms | 0 |
+| desktop | 16.7 | 16.76 | 16.8 | 33.4 | 0.55% | 0 / 0ms | 0 |
+| mobile | 16.7 | 16.7 | 16.8 | 33.3 | 0.18% | 0 / 0ms | 0 |
+| mobile-cpu-4x | 16.7 | 16.82 | 16.7 | 50 | 0.73% | 0 / 0ms | 0 |
+| fallback-mobile | 16.7 | 16.67 | 16.8 | 16.8 | 0% | 0 / 0ms | 0 |
 
 A delayed interval is greater than 1.5 times that profile's measured idle median. This flags missed presentation opportunities; it does not identify their cause. The JSON report also includes a derived skipped-frame estimate and the raw timing samples. CLS uses the largest session window, with up to one second between shifts and a maximum five-second window.
 
@@ -19,7 +19,7 @@ No profile crossed the harness warning thresholds (p95 > 2× idle, delayed inter
 
 ## Functional and accessibility checks
 
-88 checks passed; 0 failed. 0 automated WCAG A/AA violations were reported by axe across desktop, mobile, open practice dialogs and the open mobile menu. Checks compare the supplied logo bytes, complete firm overview, mission, vision, all nine detailed service scopes, every contact route, address, opening time and social profile against independent values transcribed from the latest PDF. The location gallery checks all seven supplied photographs, selected states and the map-directions destination. Checks also cover section links, all four practice filters and pressed states, mobile menu state/Escape/link activation, practice-dialog dismissal and focus return, consultation selection and contact keyboard focus, substantive legal guides, expandable FAQ, horizontal overflow, visible intermediate section entrance frames, native reading-progress response to wheel scrolling where supported, measured artwork translation/rotation/scale and decorative text rows moving in opposite directions, readable mobile sticky cards before each handoff, a maximum of four interface arrows, visible and unobscured keyboard focus, complete reveals after full traversal, reduced-motion preference at page load and during a visit, and contact email-draft preparation. Contact checks verify native required-field validation, RFC 6068 mailto encoding, removal of stale drafts after edits, and absence of a claim that a backend delivered the message. The forced unsupported-timeline browser verifies actual fallback artwork/text movement, full-page accessibility, restoration of original inline motion styles under reduced motion, absence of new motion styles after scrolling with that preference, and motion resumption when the preference changes back. Screenshots are captured after full scroll traversal so section reveals have been exercised.
+98 checks passed; 0 failed. 0 automated WCAG A/AA violations were reported by axe across desktop, mobile, open practice dialogs and the open mobile menu. Checks compare the supplied logo bytes, complete firm overview, mission, vision, all nine detailed service scopes, every contact route, address, opening time and social profile against independent values transcribed from the latest PDF. The visible Client Testimonials section, all four client names, prominent social profiles and X handle, Blog & News articles/notices, and working Special Features preparation checklist and shortcuts are also checked. The location gallery checks all seven supplied photographs, selected states and the map-directions destination. Checks also cover section links, all four practice filters and pressed states, mobile menu state/Escape/link activation, practice-dialog dismissal and focus return, consultation selection and contact keyboard focus, substantive legal guides, expandable FAQ, horizontal overflow, visible intermediate section entrance frames, native reading-progress response to wheel scrolling where supported, measured artwork translation/rotation/scale and decorative text rows moving in opposite directions, readable mobile sticky cards before each handoff, a maximum of four interface arrows, visible and unobscured keyboard focus, complete reveals after full traversal, reduced-motion preference at page load and during a visit, and contact email-draft preparation. Contact checks verify native required-field validation, RFC 6068 mailto encoding, removal of stale drafts after edits, and absence of a claim that a backend delivered the message. The forced unsupported-timeline browser verifies actual fallback artwork/text movement, full-page accessibility, restoration of original inline motion styles under reduced motion, absence of new motion styles after scrolling with that preference, and motion resumption when the preference changes back. Screenshots are captured after full scroll traversal so section reveals have been exercised.
 
 ## Limits and reproduction
 
