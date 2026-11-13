@@ -123,6 +123,8 @@ jobs:
             artifacts/desktop.png
             artifacts/mobile.png
             artifacts/mobile-reduced-motion.png
+            artifacts/service-property-1440.png
+            artifacts/service-property-390.png
             artifacts/browser-report.json
             docs/PERFORMANCE.md
           if-no-files-found: warn

@@ -1,6 +1,6 @@
 # R. K. Njogu & Company Advocates
 
-A responsive React and TypeScript website built from the client's website checklist and the combined design references. Forest green and ivory frame expressive typography and a compact, tabbed structure: expertise, the firm, client resources and contact. Testimonials are removed at the client’s request.
+A responsive React and TypeScript website built from the client's website checklist and the combined design references. Forest green and ivory frame expressive typography and a compact, tabbed homepage plus nine pre-rendered service pages, tailored preparation and a WhatsApp consultation flow. Testimonials are removed at the client’s request.
 
 ## Develop
 
@@ -36,8 +36,10 @@ See [docs/PERFORMANCE.md](docs/PERFORMANCE.md) for measured results and their li
 
 - [DESIGN.md](DESIGN.md) combines both uploaded style references into one original design direction and explains decisions where the references conflict.
 - [docs/CHECKLIST.md](docs/CHECKLIST.md) maps every supplied client requirement and records outstanding publication inputs.
-- `src/data.ts` contains firm facts, nine practice areas, FAQs and original educational guides.
+- `src/data.ts` contains firm facts, nine practice areas, FAQs and original educational guides. `src/serviceData.ts` adds the nine service-specific introductions, preparation lists and meeting questions.
 - `src/App.tsx` contains the service discovery, dialogs, consultation flow and page composition.
+- `src/ServicePage.tsx` renders each service guide; `scripts/prerender.mjs` emits real HTML pages and a sitemap during the build.
+- `src/PreparationChecklist.tsx` and `src/WhatsAppEnquiry.tsx` share the tailored preparation and consultation flow between home and service pages.
 - `src/Tabs.tsx` provides accessible tabs with roving focus, arrow keys and Home/End support.
 - `src/styles.css` and `src/editorial.css` provide the visual foundation; `src/refinements.css` defines the compact chapters, service directory, tabs and responsive refinements.
 - `src/useScrollMotion.ts` manages entrances, newly mounted tab content, keyboard focus and live motion preferences. Hero and firm photography retain subtle image drift; large kinetic-type sections and the sticky approach sequence have been removed. Reduced motion disables the remaining effects.
@@ -50,11 +52,11 @@ See [docs/PERFORMANCE.md](docs/PERFORMANCE.md) for measured results and their li
 
 Decorative directional arrow controls have been removed. Service details use a plus symbol; other editorial/contact actions use underlined text.
 
-The form prepares an email draft. It does not send enquiries, persist form values, or claim delivery. Visitors review and send the draft through their email application; direct telephone, both WhatsApp numbers and both email addresses are also available. Editing the form invalidates an old draft. No credentials or backend service are required for this workflow.
+The form prepares a WhatsApp enquiry addressed to the firm’s supplied mobile number. The visitor reviews the name, selected service, brief message and optional preferred time, then continues to WhatsApp and taps Send. Receipt, availability and fees are confirmed by the firm in the chat. The website cannot observe sending, delivery or reading and never claims a confirmed receipt or booking. Editing any field or changing the selected matter invalidates the old review. A copy fallback and direct telephone contacts remain available. Enquiry data stays in page memory until the visitor follows the WhatsApp link; no backend or API credentials are needed.
 
 ## Before public launch
 
-Review the educational guides, privacy notice and website terms with the firm. Testimonials and client-name placeholders have been removed. Add approved team biographies or office photography only when supplied. Configure and test a delivery service if a server-backed form is wanted.
+Review the educational guides, privacy notice and website terms with the firm. Testimonials and client-name placeholders have been removed. Add approved team biographies or office photography only when supplied. Automatic delivery receipts would require a separately configured WhatsApp Business API and authenticated backend; the current GitHub Pages flow uses WhatsApp click-to-chat.
 
 The GitHub Pages target is `https://alitrial2025.github.io/rk-njogu-advocates/`. The canonical and social image URLs point there. Verify the map pin and public holiday hours. If moving to a custom domain, update the canonical/social metadata and the build base.
 
@@ -77,7 +79,7 @@ BASE_URL=http://127.0.0.1:4173/rk-njogu-advocates/ npm run test:browser
 
 After deployment, the workflow runs Chromium browser, accessibility and scroll checks against the public site and uploads screenshots and reports as a workflow artifact. It verifies the deployed build revision matches the commit being released, so a cached older page cannot count as successful verification.
 
-The browser harness can also run against the public URL by changing `BASE_URL`. Set `EXPECTED_COMMIT` to the full deployed SHA to require the same revision check. This exercises the real hosted assets, navigation, contact drafting and scrolling. Save fresh evidence for each deployed version; a successful local build alone does not prove publication.
+The browser harness can also run against the public URL by changing `BASE_URL`. Set `EXPECTED_COMMIT` to the full deployed SHA to require the same revision check. This exercises the real hosted assets, navigation, WhatsApp enquiry review and scrolling. Save fresh evidence for each deployed version; a successful local build alone does not prove publication.
 
 ## Compact content structure
 
@@ -87,6 +89,16 @@ The browser harness can also run against the public URL by changing `BASE_URL`. 
 - **Contact:** contact details and office gallery tabs beside the persistent enquiry form. The seven supplied location photographs and every contact route remain available.
 - **Footer:** social profiles, concise navigation and working privacy/terms dialogs.
 
-Legacy links to `#approach`, `#insights`, `#tools`, `#faq`, `#news` and `#visit` select the corresponding tab and navigate to its chapter. Checklist selections survive tab changes in page memory and reset on reload. Office-tab changes preserve the enquiry form. The browser suite checks each panel, keyboard operation, repeated links, browser Back, contact drafting, all five generated images, native scrolling past the approach closing statement, motion and compact page-height budgets.
+Legacy links to `#approach`, `#insights`, `#tools`, `#faq`, `#news` and `#visit` select the corresponding tab and navigate to its chapter. Checklist selections survive tab changes in page memory and reset on reload. Office-tab changes preserve the enquiry form. The browser suite checks each panel, keyboard operation, repeated links, browser Back, WhatsApp enquiry review, all five generated images, native scrolling past the approach closing statement, motion and compact page-height budgets.
 
 Next client content: approved advocate biographies, portraits and professional credentials. These would add valuable personal context; none are invented. All factual content remains mapped in docs/CHECKLIST.md.
+
+## Dedicated service pages
+
+`npm run build` type-checks, builds the browser bundle, then uses React server rendering to emit the homepage and one HTML document per service. The temporary `.prerender/` bundle is removed after generation. No server runtime is required on GitHub Pages.
+
+Service paths are `services/<practice-id>/`, including `services/land-property/`, `services/family-law/` and `services/employment-labour/`. Each supports direct loads, reloads and ordinary browser history, with a service-specific title, description, canonical/social URL, Service/Breadcrumb structured data, complete service scope, practical context and tailored preparation. `dist/sitemap.xml` lists the homepage and all nine service pages. The homepage itself is pre-rendered so crawlers can discover its ordinary service links without executing JavaScript. The interactive controls hydrate in the browser. A static `404.html` provides a return path for unavailable URLs.
+
+The preparation selector and WhatsApp practice selector share the selected matter. Each matter keeps its own completion state while the visitor changes tabs or matters on the same page; switching service URLs or reloading starts a fresh checklist. Service pages and the homepage use the same reviewed guidance. Keep documents ready for a consultation; the checklist does not upload them or include them in the WhatsApp enquiry.
+
+The existing Pages build flag remains required: `GITHUB_PAGES=true npm run build` and `GITHUB_PAGES=true npm run preview`. Browser checks cover all nine pages with JavaScript disabled and enabled, metadata, sitemap, mobile layouts, hydration, checklist state and an intercepted WhatsApp handoff. Test messages are never sent to the firm.

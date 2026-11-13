@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { checklistChecks } from './checklist-check.mjs';
+import { serviceChecks } from './service-check.mjs';
 
 // Run against the production preview: BASE_URL=http://127.0.0.1:4173 node scripts/browser-check.mjs
 const baseURL = process.env.BASE_URL ?? 'http://127.0.0.1:4173';
@@ -497,7 +498,7 @@ async function functional(page, label, mobile) {
     await dialog.getByRole('button', { name: 'Discuss this matter', exact: true }).click();
     await dialog.waitFor({ state: 'hidden' });
     const contact = page.locator('#contact');
-    expect(await contact.getByLabel('Practice area', { exact: true }).inputValue() === chosenPractice, 'Consultation did not select the chosen practice area');
+    expect(await contact.getByLabel('Practice area', { exact: true }).locator('option:checked').innerText() === chosenPractice, 'Consultation did not select the chosen practice area');
     await page.waitForFunction(() => document.activeElement?.matches('#contact input[name="name"]'), undefined, { timeout: 2000 });
     // Wait past modal teardown so a delayed focus restoration cannot undo the handoff.
     await page.waitForTimeout(150);
@@ -532,51 +533,57 @@ async function functional(page, label, mobile) {
     await page.locator('#resources').getByRole('tab', { name: /Legal guides/ }).click();
   });
 
-  await check(`${label}: required contact fields prevent an invalid email draft`, async () => {
+  await check(`${label}: WhatsApp review requires a name and message`, async () => {
     const form = page.locator('#contact form');
-    await form.getByRole('button', { name: /prepare email enquiry/i }).click();
-    const invalidFields = await form.locator('input[required]:invalid, textarea[required]:invalid').count();
-    expect(invalidFields === 3, `Expected three empty required fields to be invalid, found ${invalidFields}`);
-    expect(await form.evaluate(element => !element.checkValidity()), 'Empty contact form passes native validation');
-    expect(await page.locator('#contact .email-draft').count() === 0, 'An invalid form created an email draft');
+    await form.getByRole('button', { name: 'Review WhatsApp enquiry', exact: true }).click();
+    expect(await form.locator('input[required]:invalid, textarea[required]:invalid').count() === 2, 'Empty required fields did not prevent review');
+    expect(await page.locator('.whatsapp-preview').count() === 0, 'An invalid form created a WhatsApp preview');
   });
-
-  await check(`${label}: contact prepares an honest email draft`, async () => {
-    const contact = page.locator('#contact');
-    const form = contact.locator('form');
-    expect(await form.count() === 1, 'Contact form missing');
-    await form.getByLabel(/name/i).first().fill('Browser verification');
-    await form.getByLabel(/email/i).first().fill('verification@example.com');
-    await form.getByLabel(/message|matter|help/i).last().fill('Please arrange an initial consultation about a conveyancing matter. Documents + dates are available. This is a browser validation draft.');
-    await form.getByRole('button', { name: /prepare|draft|email|send|submit/i }).click();
-    const draft = contact.getByText(/draft|email app|email application|email client/i);
-    expect(await draft.count() > 0, 'Contact flow does not explain its email handoff');
-    const mail = contact.locator('a[href^="mailto:"]');
-    expect(await mail.count() > 0, 'No email handoff link available');
-    const hrefs = await mail.evaluateAll(links => links.map(link => link.getAttribute('href')));
-    expect(hrefs.some(href => href.includes('verification%40example.com') || href.includes('verification@example.com')), 'Prepared mailto draft does not include submitted email');
-    expect(!/successfully sent|message sent|we have received your message/i.test(await contact.innerText()), 'Static contact form claims backend delivery');
+  await check(`${label}: enquiry review includes the selected matter and preferred time`, async () => {
+    const form = page.locator('#contact form');
+    await form.getByLabel('Your name').fill('Browser verification');
+    await form.getByLabel('Practice area', { exact: true }).selectOption('land-property');
+    await form.getByLabel('Preferred consultation time').fill('Tuesday afternoon (Kenya time)');
+    await form.getByLabel('How can we help?').fill('Documents + dates & questions. A second line: Wanjikũ.');
+    await form.getByRole('button', { name: 'Review WhatsApp enquiry', exact: true }).click();
+    const preview = page.locator('.whatsapp-preview');
+    expect(await preview.isVisible(), 'No WhatsApp review appeared');
+    const text = await preview.locator('pre').innerText();
+    for (const part of ['Name: Browser verification', 'Land, Property & Conveyancing', 'Tuesday afternoon (Kenya time)', 'Documents + dates & questions.', 'Wanjikũ']) expect(text.includes(part), `Missing enquiry field: ${part}`);
+    expect((await preview.innerText()).includes('It has not been sent.'), 'Review does not explain the handoff');
+    expect(await preview.evaluate(element => element === document.activeElement), 'Review did not receive keyboard focus');
   });
-
-  await check(`${label}: mailto uses RFC 6068 percent encoding for spaces and literal plus`, async () => {
-    const href = await page.locator('#contact .email-draft a[href^="mailto:"]').getAttribute('href');
-    expect(href !== null && href.includes('?'), 'Prepared mailto link has no draft fields');
-    const query = href.slice(href.indexOf('?') + 1);
-    expect(!query.includes('+'), 'Mailto query uses form-style plus encoding for spaces');
-    const fields = Object.fromEntries(query.split('&').map(field => {
-      const separator = field.indexOf('=');
-      return [decodeURIComponent(field.slice(0, separator)), decodeURIComponent(field.slice(separator + 1))];
-    }));
-    expect(fields.subject.startsWith('Consultation enquiry'), 'RFC-decoded subject loses spaces');
-    expect(fields.body.includes('Name: Browser verification'), 'RFC-decoded body loses name spacing');
-    expect(fields.body.includes('Documents + dates are available.'), 'RFC-decoded body loses the literal plus or surrounding spaces');
-    expect(fields.body.includes('Email: verification@example.com'), 'RFC-decoded body loses the email address');
+  await check(`${label}: WhatsApp URL targets the firm and preserves message encoding`, async () => {
+    const href = await page.locator('.whatsapp-preview').getByRole('link', { name: 'Continue to WhatsApp', exact: true }).getAttribute('href');
+    const url = new URL(href);
+    expect(url.origin === 'https://wa.me' && url.pathname === '/254704652614', 'Enquiry targets the wrong WhatsApp recipient');
+    const message = url.searchParams.get('text');
+    expect(message === await page.locator('.whatsapp-preview pre').innerText(), 'WhatsApp encoding changed the reviewed message');
+    expect(message.includes('Documents + dates & questions.') && message.includes('Wanjikũ') && message.includes('\n\n'), 'Encoding loses literal symbols, Unicode or line breaks');
+    expect(await page.locator('.whatsapp-preview a[href^="mailto:"]').count() === 0, 'Enquiry still uses an email handoff');
   });
-
-  await check(`${label}: editing contact fields invalidates the prepared draft`, async () => {
-    expect(await page.locator('#contact .email-draft').count() === 1, 'No prepared draft to exercise stale-data prevention');
-    await page.locator('#contact form').getByLabel(/name/i).first().fill('Updated browser verification');
-    expect(await page.locator('#contact .email-draft').count() === 0, 'Editing the name leaves a stale email draft available');
+  await check(`${label}: editing contact fields invalidates the WhatsApp review`, async () => {
+    await page.locator('#contact input[name="name"]').fill('Updated verification');
+    expect(await page.locator('.whatsapp-preview').count() === 0, 'Editing leaves an outdated WhatsApp link available');
+  });
+  await check(`${label}: tailored preparation and consultation share the selected matter`, async () => {
+    await page.getByRole('tab', { name: 'Consultation checklist', exact: true }).click();
+    const selector = page.getByLabel('Prepare for', { exact: true });
+    await selector.selectOption('land-property');
+    expect((await page.locator('#tools').innerText()).includes('Property reference, location and title information'), 'Property checklist is not tailored');
+    await page.locator('#tools').getByRole('checkbox').first().check();
+    await selector.selectOption('employment-labour');
+    expect((await page.locator('#tools').innerText()).includes('Employment contract and relevant workplace policies'), 'Employment checklist is not tailored');
+    expect(await page.locator('#tools progress').getAttribute('value') === '0', 'Property completion leaked into employment preparation');
+    expect(await page.getByLabel('Practice area', { exact: true }).inputValue() === 'employment-labour', 'Checklist selection did not update the consultation');
+    await selector.selectOption('land-property');
+    expect(await page.locator('#tools').getByRole('checkbox').first().isChecked(), 'Changing matter lost its preparation state');
+    await page.locator('#tools').getByRole('checkbox').first().uncheck();
+    await page.getByLabel('Practice area', { exact: true }).selectOption('family-law');
+    expect(await selector.inputValue() === 'family-law', 'Consultation selection did not update the checklist');
+    expect((await page.locator('#tools').innerText()).includes('Relevant marriage or family records'), 'Family preparation is missing');
+    await selector.selectOption('');
+    await page.getByRole('tab', { name: /Legal guides/ }).click();
   });
 
   await accessibility(page, label);
@@ -829,6 +836,7 @@ try {
     const resumed = await strongScrollMotion(fallbackPage, 'fallback-resumed');
     return { styledElementsBeforeReduction: active, restoredElements: stopped.length, resumedArtworkTravelPx: resumed.artworkTravelPx };
   });
+  await serviceChecks({ browser, baseURL, check, expect, accessibility, report });
   await check('no browser JavaScript exceptions', () => expect(report.errors.length === 0, JSON.stringify(report.errors)));
 } catch (error) {
   report.errors.push({ label: 'harness', error: error.message });
@@ -846,7 +854,7 @@ try {
     const rows = report.scroll.map(measurement => `| ${measurement.label} | ${measurement.baselineFrameIntervalMs.median} | ${measurement.scrollFrameIntervalMs.mean} | ${measurement.scrollFrameIntervalMs.p95} | ${measurement.scrollFrameIntervalMs.max} | ${measurement.delayedFramePercent}% | ${measurement.longTasks.count} / ${measurement.longTasks.maxDurationMs}ms | ${measurement.scrollWindowCLS} |`).join('\n');
     const warnings = report.scroll.flatMap(measurement => measurement.warnings.map(warning => `- ${measurement.label}: ${warning}.`));
     const failures = report.checks.filter(check => check.status === 'failed').map(check => `- ${check.name}: ${check.error}`).join('\n');
-    await writeFile(resolve(docs, 'PERFORMANCE.md'), `# Browser and scroll validation\n\nMeasured ${report.measuredAt} using Chromium ${report.browser} against ${baseURL}.\n\n## What was exercised\n\nThe production preview was tested at 1440 × 1000 and 390 × 844 CSS pixels, with additional horizontal-overflow checks at 320, 768 and 1024 CSS pixels. Native wheel input moved the full document down and back up. requestAnimationFrame intervals were sampled throughout each traversal; an idle baseline was collected separately in the same browser session. A mobile-sized repeat used Chrome DevTools 4× CPU slowdown. A separate mobile browser overrides JavaScript scroll-timeline feature detection to exercise the production fallback; its native-wheel traversal appears as the fallback-mobile profile. PerformanceObserver recorded tasks over 50ms and layout shifts during traversal.\n\n| Profile | Idle median ms | Scroll mean ms | Scroll p95 ms | Scroll max ms | Intervals > 1.5× idle | Long tasks / longest | Scroll-window CLS |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |\n${rows}\n\nA delayed interval is greater than 1.5 times that profile's measured idle median. This flags missed presentation opportunities; it does not identify their cause. The JSON report also includes a derived skipped-frame estimate and the raw timing samples. CLS uses the largest session window, with up to one second between shifts and a maximum five-second window.\n\n${warnings.length ? `## Observations\n\n${warnings.join('\n')}\n\n` : 'No profile crossed the harness warning thresholds (p95 > 2× idle, delayed intervals > 10%, a task > 200ms, or CLS > 0.1).\n\n'}## Functional and accessibility checks\n\n${report.summary.passed} checks passed; ${report.summary.failed} failed. ${report.summary.accessibilityViolations} automated WCAG A/AA violations were reported by axe across desktop, mobile, open practice dialogs and the open mobile menu. Checks compare the supplied logo bytes, complete firm overview, mission, vision, all nine detailed service scopes, every contact route, address, opening time and social profile against independent values transcribed from the client checklist, with the latest client feedback governing layout and testimonial removal. The removal of testimonials and client names, accessible category tabs, legal guides and consultation checklist state are checked. Firm principles and the approach remain available in tabs; location photos share the contact chapter. The location gallery checks all seven supplied photographs, selected states and the map-directions destination. Five generated legal images are decoded and checked in their intended sections. The approach closing statement is sampled at three native-scroll positions to verify normal flow, readable type, stable document position and no overlap or coverage. Checks also cover section links, all four practice tabs and selected states, mobile menu state/Escape/link activation, practice-dialog dismissal and focus return, consultation selection and contact keyboard focus, substantive legal guides, expandable FAQ, horizontal overflow, visible intermediate section entrance frames, native reading-progress response to wheel scrolling where supported, restrained hero-image motion during native scrolling, no decorative arrow controls, visible and unobscured keyboard focus, complete reveals after full traversal, reduced-motion preference at page load and during a visit, and contact email-draft preparation. Contact checks verify native required-field validation, RFC 6068 mailto encoding, removal of stale drafts after edits, and absence of a claim that a backend delivered the message. The forced unsupported-timeline browser verifies actual fallback artwork/text movement, full-page accessibility, restoration of original inline motion styles under reduced motion, absence of new motion styles after scrolling with that preference, and motion resumption when the preference changes back. Screenshots are captured after full scroll traversal so section reveals have been exercised.\n\n${failures ? `Failed checks:\n\n${failures}\n\n` : ''}## Limits and reproduction\n\nThese measurements come from a cloud execution environment running headless Chromium. They are useful regression evidence, not physical-phone performance, touch-scroll validation, a guarantee of frame rate, or field Core Web Vitals. CPU slowdown simulates constrained main-thread execution; it does not emulate a complete mobile device or slow network. Forced feature detection exercises the fallback in Chromium and does not constitute a physical Safari or Firefox device test. Automated accessibility does not replace manual assistive-technology testing.\n\nRun \`npm run build\`, start \`npm run preview -- --host 0.0.0.0\`, then run \`BASE_URL=http://127.0.0.1:4173 node scripts/browser-check.mjs\`. Use \`CHROMIUM_EXECUTABLE\` to select another installed Chromium binary.\n\nEvidence: [JSON report](../artifacts/browser-report.json), [desktop screenshot](../artifacts/desktop.png), [mobile screenshot](../artifacts/mobile.png), [reduced-motion screenshot](../artifacts/mobile-reduced-motion.png).\n`);
+    await writeFile(resolve(docs, 'PERFORMANCE.md'), `# Browser and scroll validation\n\nMeasured ${report.measuredAt} using Chromium ${report.browser} against ${baseURL}.\n\n## What was exercised\n\nThe production preview was tested at 1440 × 1000 and 390 × 844 CSS pixels, with additional horizontal-overflow checks at 320, 768 and 1024 CSS pixels. Native wheel input moved the full document down and back up. requestAnimationFrame intervals were sampled throughout each traversal; an idle baseline was collected separately in the same browser session. A mobile-sized repeat used Chrome DevTools 4× CPU slowdown. A separate mobile browser overrides JavaScript scroll-timeline feature detection to exercise the production fallback; its native-wheel traversal appears as the fallback-mobile profile. PerformanceObserver recorded tasks over 50ms and layout shifts during traversal.\n\n| Profile | Idle median ms | Scroll mean ms | Scroll p95 ms | Scroll max ms | Intervals > 1.5× idle | Long tasks / longest | Scroll-window CLS |\n| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |\n${rows}\n\nA delayed interval is greater than 1.5 times that profile's measured idle median. This flags missed presentation opportunities; it does not identify their cause. The JSON report also includes a derived skipped-frame estimate and the raw timing samples. CLS uses the largest session window, with up to one second between shifts and a maximum five-second window.\n\n${warnings.length ? `## Observations\n\n${warnings.join('\n')}\n\n` : 'No profile crossed the harness warning thresholds (p95 > 2× idle, delayed intervals > 10%, a task > 200ms, or CLS > 0.1).\n\n'}## Functional and accessibility checks\n\n${report.summary.passed} checks passed; ${report.summary.failed} failed. ${report.summary.accessibilityViolations} automated WCAG A/AA violations were reported by axe across desktop, mobile, open practice dialogs and the open mobile menu. Checks compare the supplied logo bytes, complete firm overview, mission, vision, all nine detailed service scopes, every contact route, address, opening time and social profile against independent values transcribed from the client checklist, with the latest client feedback governing layout and testimonial removal. The removal of testimonials and client names, accessible category tabs, legal guides and consultation checklist state are checked. Firm principles and the approach remain available in tabs; location photos share the contact chapter. The location gallery checks all seven supplied photographs, selected states and the map-directions destination. Five generated legal images are decoded and checked in their intended sections. The approach closing statement is sampled at three native-scroll positions to verify normal flow, readable type, stable document position and no overlap or coverage. Checks also cover section links, all four practice tabs and selected states, mobile menu state/Escape/link activation, practice-dialog dismissal and focus return, consultation selection and contact keyboard focus, substantive legal guides, expandable FAQ, horizontal overflow, visible intermediate section entrance frames, native reading-progress response to wheel scrolling where supported, restrained hero-image motion during native scrolling, no decorative arrow controls, visible and unobscured keyboard focus, complete reveals after full traversal, reduced-motion preference at page load and during a visit, and WhatsApp enquiry review and matter-specific preparation. Contact checks verify native required-field validation, WhatsApp message encoding, removal of stale WhatsApp links after edits, and absence of a claim that a WhatsApp message was delivered. Service checks cover all nine pre-rendered URLs, metadata, sitemap discovery, preparation guidance and review-to-WhatsApp handoff; test messages are intercepted locally and never sent to the firm. The forced unsupported-timeline browser verifies actual fallback artwork/text movement, full-page accessibility, restoration of original inline motion styles under reduced motion, absence of new motion styles after scrolling with that preference, and motion resumption when the preference changes back. Screenshots are captured after full scroll traversal so section reveals have been exercised.\n\n${failures ? `Failed checks:\n\n${failures}\n\n` : ''}## Limits and reproduction\n\nThese measurements come from a cloud execution environment running headless Chromium. They are useful regression evidence, not physical-phone performance, touch-scroll validation, a guarantee of frame rate, or field Core Web Vitals. CPU slowdown simulates constrained main-thread execution; it does not emulate a complete mobile device or slow network. Forced feature detection exercises the fallback in Chromium and does not constitute a physical Safari or Firefox device test. Automated accessibility does not replace manual assistive-technology testing.\n\nRun \`npm run build\`, start \`npm run preview -- --host 0.0.0.0\`, then run \`BASE_URL=http://127.0.0.1:4173 node scripts/browser-check.mjs\`. Use \`CHROMIUM_EXECUTABLE\` to select another installed Chromium binary.\n\nEvidence: [JSON report](../artifacts/browser-report.json), [desktop screenshot](../artifacts/desktop.png), [mobile screenshot](../artifacts/mobile.png), [reduced-motion screenshot](../artifacts/mobile-reduced-motion.png).\n`);
   }
   console.log(`RESULT ${report.summary.passed} passed, ${report.summary.failed} failed; report: artifacts/browser-report.json`);
   if (report.summary.failed || report.summary.javascriptErrors) process.exitCode = 1;

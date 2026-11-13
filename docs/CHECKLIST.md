@@ -76,7 +76,7 @@ Use meaningful accessible names for icon links. If external links open a new tab
 | Special features | No feature is specified. | Client resources → Consultation checklist provides an interactive five-item preparation checklist. Practice discovery and contact/visit links remain available in the main navigation and hero shortcuts. No unsupported booking or payment claims. |
 | Advocate biographies and portraits | Not included. | No invented advocates, credentials, experience, or headshots. Obtain names, practising roles, approved biographies, and portraits if a team section is desired. |
 | Office photography | Seven aerial approach/area photos supplied separately in `Downloads.zip`; no identified office-building photograph. | The seven original JPEGs appear in the Kamulu location gallery with attribution intact and a directions link using the supplied plus code. The generated scenes in `public/legal/` illustrate legal work and guide topics; none depicts the actual office, staff or a client matter. Original architectural assets are retained but unused in the current page. |
-| Email/form delivery | No provider, endpoint or secure delivery configuration supplied. | Direct email and WhatsApp contact are available. A form that prepares a draft must clearly say it opens the user's email app or WhatsApp; it cannot claim delivery. Configure and test a server endpoint before enabling a real sent state. |
+| Consultation delivery | Supplied mobile WhatsApp number: 0704 652 614. | Review and send through WhatsApp click-to-chat. Name and brief message required; preferred time optional. No email address is required. No website claim of sent/delivered/received or confirmed booking. The firm confirms in the chat. |
 | Privacy and legal publication copy | Not included. | Ensure any drafted policy reflects actual hosting, data handling and integrations; obtain client review before publication. |
 | Domain hosting / final deployment | Checklist provides the domain in an email address, but no hosting configuration. | The local/cloud preview can be complete. Confirm destination and publish only through the authorized deployment workflow. |
 
@@ -93,7 +93,7 @@ Use meaningful accessible names for icon links. If external links open a new tab
 - Mobile and desktop layouts have no unintended horizontal overflow.
 - Motion works with CSS timelines and their passive-event fallback; reduced motion disables the remaining scrub effects. The approach is a compact tab panel without pinned cards. Browser scroll performance has a reproducible report tied to the tested revision.
 
-All factual firm information remains available: original logo, complete overview, mission, vision, values, nine practice scopes, contacts, address, hours, map and social profiles. Tabs consolidate the approach, values, legal guides, FAQs, preparation checklist and location gallery. Testimonials and named-client placeholders are removed. Approved advocate biographies, portraits and professional credentials are the main missing trust content. A server-backed delivery service remains a separate integration; the current form prepares an email draft.
+All factual firm information remains available: original logo, complete overview, mission, vision, values, nine practice scopes, contacts, address, hours, map and social profiles. Tabs consolidate the approach, values, legal guides, FAQs, preparation checklist and location gallery. Testimonials and named-client placeholders are removed. Approved advocate biographies, portraits and professional credentials are the main missing trust content. The current form prepares a WhatsApp enquiry for the visitor to review and send. The firm confirms receipt, appointment availability and fees in the chat. A website-observable delivery receipt would require a separate WhatsApp Business API/backend integration.
 
 ## Logo provenance
 
@@ -124,3 +124,9 @@ Extracted the original embedded JPEG from page 1 of the latest checklist without
 | Preparation checklist and FAQs | `#resources` → Consultation checklist / Common questions; `#tools` / `#faq` deep links |
 | Kamulu approach photos and directions | `#contact` → Find the office; legacy `#visit` selects this tab |
 | Address, both phones/emails/WhatsApp routes, hours and map | `#contact` |
+
+## Service-page and preparation acceptance
+
+All nine services have unique pre-rendered URLs and useful HTML content available without JavaScript. Verify direct navigation, reload, browser history, service-specific metadata and all ten sitemap URLs under the GitHub Pages base path. The home directory titles link to those pages; quick-view dialogs retain the complete supplied scope.
+
+Each service supplies five tailored preparation items and three meeting questions. Verify that switching matters changes the documents/questions, keeps completion separate, restores earlier selections on the same page and synchronizes the WhatsApp enquiry. Form edits or changes of matter must invalidate the old WhatsApp link. The reviewed text must match the decoded WhatsApp message, including Unicode, punctuation and line breaks. Browser tests intercept outgoing WhatsApp links so no test message reaches the firm.

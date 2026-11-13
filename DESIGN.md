@@ -120,7 +120,7 @@ Three tabs group the legal guides, consultation preparation checklist and FAQs. 
 
 Keep contact details and the office gallery in two tabs beside a persistent enquiry form. Preserve both telephone numbers, both emails, both WhatsApp routes, full physical/postal addresses and opening hours. The gallery contains all seven supplied photographs; captions explain these are surrounding-area views, and the directions action uses the supplied map location. Changing office tabs must not reset form entries.
 
-The form prepares a draft for the visitor's email app. It never claims server delivery. Name, email and message are required; the chosen practice is preserved when entering from a service dialog. Editing invalidates a stale draft. The privacy and terms dialogs reflect the current implementation.
+The form prepares a WhatsApp enquiry. Name and a brief message are required; preferred consultation time is optional. The selected practice is preserved from a service dialog or service page and shared with the preparation checklist. A review step shows the exact message before the visitor opens WhatsApp and taps Send. The firm confirms receipt, availability and fees in the chat; the website cannot observe message delivery. Editing or switching matter invalidates the previous review. No email address is required by this flow. The privacy notice explains the WhatsApp handoff and page-memory state.
 
 ### Tab and link behaviour
 
@@ -172,3 +172,9 @@ Approved portraits, biographies and professional credentials, reviewed legal art
 ## Current content map
 
 Firm facts and all nine service scopes follow the client checklist. The latest client feedback supersedes the earlier testimonial and long-section layout: remove testimonials and named-client placeholders; group supporting content in accessible tabs. Legal guides remain original general information subject to review. Social links stay in the footer, office facts appear once in Contact, and the preparation checklist stays available from Client resources and the hero shortcut.
+
+## Service guides and tailored preparation
+
+Each practice has a real static HTML page under `services/<id>/`, with unique metadata, canonical/social URLs, service and breadcrumb structured data, and inclusion in a generated sitemap. Titles in the home directory are ordinary links; the plus controls retain quick views and also link to the full guide. Pre-render the home content so those links are discoverable before JavaScript executes. Hydrate the same React components for interaction; keep assets and home links compatible with the GitHub Pages project path.
+
+A service page balances a concise service introduction and full supplied scope with preparation for the meeting. Five tailored records/details and three questions are available for each matter; users gather what is available and ask the firm to confirm requirements. A matter-specific checklist shares its selection with the WhatsApp enquiry and maintains separate completion per matter. Avoid presenting the preparation list as a definitive legal requirement. Show the consultation next steps and contact hours clearly; keep related-service links compact.

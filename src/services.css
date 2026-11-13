@@ -1,0 +1,446 @@
+/* Shareable, pre-rendered practice guides and the WhatsApp consultation flow. */
+.practice-description h3 a {
+  text-decoration: underline;
+  text-decoration-color: #bcc8b9;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+.practice-description h3 a:hover {
+  text-decoration-color: #254b38;
+}
+.practice-card .practice-link,
+.practice-card:first-child .practice-link {
+  inset: 50% 0 auto auto;
+  width: 40px;
+  height: 40px;
+  transform: translateY(-50%);
+  justify-content: center;
+}
+.full-service-link {
+  display: flex;
+  width: fit-content;
+  margin-block: 10px 18px;
+}
+.preparation-checklist label.preparation-select {
+  display: block;
+  border: 0;
+  font-size: 12px;
+  min-height: 0;
+  margin-block: 20px 12px;
+}
+.preparation-select select {
+  display: block;
+  width: 100%;
+  font-size: 14px;
+  color: #203e2c;
+  border: 1px solid #839b7d;
+  border-radius: 3px;
+  background: #fffef8;
+  padding: 12px;
+  margin-top: 8px;
+}
+.preparation-checklist .preparation-topic {
+  margin: 0 0 16px;
+  font-size: 12px;
+}
+.preparation-count {
+  font-size: 11px;
+  color: #526057;
+}
+.preparation-questions {
+  margin-top: 20px;
+  border-bottom: 1px solid #c2cdba;
+}
+.preparation-questions summary {
+  cursor: pointer;
+  font-size: 13px;
+  padding-block: 12px;
+}
+.preparation-questions ul {
+  padding-left: 20px;
+  font-size: 12px;
+  color: #526057;
+  line-height: 1.8;
+}
+.preparation-questions li + li {
+  margin-top: 8px;
+}
+.whatsapp-enquiry .form-row {
+  margin-bottom: 0;
+}
+.whatsapp-enquiry label {
+  margin-bottom: 20px;
+}
+.whatsapp-enquiry .form-row label {
+  margin-bottom: 20px;
+}
+.whatsapp-enquiry .form-note a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.whatsapp-preview {
+  margin-top: 24px;
+  padding: 22px;
+  background: #eaf0e4;
+  border: 1px solid #9db293;
+  border-radius: 4px;
+}
+.whatsapp-preview:focus {
+  outline: 2px solid #536e4e;
+  outline-offset: 4px;
+}
+.whatsapp-preview p {
+  font-size: 12px;
+  margin-top: 12px;
+}
+.whatsapp-preview pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font:
+    12px/1.8 Inter,
+    sans-serif;
+  padding: 18px;
+  margin-block: 16px;
+  background: #fffef8;
+  border-radius: 3px;
+}
+.whatsapp-preview .draft-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+}
+.whatsapp-next-step {
+  border-top: 1px solid #9db293;
+  padding-top: 14px;
+}
+.service-hero {
+  background: #101e19;
+  color: #f4f3eb;
+  padding-block: 30px 58px;
+}
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 11px;
+  color: #d5dfcf;
+  margin-bottom: 38px;
+}
+.breadcrumbs a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.service-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 70px;
+  align-items: center;
+}
+.service-hero h1 {
+  font-family: var(--display);
+  font-size: clamp(45px, 5.1vw, 77px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  margin-bottom: 24px;
+}
+.service-summary {
+  color: #d5dfcf;
+  font-size: 15px;
+  max-width: 580px;
+}
+.service-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px 24px;
+  align-items: center;
+  margin-block: 28px 22px;
+}
+.service-locality {
+  font-size: 11px;
+  color: #c1d2b5;
+}
+.service-image {
+  position: relative;
+  margin: 0;
+  border-radius: 3px 3px 70px 3px;
+  overflow: hidden;
+}
+.service-image img {
+  width: 100%;
+  height: 370px;
+  object-fit: cover;
+}
+.service-image::after {
+  content: "";
+  position: absolute;
+  inset: 45% 0 0;
+  background: linear-gradient(transparent, #101e19b8);
+  pointer-events: none;
+}
+.service-image figcaption {
+  position: absolute;
+  z-index: 1;
+  bottom: 25px;
+  left: 25px;
+  right: 25px;
+  color: #fffef8;
+  font-family: var(--display);
+  font-size: 26px;
+}
+.service-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 90px;
+  align-items: start;
+}
+.service-scope h2 {
+  font-size: 54px;
+  margin-bottom: 25px;
+}
+.service-introduction {
+  font-size: 15px;
+  color: #526057;
+  margin-bottom: 25px;
+}
+.service-scope .scope-list {
+  padding: 0;
+}
+.service-scope .scope-list li {
+  font-size: 14px;
+}
+.service-expectations {
+  padding-top: 24px;
+  margin-top: 30px;
+  border-top: 1px solid #b6c2b0;
+}
+.service-expectations h3 {
+  font-family: var(--display);
+  font-size: 33px;
+  margin-bottom: 18px;
+}
+.service-expectations ol {
+  padding-left: 20px;
+  font-size: 13px;
+  line-height: 1.9;
+  color: #526057;
+}
+.service-expectations li + li {
+  margin-top: 10px;
+}
+.service-information-note {
+  font-size: 11px;
+  color: #526057;
+  margin-top: 24px;
+}
+.service-preparation,
+.service-consultation {
+  scroll-margin-top: 110px;
+}
+.service-preparation .preparation-checklist {
+  padding: 27px;
+}
+.service-consultation {
+  background: #e7ebdf;
+}
+.service-consultation-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 85px;
+  align-items: start;
+}
+.service-consultation h2 {
+  font-size: 54px;
+  margin-bottom: 25px;
+}
+.service-consultation-grid > div > p:not(.eyebrow) {
+  font-size: 14px;
+  color: #526057;
+  margin-bottom: 20px;
+}
+.service-direct-contact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  padding-block: 12px;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  font-size: 14px;
+}
+.service-hours {
+  margin-block: 24px;
+  padding-block: 22px;
+  border-block: 1px solid #b6c2b0;
+}
+.service-hours h3 {
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+.service-hours p {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  font-size: 11px;
+  padding-block: 6px;
+}
+.service-consultation address {
+  font-style: normal;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.related-services h2 {
+  font-size: 42px;
+  margin-bottom: 30px;
+}
+.related-service-links {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0 30px;
+}
+.related-service-links a {
+  border-top: 1px solid #b6c2b0;
+  padding-block: 17px;
+  font-size: 13px;
+  line-height: 1.5;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.service-footer .footer-top {
+  justify-content: space-between;
+}
+.service-footer .footer-bottom button {
+  background: transparent;
+}
+.not-found {
+  padding-block: 100px;
+  max-width: 800px;
+}
+.not-found h1 {
+  font-family: var(--display);
+  font-size: 68px;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+.not-found p {
+  margin-bottom: 30px;
+}
+@media (max-width: 1100px) {
+  .service-hero-grid,
+  .service-detail-grid,
+  .service-consultation-grid {
+    gap: 45px;
+  }
+  .service-hero h1 {
+    font-size: 58px;
+  }
+  .service-image img {
+    height: 330px;
+  }
+}
+@media (max-width: 850px) {
+  .service-hero-grid {
+    gap: 30px;
+  }
+  .service-hero h1 {
+    font-size: 47px;
+  }
+  .service-image img {
+    height: 300px;
+  }
+  .service-detail-grid,
+  .service-consultation-grid {
+    gap: 30px;
+  }
+  .service-consultation h2 {
+    font-size: 44px;
+  }
+  .service-hours p {
+    flex-direction: column;
+    gap: 3px;
+  }
+  .related-service-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .service-hero {
+    padding-block: 22px 35px;
+  }
+  .breadcrumbs {
+    font-size: 10px;
+    margin-bottom: 28px;
+  }
+  .service-hero-grid,
+  .service-detail-grid,
+  .service-consultation-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+  .service-hero h1 {
+    font-size: 46px;
+  }
+  .service-summary {
+    font-size: 13px;
+  }
+  .service-actions .button {
+    padding-inline: 20px;
+    font-size: 12px;
+  }
+  .service-image img {
+    height: 190px;
+  }
+  .service-image figcaption {
+    font-size: 24px;
+    bottom: 18px;
+    left: 20px;
+  }
+  .service-scope h2,
+  .service-consultation h2 {
+    font-size: 42px;
+  }
+  .service-introduction,
+  .service-scope .scope-list li {
+    font-size: 13px;
+  }
+  .service-preparation .preparation-checklist {
+    padding: 24px 18px;
+  }
+  .preparation-select select {
+    font-size: 16px;
+  }
+  .service-hours p {
+    flex-direction: row;
+  }
+  .service-locality {
+    font-size: 10px;
+  }
+  .whatsapp-preview {
+    padding: 17px;
+  }
+  .whatsapp-preview .button {
+    font-size: 12px;
+    padding-inline: 20px;
+  }
+  .related-services h2 {
+    font-size: 34px;
+  }
+  .related-service-links a {
+    font-size: 12px;
+  }
+  .service-footer .footer-top > .text-link {
+    font-size: 11px;
+  }
+}
+.practice-card,
+.practice-card:nth-child(n),
+.practice-card:first-child {
+  grid-template-columns: 32px minmax(0, 1fr) 40px;
+}
+@media (max-width: 600px) {
+  .practice-card,
+  .practice-card:nth-child(n),
+  .practice-card:first-child {
+    grid-template-columns: 26px minmax(0, 1fr) 40px;
+  }
+}

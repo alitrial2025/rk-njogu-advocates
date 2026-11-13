@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Scale,
   ShieldCheck,
@@ -13,7 +13,6 @@ import {
   X,
   MapPin,
   Phone,
-  Mail,
   MessageCircle,
   Plus,
   Check,
@@ -24,12 +23,19 @@ import {
   faqs,
   guides,
   locationPhotos,
-  consultationPreparation,
   type PracticeArea,
   type LegalGuide,
 } from "./data";
 import { useScrollMotion } from "./useScrollMotion";
 import { Tabs } from "./Tabs";
+import { Modal, Wordmark } from "./SiteElements";
+import { PrivacyNotice } from "./PrivacyNotice";
+import { WhatsAppEnquiry } from "./WhatsAppEnquiry";
+import {
+  PreparationChecklist,
+  type PreparationState,
+} from "./PreparationChecklist";
+import { servicePath } from "./serviceData";
 
 const icons = {
   shield: ShieldCheck,
@@ -68,87 +74,6 @@ type ModalContent =
   | { type: "practice"; area: PracticeArea }
   | { type: "guide"; guide: LegalGuide }
   | { type: "privacy" | "terms" };
-type Draft = {
-  name: string;
-  email: string;
-  phone: string;
-  practice: string;
-  message: string;
-};
-
-function Wordmark({ footer = false }: { footer?: boolean }) {
-  return (
-    <a
-      className={`wordmark ${footer ? "wordmark-footer" : ""}`}
-      href="#home"
-      aria-label="R. K. Njogu & Company Advocates — home"
-    >
-      <img
-        className="brand-logo"
-        src={`${import.meta.env.BASE_URL}firm-logo.jpg`}
-        alt=""
-        width="291"
-        height="290"
-      />
-      <span>
-        <span className="brand-name">R. K. NJOGU</span>
-        <span className="brand-subtitle">& COMPANY ADVOCATES</span>
-      </span>
-    </a>
-  );
-}
-
-function Modal({
-  children,
-  title,
-  onClose,
-}: {
-  children: ReactNode;
-  title: string;
-  onClose: () => void;
-}) {
-  const ref = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    const dialog = ref.current!;
-    const previous = document.activeElement as HTMLElement | null;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    dialog.showModal();
-    return () => {
-      dialog.close();
-      document.body.style.overflow = previousOverflow;
-      previous?.focus({ preventScroll: true });
-    };
-  }, []);
-  return (
-    <dialog
-      ref={ref}
-      className="content-dialog"
-      aria-labelledby="dialog-title"
-      onCancel={(event) => {
-        event.preventDefault();
-        onClose();
-      }}
-      onClick={(event) => {
-        if (event.target === ref.current) onClose();
-      }}
-    >
-      <div className="dialog-body">
-        <button
-          className="close-dialog icon-button"
-          aria-label="Close dialog"
-          onClick={onClose}
-        >
-          <X size={22} />
-        </button>
-        <p className="eyebrow">R. K. NJOGU & COMPANY ADVOCATES</p>
-        <h2 id="dialog-title">{title}</h2>
-        {children}
-      </div>
-    </dialog>
-  );
-}
-
 export default function App() {
   useScrollMotion();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -158,12 +83,9 @@ export default function App() {
   const [contactTab, setContactTab] = useState("details");
   const [modal, setModal] = useState<ModalContent | null>(null);
   const [practice, setPractice] = useState("");
-  const [draft, setDraft] = useState<Draft | null>(null);
-  const [copied, setCopied] = useState(false);
   const [locationPhoto, setLocationPhoto] = useState(0);
-  const [preparedItems, setPreparedItems] = useState<number[]>([]);
+  const [preparedItems, setPreparedItems] = useState<PreparationState>({});
   const menuButton = useRef<HTMLButtonElement>(null);
-  const draftRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -190,6 +112,7 @@ export default function App() {
         visit: "contact",
         social: "social",
       };
+      if (hash === "privacy") setModal({ type: "privacy" });
       if (hash === "approach") setFirmTab("approach");
       if (hash === "insights") setResourceTab("guides");
       if (hash === "tools") setResourceTab("prepare");
@@ -230,17 +153,16 @@ export default function App() {
     };
   }, []);
 
-  const draftText = draft
-    ? `Hello R. K. Njogu & Company Advocates,\n\nI would like to discuss ${draft.practice || "a legal matter"}.\n\n${draft.message}\n\nName: ${draft.name}\nEmail: ${draft.email}${draft.phone ? `\nPhone: ${draft.phone}` : ""}\n\nPlease contact me to arrange an initial consultation.`
-    : "";
-  const draftSubject = `Consultation enquiry${draft?.practice ? ` — ${draft.practice}` : ""}`;
-  const mailto = `mailto:${firm.email}?subject=${encodeURIComponent(draftSubject)}&body=${encodeURIComponent(draftText)}`;
+  useEffect(() => {
+    const selected = new URLSearchParams(window.location.search).get("matter");
+    if (selected && practiceAreas.some((area) => area.id === selected))
+      setPractice(selected);
+  }, []);
 
   function consult(area?: PracticeArea) {
-    if (area) setPractice(area.title);
+    if (area) setPractice(area.id);
     setModal(null);
     setContactTab("details");
-    setDraft(null);
     window.location.hash = "contact";
     document.getElementById("contact")?.scrollIntoView({
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -429,7 +351,16 @@ export default function App() {
                               />
                             </div>
                             <div className="practice-description">
-                              <h3>{area.shortTitle}</h3>
+                              <h3>
+                                <a
+                                  href={servicePath(
+                                    area.id,
+                                    import.meta.env.BASE_URL,
+                                  )}
+                                >
+                                  {area.shortTitle}
+                                </a>
+                              </h3>
                               <p>{area.summary}</p>
                             </div>
                             <button
@@ -701,51 +632,13 @@ export default function App() {
                           reload.
                         </p>
                       </div>
-                      <div className="preparation-checklist" data-reveal>
-                        <div className="preparation-heading">
-                          <h3>Consultation checklist</h3>
-                          <span aria-live="polite">
-                            {preparedItems.length} /{" "}
-                            {consultationPreparation.length} prepared
-                          </span>
-                        </div>
-                        <progress
-                          value={preparedItems.length}
-                          max={consultationPreparation.length}
-                          aria-label="Consultation preparation progress"
-                        />
-                        <fieldset>
-                          <legend className="sr-only">
-                            Prepare for your first consultation
-                          </legend>
-                          {consultationPreparation.map((item, index) => (
-                            <label key={item}>
-                              <input
-                                type="checkbox"
-                                checked={preparedItems.includes(index)}
-                                onChange={(event) =>
-                                  setPreparedItems((previous) =>
-                                    event.target.checked
-                                      ? [...previous, index]
-                                      : previous.filter(
-                                          (value) => value !== index,
-                                        ),
-                                  )
-                                }
-                              />
-                              <span>{item}</span>
-                            </label>
-                          ))}
-                        </fieldset>
-                        <p>
-                          Keep documents ready for your meeting. Ask the firm
-                          how to share sensitive information securely. Your
-                          checklist resets when you reload this page.
-                        </p>
-                        <a className="button button-green" href="#contact">
-                          Prepare a consultation enquiry
-                        </a>
-                      </div>
+                      <PreparationChecklist
+                        practiceId={practice}
+                        onPracticeChange={setPractice}
+                        checkedByMatter={preparedItems}
+                        setCheckedByMatter={setPreparedItems}
+                        consultationHref="#contact"
+                      />
                     </div>
                   ),
                 },
@@ -979,155 +872,12 @@ export default function App() {
                   ]}
                 />
               </div>
-              <div className="contact-form-wrap">
-                <form
-                  onChange={() => {
-                    setDraft(null);
-                    setCopied(false);
-                  }}
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                    const data = new FormData(event.currentTarget);
-                    setDraft({
-                      name: String(data.get("name")),
-                      email: String(data.get("email")),
-                      phone: String(data.get("phone")),
-                      practice,
-                      message: String(data.get("message")),
-                    });
-                    setCopied(false);
-                    setTimeout(() => draftRef.current?.focus(), 0);
-                  }}
-                >
-                  <h3>Start a conversation</h3>
-                  <p className="form-description">
-                    Prepare an enquiry to send through your email app.
-                  </p>
-                  <div className="form-row">
-                    <label>
-                      Your name <span>*</span>
-                      <input
-                        name="name"
-                        autoComplete="name"
-                        placeholder="Full name"
-                        required
-                        maxLength={100}
-                      />
-                    </label>
-                    <label>
-                      Email address <span>*</span>
-                      <input
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        placeholder="you@example.com"
-                        required
-                        maxLength={150}
-                      />
-                    </label>
-                  </div>
-                  <div className="form-row">
-                    <label>
-                      Phone number <span className="optional">(optional)</span>
-                      <input
-                        name="phone"
-                        type="tel"
-                        autoComplete="tel"
-                        placeholder="07XX XXX XXX"
-                        maxLength={30}
-                      />
-                    </label>
-                    <label>
-                      Practice area
-                      <select
-                        name="practice"
-                        aria-label="Practice area"
-                        value={practice}
-                        onChange={(event) => setPractice(event.target.value)}
-                      >
-                        <option value="">I’m not sure yet</option>
-                        {practiceAreas.map((area) => (
-                          <option key={area.id}>{area.title}</option>
-                        ))}
-                      </select>
-                    </label>
-                  </div>
-                  <label>
-                    How can we help? <span>*</span>
-                    <textarea
-                      name="message"
-                      rows={4}
-                      placeholder="A brief overview of your matter…"
-                      required
-                      maxLength={1500}
-                    />
-                  </label>
-                  <p className="form-note">
-                    Please keep your first enquiry brief and avoid confidential
-                    details. An enquiry does not create an advocate–client
-                    relationship. Read our{" "}
-                    <button
-                      type="button"
-                      onClick={() => setModal({ type: "privacy" })}
-                    >
-                      privacy notice
-                    </button>
-                    .
-                  </p>
-                  <button className="button button-green" type="submit">
-                    Prepare email enquiry
-                  </button>
-                  <p className="handoff-note">
-                    <Mail size={14} /> You review and send it in your email app.
-                    Nothing is sent here.
-                  </p>
-                </form>
-                {draft && (
-                  <div
-                    className="email-draft"
-                    ref={draftRef}
-                    tabIndex={-1}
-                    aria-labelledby="draft-title"
-                  >
-                    <div className="draft-title">
-                      <Check size={20} />
-                      <h4 id="draft-title">Your email draft is ready</h4>
-                    </div>
-                    <p>
-                      Review your draft, then open your email app to send it. We
-                      haven’t sent or stored your enquiry.
-                    </p>
-                    <pre>{draftText}</pre>
-                    <div className="draft-actions">
-                      <a className="button button-green" href={mailto}>
-                        Open email app
-                      </a>
-                      <button
-                        className="text-link"
-                        type="button"
-                        onClick={async () => {
-                          try {
-                            await navigator.clipboard.writeText(draftText);
-                            setCopied(true);
-                          } catch {
-                            setCopied(false);
-                          }
-                        }}
-                      >
-                        {copied ? "Copied" : "Copy draft"}
-                      </button>
-                    </div>
-                    <p className="small-copy" aria-live="polite">
-                      {copied
-                        ? "Draft copied. Paste it into an email to " +
-                          firm.email
-                        : "No email app configured? Copy the draft and email " +
-                          firm.email +
-                          "."}
-                    </p>
-                  </div>
-                )}
-              </div>
+              <WhatsAppEnquiry
+                practiceId={practice}
+                onPracticeChange={setPractice}
+                privacyHref="#privacy"
+                onPrivacy={() => setModal({ type: "privacy" })}
+              />
             </div>
           </div>
         </section>
@@ -1254,6 +1004,12 @@ export default function App() {
                 The right approach depends on your circumstances. Speak with our
                 team about your objectives, the proposed scope and fees.
               </p>
+              <a
+                className="text-link full-service-link"
+                href={servicePath(modal.area.id, import.meta.env.BASE_URL)}
+              >
+                Read the full service guide
+              </a>
               <button
                 className="button button-green"
                 onClick={() => consult(modal.area)}
@@ -1283,35 +1039,7 @@ export default function App() {
               </button>
             </>
           )}
-          {modal.type === "privacy" && (
-            <>
-              <p>
-                This website does not submit your enquiry to a server, store
-                form entries in your browser, or use analytics or advertising
-                cookies. Form entries remain in page memory until you leave or
-                reload the page.
-              </p>
-              <p>
-                “Prepare email enquiry” creates a draft for you to review.
-                Opening your email app, sending an email, using WhatsApp or
-                visiting external links involves those services’ privacy
-                practices. Only send information you are comfortable sharing,
-                and avoid confidential details in an initial enquiry.
-              </p>
-              <p>
-                The hosting provider may process technical access logs such as
-                IP addresses and request times. This notice should be reviewed
-                against the chosen production hosting and any future
-                integrations before publication.
-              </p>
-              <p>
-                For questions about information you share with the firm, contact{" "}
-                <a href={`mailto:${firm.email}`}>{firm.email}</a>. This notice
-                describes the current website and does not replace a privacy
-                notice for the firm’s wider client services.
-              </p>
-            </>
-          )}
+          {modal.type === "privacy" && <PrivacyNotice />}
           {modal.type === "terms" && (
             <>
               <p>
