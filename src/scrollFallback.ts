@@ -177,8 +177,6 @@ export function startScrollFallback() {
       "practice",
     );
     add(".insight-card", ".insight-art", "insight");
-    add(".approach-step", ".step-illustration svg", "graphic");
-    add(".approach-step", ".step-trace", "trace");
     sections = [...new Set(elements.map((item) => item.parent))];
     schedule();
   };

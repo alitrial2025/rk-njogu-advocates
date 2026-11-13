@@ -31,10 +31,6 @@
   clip-path: inset(0 100% 0 0);
 }
 
-.step-trace {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
-}
 
 /* The event-driven fallback owns these transforms in older browsers. */
 body.motion-fallback
@@ -133,10 +129,6 @@ body.motion-fallback .statement-word::after {
       view-timeline-axis: block;
     }
 
-    .approach-step {
-      view-timeline-name: --step-progress;
-      view-timeline-axis: block;
-    }
 
     body.motion-ready .reading-progress {
       animation: reading-progress linear both;
@@ -217,18 +209,7 @@ body.motion-fallback .statement-word::after {
       transform-origin: center 65%;
     }
 
-    body.motion-ready .step-illustration svg {
-      animation: step-graphic-turn linear both;
-      animation-timeline: --step-progress;
-      animation-range: entry 0% cover 55%;
-      transform-origin: center;
-    }
 
-    body.motion-ready .approach-step .step-trace {
-      animation: trace-enter linear both;
-      animation-timeline: --step-progress;
-      animation-range: entry 5% cover 48%;
-    }
   }
 }
 
@@ -399,8 +380,6 @@ body.motion-fallback .statement-word::after {
   .hero-art img,
   .reading-progress,
   .statement-word::after,
-  .approach-step .step-trace,
-  .step-illustration svg,
   .about-art,
   .about-photo,
   .about-orbit svg,
@@ -425,7 +404,4 @@ body.motion-fallback .statement-word::after {
     display: none;
   }
 
-  .step-trace {
-    stroke-dashoffset: 0;
-  }
 }

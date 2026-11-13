@@ -1,6 +1,6 @@
 # Client website checklist — content and review map
 
-Source: the latest uploaded **Website Checklist.pdf**, including its embedded logo, for **RK NJOGU ADVOCATES**. The two supplied design files are style references; the website checklist is the source for firm facts. This map preserves every supplied requirement and distinguishes content ready for implementation from items requiring client input.
+Source: the latest uploaded **Website Checklist.pdf**, including its embedded logo, for **RK NJOGU ADVOCATES**. The two supplied design files are style references; the website checklist is the source for firm facts. The current client feedback removes testimonials and consolidates supporting content into tabs. This map preserves the remaining supplied requirements and distinguishes content ready for implementation from items requiring client input.
 
 Implementation should be checked against this document before publication. A listed placement is an acceptance requirement, not a claim that an external service or client asset has already been supplied.
 
@@ -71,11 +71,11 @@ Use meaningful accessible names for icon links. If external links open a new tab
 | Item | What the checklist supplies | Current handling / next input |
 | --- | --- | --- |
 | Higher-resolution logo master (optional) | The embedded logo is 291 × 290px. | The source image is preserved unchanged; its dark-surface presentation uses CSS blending. A vector master would support future larger-format use. |
-| Client testimonials | Marked **TBA**. Possible sources listed: Afriavo Orchards Ltd, Apple Orchards Ltd, Femuro Management Ltd, Outrival Human Resource Services Ltd, Google Reviews. | At the user’s explicit request, display all four listed names in the Client Testimonials section with forthcoming status, plus the supplied Google Reviews link. Written quotations remain TBA; no quotations, client logos or ratings are fabricated. |
-| Blog / news | No copy supplied. | Visible Blog & News section contains original educational guides and office notices grounded in the supplied address and hours. No invented bylines, dates or firm announcements. |
-| Special features | No feature is specified. | At the user’s request, show Client Tools & Special Features: an interactive five-item consultation preparation checklist, practice discovery, enquiry preparation, WhatsApp and visit/directions shortcuts. No unsupported booking or payment claims. |
+| Client testimonials | Previously marked **TBA**. | Removed at the client’s request, including client-name placeholders and testimonial navigation. The supplied Google Business profile remains a contact link in the footer. |
+| Blog / news | No copy supplied. | Client resources → Legal guides contains original educational guides. Office address and hours live in Contact without duplicate news cards. No invented bylines, dates or firm announcements. |
+| Special features | No feature is specified. | Client resources → Consultation checklist provides an interactive five-item preparation checklist. Practice discovery and contact/visit links remain available in the main navigation and hero shortcuts. No unsupported booking or payment claims. |
 | Advocate biographies and portraits | Not included. | No invented advocates, credentials, experience, or headshots. Obtain names, practising roles, approved biographies, and portraits if a team section is desired. |
-| Office photography | Seven aerial approach/area photos supplied separately in `Downloads.zip`; no identified office-building photograph. | The seven original JPEGs appear in the Kamulu location gallery with attribution intact and a directions link using the supplied plus code. `threshold.webp` and `perspective.webp` remain decorative conceptual architecture; neither depicts the actual office. |
+| Office photography | Seven aerial approach/area photos supplied separately in `Downloads.zip`; no identified office-building photograph. | The seven original JPEGs appear in the Kamulu location gallery with attribution intact and a directions link using the supplied plus code. The generated scenes in `public/legal/` illustrate legal work and guide topics; none depicts the actual office, staff or a client matter. Original architectural assets are retained but unused in the current page. |
 | Email/form delivery | No provider, endpoint or secure delivery configuration supplied. | Direct email and WhatsApp contact are available. A form that prepares a draft must clearly say it opens the user's email app or WhatsApp; it cannot claim delivery. Configure and test a server endpoint before enabling a real sent state. |
 | Privacy and legal publication copy | Not included. | Ensure any drafted policy reflects actual hosting, data handling and integrations; obtain client review before publication. |
 | Domain hosting / final deployment | Checklist provides the domain in an email address, but no hosting configuration. | The local/cloud preview can be complete. Confirm destination and publish only through the authorized deployment workflow. |
@@ -91,9 +91,9 @@ Use meaningful accessible names for icon links. If external links open a new tab
 - Form labels, validation, feedback and delivery wording match the implemented integration.
 - No fabricated testimonials, reviews, awards, outcomes, advocate biographies, or office claims appear.
 - Mobile and desktop layouts have no unintended horizontal overflow.
-- Motion works with CSS timelines and their passive-event fallback; reduced motion disables scrub effects and restores the three approach cards to normal flow. Browser scroll performance has a reproducible report tied to the tested revision.
+- Motion works with CSS timelines and their passive-event fallback; reduced motion disables the remaining scrub effects. The approach is a compact tab panel without pinned cards. Browser scroll performance has a reproducible report tied to the tested revision.
 
-All populated firm-information fields are implemented, including the supplied logo, complete overview, mission, vision, nine practice scopes, contacts, address, hours, map and social profiles. The user requested visible sections for every checklist heading. Client Testimonials displays all four listed names with forthcoming status and Google Reviews; prominent Social Media includes every supplied profile and @RKNjoguAdv. Blog & News and Client Tools & Special Features are implemented despite the PDF supplying no article copy or feature specifications. Approved testimonial/article material, biography assets and a delivery backend remain separate client inputs or integration work. GitHub Pages is the user-authorized publication target.
+All factual firm information remains available: original logo, complete overview, mission, vision, values, nine practice scopes, contacts, address, hours, map and social profiles. Tabs consolidate the approach, values, legal guides, FAQs, preparation checklist and location gallery. Testimonials and named-client placeholders are removed. Approved advocate biographies, portraits and professional credentials are the main missing trust content. A server-backed delivery service remains a separate integration; the current form prepares an email draft.
 
 ## Logo provenance
 
@@ -116,11 +116,11 @@ Extracted the original embedded JPEG from page 1 of the latest checklist without
 | Checklist heading | Website location |
 | --- | --- |
 | Firm identity, logo, tagline | Header, hero, footer and metadata |
-| About, mission, vision, values | `#about` |
+| About, mission, vision, values | `#about` → Who we are / Our principles |
 | All nine practice areas and full scopes | `#practice` and service dialogs |
-| Client Testimonials, four named clients, Google Reviews | `#testimonials` |
-| Social Media: Facebook, LinkedIn, Twitter/X, Google Business | `#social` and footer |
-| Blog / News | `#insights`, legal guide dialogs and `#news` office notices |
-| Any Special Features Required | `#tools`: working preparation checklist and client shortcuts |
-| Kamulu approach photos and directions | `#visit` |
+| Client testimonials | Removed at client request |
+| Social Media: Facebook, LinkedIn, Twitter/X, Google Business | `#social` in the footer |
+| Legal guides | `#resources` → Legal guides, plus guide dialogs; legacy `#insights` selects this tab |
+| Preparation checklist and FAQs | `#resources` → Consultation checklist / Common questions; `#tools` / `#faq` deep links |
+| Kamulu approach photos and directions | `#contact` → Find the office; legacy `#visit` selects this tab |
 | Address, both phones/emails/WhatsApp routes, hours and map | `#contact` |

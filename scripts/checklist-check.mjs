@@ -183,14 +183,19 @@ export async function checklistChecks(page, label, check, expect) {
   await check(
     `${label}: complete checklist overview, mission and vision are present`,
     async () => {
-      const text = normalize(await page.locator('#about').innerText());
-      for (const paragraph of overview)
-        expect(
-          text.includes(normalize(paragraph)),
-          `Missing firm information: ${paragraph}`,
-        );
+      const firm = page.locator('#about');
+      await firm.getByRole('tab', { name: 'Who we are', exact: true }).click();
+      const text = normalize(await firm.innerText());
+      for (const paragraph of overview.slice(0, 4))
+        expect(text.includes(normalize(paragraph)), `Missing firm information: ${paragraph}`);
+      await firm.getByRole('tab', { name: 'Our principles', exact: true }).click();
+      await firm.locator('.purpose-details summary').click();
+      const principles = normalize(await firm.innerText());
+      for (const paragraph of overview.slice(4))
+        expect(principles.includes(normalize(paragraph)), `Missing firm purpose: ${paragraph}`);
+      await firm.getByRole('tab', { name: 'Who we are', exact: true }).click();
       const tagline = normalize(
-        await page.locator('.footer-top').innerText(),
+        await page.locator('#hero-title').innerText(),
       ).replaceAll('.', '');
       expect(
         tagline.includes('legal solutions made practical'),
@@ -254,114 +259,28 @@ export async function checklistChecks(page, label, check, expect) {
     },
   );
 
-  await check(
-    `${label}: testimonial section includes all four checklist clients and Google Reviews`,
-    async () => {
-      const section = page.locator('#testimonials');
-      const clients = await section.locator('.client-list li').allInnerTexts();
-      expect(
-        clients.length === 4,
-        'The visible testimonials section is missing client entries',
-      );
-      for (const name of [
-        'Afriavo Orchards Ltd',
-        'Apple Orchards Ltd',
-        'Femuro Management Ltd',
-        'Outrival Human Resource Services Ltd',
-      ]) {
-        expect(
-          clients.some((client) => client.includes(name)),
-          `Missing checklist client: ${name}`,
-        );
-      }
-      expect(
-        clients.every((client) =>
-          normalize(client).includes('testimonial forthcoming'),
-        ),
-        'Testimonials marked TBA in the PDF are not identified as forthcoming',
-      );
-      expect(
-        (await section
-          .getByRole('link', { name: 'Read Google Reviews', exact: true })
-          .getAttribute('href')) === 'https://share.google/ylvoiONkW36RoPiQF',
-        'Google Reviews does not use the supplied business profile',
-      );
-    },
-  );
+  await check(`${label}: testimonials and their navigation links are removed`, async () => {
+    expect(await page.locator('#testimonials, a[href="#testimonials"]').count() === 0, 'Retired testimonials remain');
+    const text = await page.locator('body').innerText();
+    for (const value of ['Testimonial forthcoming', 'Afriavo Orchards Ltd', 'Apple Orchards Ltd', 'Femuro Management Ltd', 'Outrival Human Resource Services Ltd'])
+      expect(!text.includes(value), `Withdrawn client reference remains: ${value}`);
+  });
 
-  await check(
-    `${label}: prominent social profiles include Facebook, LinkedIn and the supplied X handle`,
-    async () => {
-      const social = page.locator('#social');
-      const links = await social
-        .locator('a')
-        .evaluateAll((elements) =>
-          elements.map((element) => element.getAttribute('href')),
-        );
-      expect(
-        links.length === 4 && socialLinks.every((link) => links.includes(link)),
-        'Prominent social links do not match all four supplied profiles',
-      );
-      const text = await social.innerText();
-      for (const name of [
-        'Facebook',
-        'LinkedIn',
-        'X / Twitter',
-        '@RKNjoguAdv',
-        'Google Business',
-      ])
-        expect(text.includes(name), `Social section is missing ${name}`);
-    },
-  );
-
-  await check(
-    `${label}: Blog and News has readable articles and checklist-grounded firm notices`,
-    async () => {
-      const menuButton = page.getByRole('button', {
-        name: 'Open menu',
-        exact: true,
-      });
-      const mobileMenu = await menuButton.isVisible();
-      if (mobileMenu) await menuButton.click();
-      expect(
-        (await page
-          .locator('header')
-          .getByRole('link', { name: 'Blog & News', exact: true })
-          .getAttribute('href')) === '#insights',
-        'Blog and News is not discoverable in navigation',
-      );
-      if (mobileMenu)
-        await page
-          .getByRole('button', { name: 'Close menu', exact: true })
-          .click();
-      const blog = page.locator('#insights');
-      expect(
-        (await blog.innerText()).includes('BLOG & NEWS'),
-        'Blog and News section has no visible label',
-      );
-      expect(
-        (await blog.locator('.insight-card').count()) === 3,
-        'Blog articles are missing',
-      );
-      const notices = await blog.locator('#news').innerText();
-      expect(
-        notices.includes('Suite BW-213') &&
-          notices.includes('8:00 am–5:00 pm') &&
-          notices.includes('8:00 am–1:00 pm') &&
-          notices.includes('public holidays'),
-        'Firm notices are missing the supplied location or hours',
-      );
-    },
-  );
+  await check(`${label}: client resources expose substantive guides`, async () => {
+    await page.locator('#resources').getByRole('tab', { name: /Legal guides/ }).click();
+    expect(await page.locator('#insights .guide-row').count() === 3, 'Legal guides are missing');
+    for (const guide of await page.locator('#insights .guide-row').all()) {
+      expect((await guide.innerText()).length > 120, 'Guide is missing its topic or summary');
+    }
+    const headerLink = page.locator('header a[href="#resources"]');
+    expect(await headerLink.count() === 1, 'Resources are missing from navigation');
+  });
 
   await check(
     `${label}: special features include a working consultation preparation checklist`,
     async () => {
       const tools = page.locator('#tools');
-      expect(
-        (await tools.innerText()).includes('SPECIAL FEATURES'),
-        'Special features section is not visibly identified',
-      );
+      await page.locator('#resources').getByRole('tab', { name: 'Consultation checklist', exact: true }).click();
       const inputs = tools.getByRole('checkbox');
       expect(
         (await inputs.count()) === 5,
@@ -397,33 +316,23 @@ export async function checklistChecks(page, label, check, expect) {
     },
   );
 
-  await check(
-    `${label}: client tool shortcuts reach real services, consultation and directions`,
-    async () => {
-      const hrefs = await page
-        .locator('#tools a')
-        .evaluateAll((links) => links.map((link) => link.getAttribute('href')));
-      for (const target of [
-        '#practice',
-        '#contact',
-        '#visit',
-        'https://wa.me/254704652614',
-      ])
-        expect(
-          hrefs.includes(target),
-          `Missing working client-tool destination: ${target}`,
-        );
-      for (const target of ['#practice', '#contact', '#visit'])
-        expect(
-          (await page.locator(target).count()) === 1,
-          `Client-tool destination ${target} is missing`,
-        );
-    },
-  );
+  await check(`${label}: preparation selections survive switching resource tabs`, async () => {
+    const resources = page.locator('#resources');
+    await resources.getByRole('tab', { name: 'Consultation checklist', exact: true }).click();
+    await resources.getByRole('checkbox').first().check();
+    await resources.getByRole('tab', { name: /Legal guides/ }).click();
+    expect(await resources.getByRole('checkbox').count() === 0, 'Inactive controls remain in the tab order');
+    await resources.getByRole('tab', { name: 'Consultation checklist', exact: true }).click();
+    expect(await resources.getByRole('checkbox').first().isChecked(), 'Switching tabs lost preparation state');
+    await resources.getByRole('checkbox').first().uncheck();
+    expect(await resources.getByRole('link', { name: 'Prepare a consultation enquiry', exact: true }).getAttribute('href') === '#contact', 'Preparation does not link to the consultation');
+    await resources.getByRole('tab', { name: /Legal guides/ }).click();
+  });
 
   await check(
     `${label}: all seven Kamulu photos can be viewed and directions use the supplied map location`,
     async () => {
+      await page.getByRole('tab', { name: 'Find the office', exact: true }).click();
       const visit = page.locator('#visit');
       const buttons = visit
         .getByRole('group', { name: 'Kamulu location photos' })
@@ -477,6 +386,7 @@ export async function checklistChecks(page, label, check, expect) {
         (await visit.innerText()).includes('Suite BW-213'),
         'Location section is missing the office suite',
       );
+      await page.getByRole('tab', { name: 'Contact details', exact: true }).click();
     },
   );
 

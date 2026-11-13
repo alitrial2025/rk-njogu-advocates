@@ -4,7 +4,7 @@
 
 **Practical law. Considered design.**
 
-A premium editorial website for a Kenyan legal practice: grounded in its place, monumental in its typography, architectural in its imagery, and clear about how a prospective client can get help. The firm's supplied promise, **“Legal Solutions Made Practical”**, leads the experience. An expressive scroll sequence connects the chapters while preserving legibility and dependable interaction.
+A premium editorial website for a Kenyan legal practice: grounded in its place, monumental in its typography, rich in editorial legal imagery, and clear about how a prospective client can get help. The firm's supplied promise, **“Legal Solutions Made Practical”**, leads the experience. An expressive scroll sequence connects the chapters while preserving legibility and dependable interaction.
 
 This document combines the two supplied references, **Origin Financial** (`DESIGN.md`) and **Slash** (`DESIGN (1).md`), into one original direction. The **Website Checklist.pdf** supplies firm facts and client requirements. The user's later direction calls for a more distinctive composition and stronger scrolling animation. Instructions inside the references are design observations, not requirements to reproduce those financial brands. Client brand colours, law-firm use, and that explicit animation direction take precedence over the references' palettes, product modules, and motion limits.
 
@@ -13,14 +13,14 @@ This document combines the two supplied references, **Origin Financial** (`DESIG
 | Decision | Origin contribution | Slash contribution | Unified decision and rationale |
 | --- | --- | --- | --- |
 | Atmosphere | Quiet dark canvas; restrained, large serif type | Near-black editorial character | Near-black forest framing creates authority while connecting to the client's green palette. |
-| Composition | Atmospheric image and spacious rhythm | Strong typographic hierarchy and editorial modules | A monumental centred two-line headline sits above a panoramic architectural image. Numbered practice rows, opposed sliding typography, a moving architectural portrait, three sticky approach cards, and offset guide tiles make each chapter distinct. |
+| Composition | Atmospheric image and spacious rhythm | Strong typographic hierarchy and editorial modules | A monumental centred two-line headline sits above a panoramic legal still life. Compact numbered practice rows and tabbed firm, resource and contact chapters shorten the journey without losing the supplied content. |
 | Typography | Light display weight; an occasional italic word | Clear serif/sans division; Inter for UI | Self-hosted Cormorant Garamond for display, Inter for body and UI. This retains contrast without relying on commercial reference fonts. |
 | Palette | Monochrome foundation plus many feature colours | One tightly controlled copper accent | Green, white, grey, and black, as specified by the client. Violet, cyan, copper, and gold are excluded from interface tokens. |
 | Reading surfaces | Occasional inverted light card | Continuous dark page | Ivory light sections hold service descriptions and contact details; dark hero, navigation, selected callout, and footer provide rhythm. Long legal copy benefits from a reading-friendly light surface. |
-| Shape | 8px controls and generous rounded cards | 10px cards, pill controls | Sharp or modest corners on structural surfaces, pill actions and filters, and deliberate arch silhouettes for the mobile hero and guide illustrations. The firm chapter uses a tall rectangular architectural photograph with the supplied firm logo. |
-| Structure | Clean surface steps and restrained elevation | Hairline borders and curated grids | Hairline rules, whitespace, and surface changes establish hierarchy. Subtle shadows help distinguish the moving firm image and overlapping approach cards; ordinary service rows remain flat. |
+| Shape | 8px controls and generous rounded cards | 10px cards, pill controls | Sharp or modest corners on structural surfaces, pill actions and deliberate arch silhouettes for the mobile hero. The firm chapter uses an illustrative law-library photograph; the original firm logo stays in the header and footer. |
+| Structure | Clean surface steps and restrained elevation | Hairline borders and curated grids | Hairline rules, whitespace, and surface changes establish hierarchy. The compact service directory and resource lists remain flat; selected tabs use a strong underline and label weight. |
 | Conversion | Bright primary action | A scarce high-contrast primary action | One dominant consultation action per section; direct call, email, and WhatsApp paths support it. |
-| Motion | Atmospheric entrances and border traces | Quiet state changes and editorial emphasis | Masked headlines, image drift, opposed kinetic type, continuous service/guide motion, sticky card stacking, SVG traces, and a reading-progress rule express the user's stronger-animation direction. Native CSS timelines have an event-driven fallback; browser scrolling remains native. |
+| Motion | Atmospheric entrances and border traces | Quiet state changes and editorial emphasis | Masked headlines, subtle image drift, restrained entrances and a reading-progress rule preserve character while keeping the shorter page calm. Native CSS timelines have an event-driven fallback; browser scrolling remains native. |
 | Proof | Award marks and statistics | Testimonials and product data | Only supplied, approved facts. No fabricated awards, case wins, years of experience, client quotations, review counts, or guarantees. |
 
 ## Brand and content foundation
@@ -70,7 +70,7 @@ Use **Cormorant Garamond** for hero and section display headings, **Inter** for 
 | --- | --- | --- | --- | --- |
 | Hero display | Cormorant Garamond 400 | Fluid 84–176px | Fluid 55–92px | Tight, approximately 0.91–0.99 line height; second line italic; preserve glyph clearance in reveal masks |
 | Section heading | Cormorant Garamond 400 | Fluid 48–82px | Fluid 42–64px | Approximately 1.02–1.14 line height; controlled line lengths |
-| Service headline | Cormorant Garamond 400–500 | 31–52px | 27–35px | Featured first row is larger; keep recognizable practice names |
+| Service headline | Cormorant Garamond 400–500 | 31–52px | 27–35px | Keep recognizable practice names in compact equal-weight rows |
 | Intro / lead | Inter 400 | 15–18px | 13–16px | 1.65–1.85 line height |
 | Body | Inter 400 | 13–16px | 12–16px | 1.65–1.9 line height; retain readable contrast and zoom behaviour |
 | UI | Inter 500 | 11–14px | 10–14px | Compact editorial labels with adequate touch targets |
@@ -82,7 +82,7 @@ Serif type communicates thoughtfulness and gravitas; sans text handles tasks. Li
 
 - Content container: up to approximately 1320px; centered with fluid margins.
 - Desktop gutters: approximately 48px; tablet: 28–40px; mobile: 20–24px.
-- Desktop sections: approximately 110–135px vertical breathing room; mobile: approximately 45–85px according to chapter density.
+- Desktop sections: approximately 60–76px vertical breathing room; mobile: approximately 45–60px according to chapter density.
 - Use a 4px spacing base and practical steps: 8, 12, 16, 24, 32, 48, 64, 96, 120.
 - Pair narrow section introductions with larger content columns. Use alignment and thin rules to carry the editorial structure.
 - Collapse supporting metadata and editorial grids to a single column at widths where the content becomes cramped. Unpin sticky introductions on mobile. Responsive decisions follow readable content, not a fixed list of device names.
@@ -90,71 +90,43 @@ Serif type communicates thoughtfulness and gravitas; sans text handles tasks. Li
 
 ### Imagery and identity
 
-The hero uses an original generated conceptual photograph, `public/threshold.webp`: a limestone colonnade with considered light, stone, quiet planting, and a forest-toned scene. It supplies atmosphere and a visual threshold, not documentary evidence of the firm's premises. Do not label it as the actual office or imply it depicts a courthouse, staff, or clients. On desktop it reads as a broad panorama; on mobile it is cropped into an arch that repeats elsewhere in the visual system.
+Five generated editorial photographs in `public/legal/` add legal context and warm colour without new full-height sections. `hero.webp` shows scales and legal volumes in sunlight; `library.webp` shows a warm law library; `property.webp`, `consultation.webp` and `commercial.webp` illustrate the three guide topics. They are illustrative scenes, not documentary photographs of the firm, its premises, staff or actual client matters. Forest green, ivory, warm wood, brass and burgundy connect the set to the brand. Original architectural images remain on disk but are replaced in the current composition.
 
-The firm chapter adds `public/perspective.webp`, a generated decorative architectural composition in portrait orientation (1086 × 1448px; 199,352 bytes). It is not an advocate portrait or the firm's actual office. It loads lazily with intrinsic dimensions; the hero image retains loading priority.
+Use intrinsic dimensions and optimized WebP files. The hero has loading priority; the firm image and guide thumbnails load lazily. Guide dialogs reuse a larger rendering of their thumbnail source. The mobile firm image uses a small banner; guide thumbnails share their existing rows. Keep approach steps and the closing “Clarity at every step. Care in every decision.” statement static in normal flow. Obsolete sticky-card style rules and fallback registrations have been removed.
 
-Avoid gavels, scales-of-justice stock photography, generic handshakes, invented advocate portraits, financial dashboards, and awards. Actual office photography and approved advocate portraits can replace supporting artwork later. Use intrinsic image dimensions, suitable compression, and responsive loading. Reserve eager/high-priority loading for the hero artwork; defer below-fold imagery.
-
-The latest checklist contains the firm’s approved logo, and the user explicitly requested its use. `public/firm-logo.jpg` is the original embedded JPEG extracted without alteration (291 × 290px, 6,975 bytes). Preserve its lettering, proportions and source image. At the user’s request, CSS inversion, hue rotation and screen blending remove the visible white rectangle on dark surfaces and give the lettering a light treatment without redrawing the mark. Use it in the navigation, footer, supporting firm artwork, favicon and sharing image; adjacent typeset text keeps the firm name readable at small sizes.
+The latest checklist contains the firm’s approved logo, and the user explicitly requested its use. `public/firm-logo.jpg` is the original embedded JPEG extracted without alteration (291 × 290px, 6,975 bytes). Preserve its lettering, proportions and source image. At the user’s request, CSS inversion, hue rotation and screen blending remove the visible white rectangle on dark surfaces and give the lettering a light treatment without redrawing the mark. Use it in the navigation, footer, favicon and sharing image; adjacent typeset text keeps the firm name readable at small sizes.
 
 ## Page composition and interactions
 
-### Navigation
+The current client direction prioritizes shorter scrolling, progressive disclosure, no testimonials and fewer arrows. Four main destinations follow the hero: expertise, the firm, client resources and contact. All nine practice scopes and the factual firm/contact details remain available.
 
-A compact dark navigation band holds the wordmark, anchors to the firm's overview, practice areas, approach or insights, and contact, plus a restrained consultation action. Maintain a visible focus state. A mobile disclosure menu must announce its expanded state, close after navigation, support keyboard operation, and avoid blocking document scrolling accidentally. Include a skip-to-main link.
+### Navigation and hero
 
-Keep directional arrow indicators to four purposeful placements: the hero consultation action, form draft action, back-to-top control, and hero scroll cue. Service details use a plus symbol; editorial and contact links use underlined text. Text remains the primary instruction.
+Keep the original wordmark, forest-and-ivory palette, two-line tagline and coordinated legal imagery. A smaller panorama and compact metadata strip reduce the hero's footprint. Clear text links lead directly to practice discovery, consultation preparation and office directions. No decorative directional arrows remain. The mobile menu announces its state, closes on navigation and Escape, and restores focus. A skip link bypasses navigation.
 
-### Hero
+### Expertise
 
-Use a monumental centred composition. Set the supplied tagline across two display lines: **“Legal solutions.”** and italic **“Made practical.”** The punctuation and line break create the composition while preserving the original words. A short practice/location eyebrow introduces it. Below, a three-part metadata strip balances the concise checklist-grounded description, consultation/practice actions, and factual location. The generated colonnade spans the container beneath it.
+Four audience tabs expose a compact numbered service directory, with all nine services shown by default. Service rows use readable titles, concise summaries and a plus-symbol detail control. Each opens the full supplied scope in a native dialog, with keyboard dismissal, focus return and a consultation action that preselects the service and focuses the enquiry form. No service copy scrubs sideways while reading.
 
-Masked headline lines enter over approximately 1.1 seconds; the image follows with a 1.4-second crop reveal. Native CSS view-timeline parallax creates a small translation and scale change as the image leaves the viewport. Browsers without scroll timelines use the shared passive-event fallback, with no React render loop or wheel interception. The mobile image adopts an arch crop without changing the meaning or contact routes.
+### The firm
 
-Use an ivory filled action on the dark canvas and a quieter secondary text or outline link to practice areas. Do not add fictitious review stars or outcomes. Support the hero with only verifiable details such as the office location and service area.
+A stable library image supports three tabs: Who we are, How we work and Our principles. All four supplied overview paragraphs are preserved. The process is three compact steps covering listening, options/scope/fees and an agreed route forward. The principles panel includes the four values and expandable mission/vision. The library image becomes a compact banner on smaller screens. Oversized statement/kinetic-text chapters and pinned card stacks are removed.
 
-### Firm overview
+### Client resources
 
-A dark statement chapter follows the hero: **“Law can be complex. Your next step should feel clear.”** Words remain readable in a subdued green base colour while a sequential ivory colour wipe follows the section's native view timeline. This is editorial messaging, not an outcome guarantee.
+Three tabs group the legal guides, consultation preparation checklist and FAQs. Guide titles open substantive content in dialogs. The checklist preserves its state across tab switches in page memory and resets on reload. FAQs address consultation, preparation, costs, engagement, dispute resolution and office hours. No invented article bylines, publication dates, qualifications or legal outcomes appear.
 
-A light sage/ivory firm chapter opens with large **“Clarity.”** and italic **“Confidence.”** lines that slide in opposite directions as the visitor scrolls. Their repeated outlined text is decorative and hidden from assistive technology.
+### Contact and office
 
-Below, the supplied description balances the portrait-format architectural photograph and the supplied logo. The frame scrubs through tilt, scale and vertical drift; the photograph has an independent subtle parallax movement, with the logo moving as part of the frame. The visual wrapper is sticky on desktop and returns to normal flow on smaller screens. Present mission, vision and values without generic filler cards; preserve all supplied wording.
+Keep contact details and the office gallery in two tabs beside a persistent enquiry form. Preserve both telephone numbers, both emails, both WhatsApp routes, full physical/postal addresses and opening hours. The gallery contains all seven supplied photographs; captions explain these are surrounding-area views, and the directions action uses the supplied map location. Changing office tabs must not reset form entries.
 
-### Practice areas
+The form prepares a draft for the visitor's email app. It never claims server delivery. Name, email and message are required; the chosen practice is preserved when entering from a service dialog. Editing invalidates a stale draft. The privacy and terms dialogs reflect the current implementation.
 
-All **nine** supplied practice areas must remain discoverable. A full-width first row establishes emphasis, followed by a two-column numbered editorial grid with hairline separators. Each item pairs a number, restrained icon, recognizable practice title, explanatory copy, and an underlined details action with a plus symbol. Category filters and service disclosures work with keyboard and touch, retain focus sensibly, and keep their active state understandable without colour alone. In addition to staggered registration, the row's inner elements scrub in from alternating sides as it enters; keyboard focus immediately restores a stable position.
+### Tab and link behaviour
 
-Avoid inventing additional specialisms or replacing the client's personal injury and general advisory services with more fashionable labels. Concise display labels may be used where the full title and supplied scope remain accessible.
+Every tablist uses one keyboard tab stop, Left/Right to cycle, Home/End to select first/last, `aria-selected` and matching panel relationships. Inactive content is absent from the focus order. Underlines and weight supplement selected colour. Tabs wrap into small-screen grids without a hidden horizontal menu or nested vertical scroll area.
 
-### Approach
-
-Explain an understandable progression such as an initial conversation, assessing the legal and practical context, and agreeing the appropriate route forward. A sticky desktop introduction balances three illustrated cards that stack at progressively offset sticky positions as the visitor scrolls. Their surfaces progress from forest green to a light final card. SVG illustrations turn and trace with scroll progress. On mobile the introduction is static while the cards retain a compact stacking sequence. Reduced motion disables card stacking and all illustration effects, leaving the steps in normal flow.
-
-These are editorial explanations, not promises of a fixed response time, free consultation, guaranteed resolution, or a particular legal result. Reflect the client's stated use of negotiation, ADR, and litigation.
-
-### Insights and reviews
-
-The checklist provides no article copy or testimonial quotations. Do not fabricate attributed articles, dates, bylines, quotations, or client outcomes. The build includes original general educational guides, with a general-information notice and no claim that they were written or endorsed by a named advocate. The copy remains subject to legal/editorial review before publication. Three offset arch illustrations drift, tilt and scale continuously with their cards' scroll progress; offset spacing collapses on mobile. Underlined titles open real readable guide content.
-
-A genuine Google Business link can offer an external route to reviews. The user explicitly requested the testimonial heading and listed client names. Display the four names as typographic entries with forthcoming testimonial status and a Google Reviews link. Written quotations remain TBA; do not invent quotations, ratings or client logos.
-
-### Contact
-
-Present the complete office address, both telephone numbers, both email addresses, opening hours, map/Google Business route, and WhatsApp options. Preserve Kenyan local display numbers while links use international `+254` formatting.
-
-Keep a consultation form short: name, contact information, practice area if helpful, and a brief message. Provide persistent labels, appropriate autocomplete, client-side validation, clear error messages, and accessible status feedback. Invite an initial outline; discourage sending sensitive documents before agreeing a secure channel.
-
-**Current integration boundary:** no server email provider or form endpoint has been supplied. A form may prepare a `mailto:` draft or open a chosen WhatsApp conversation, but its CTA and feedback must describe that action accurately. Never display “message sent” without a confirmed backend response. A secure server integration requires separate configuration and tested delivery.
-
-### Kamulu location
-
-The user supplied seven aerial approach photographs in `Downloads.zip`. Use the original JPEGs in a manual, keyboard-accessible gallery next to the verified office address. Preserve the images and their visible attribution. These are approach/area views, not photographs identifying the office building. A Google Maps directions action uses `P397+2G Kamulu`; three short directions restate only the checklist’s road, building and suite. Do not invent distances, turn-by-turn guidance or travel times. Lazy loading and intrinsic dimensions keep the gallery from shifting the page.
-
-### Footer
-
-A dark footer closes the page with the wordmark, full contact routes, practice/location navigation, the supplied social links, office hours where useful, and a concise general-information notice. Do not ship dead privacy/terms links. Any drafted privacy content must describe the actual site's data handling and remain subject to client review before publication.
+Old links to approach, insights, tools, FAQs, news and visit select the relevant panel and scroll to its chapter. Repeating an existing hash must reopen the panel even after the visitor switches tabs; browser history must work. The footer retains all supplied social profiles and working privacy/terms controls. Testimonials, placeholder client names and their links are removed.
 
 ## Motion and scroll performance
 
@@ -166,12 +138,8 @@ Preserve browser-native scrolling while delivering the user's requested expressi
 | Hero image entrance | Approximately 1400ms crop/translate reveal | Image remains visible without animation support. |
 | Hero image parallax | View progress; translation from approximately -1% to 3% and scale from 1.08 to 1.12 | Shared event-driven fallback without CSS timelines; static under reduced motion. |
 | Reading progress | Two-pixel header rule, CSS root scroll timeline | Decorative, noninteractive, hidden under reduced motion; never the only way to orient within the page. |
-| Statement emphasis | Word-by-word ivory wipe over a readable green base using a section view timeline | All words remain readable before the wipe and without timeline support. |
 | Chapter/grid reveal | Approximately 700ms transform entrance, 32px travel; sibling delays around 80ms capped at 300ms | Controls stay readable/operable; focus reveals pending ancestors immediately; first-viewport content is not hidden waiting for an observer. |
-| Kinetic type | Clarity/Confidence lines move horizontally in opposite directions across section progress | Decorative text; stationary under reduced motion. |
-| Firm image and logo | Frame tilt/scale/drift and independent image parallax | Static image and logo under reduced motion; decorative images have empty alt text. |
-| Service and guide interiors | Alternating service entry translation; guide artwork drift/tilt/scale follows progress | Service buttons remain stationary during focus and pointer activation; only heading/copy scrub. Motion is disabled under reduced motion. |
-| Approach cards and illustrations | Three offset sticky cards; SVG graphics turn and trace | Reduced motion restores normal flow and fully drawn static illustrations. |
+| Firm image | Subtle photo parallax within a stable frame | Static under reduced motion; decorative image has empty alt text. |
 | Hover/focus | Short colour, underline or plus-symbol changes, approximately 150–300ms | Equivalent visible focus indication; no essential information appears only on hover. |
 
 - Use one `IntersectionObserver` for reveal visibility and unobserve completed targets. One `MutationObserver` registers newly mounted filtered items or modal content. Avoid per-frame React state updates.
@@ -184,14 +152,14 @@ Preserve browser-native scrolling while delivering the user's requested expressi
 1. Production build succeeds and the preview route opens without console errors.
 2. All nine practice areas, checklist contacts, navigation, mobile menu, and consultation paths work.
 3. At representative desktop and mobile sizes, there is no horizontal overflow, clipped text, or content hidden behind the sticky header.
-4. Keyboard navigation, visible focus, form validation, live reduced-motion changes and the timeline fallback work; automated accessibility checks support manual review. Reduced motion also removes sticky card stacking.
+4. Keyboard navigation, visible focus, form validation, live reduced-motion changes and the timeline fallback work; automated accessibility checks support manual review. All tab panels must also be keyboard-operable and pass automated accessibility checks.
 5. Run a reproducible scroll exercise in a real browser against the production preview: scroll through the page in both directions; record frame timing and main-thread long tasks; inspect layout shifts; exercise mobile dimensions and CPU throttling separately where available.
 
 Performance evidence must identify browser, viewport, run conditions, sample count, p95 frame interval, delayed-frame share, and long-task duration. A target of p95 frame intervals around 20ms or lower on an unthrottled 60Hz-capable run is a useful diagnostic, not a promise that every device will hold 60fps. Throttled results must be reported separately, not averaged into desktop results. Investigate long tasks above 50ms that occur during the active scroll window, and verify whether a measured delay belongs to loading, browser scheduling, or application code before claiming a fix.
 
 ### Optional later enhancements
 
-Approved portraits and biographies, genuine client testimonials, reviewed legal articles, a tested delivery backend, analytics chosen with privacy requirements in mind, and a verified map embed can enrich the site once those inputs exist. They are not prerequisites for a complete, polished local React experience.
+Approved portraits, biographies and professional credentials, reviewed legal articles, a tested delivery backend, analytics chosen with privacy requirements in mind, and a verified map embed can enrich the site once those inputs exist. They are not prerequisites for a complete, polished local React experience.
 
 ## Acceptance and editorial guardrails
 
@@ -201,6 +169,6 @@ Approved portraits and biographies, genuine client testimonials, reviewed legal 
 - Do not publish unverified achievements, outcome guarantees, fake endorsements, invented team members, or misleading form confirmations.
 - Record missing client assets and integration requirements in the checklist so final publication review has clear next steps.
 
-## Requested checklist sections
+## Current content map
 
-Make each checklist heading visible and easy to discover. Client Testimonials follows the firm overview and includes all four supplied names, a clear forthcoming status and Google Reviews. The adjacent Social Media grid exposes all supplied profiles and the exact X handle. Blog & News contains the original educational guides plus office notices using verified address/hours; omit invented dates and bylines. Client Tools & Special Features provides an interactive consultation preparation checklist and functional service, enquiry, WhatsApp and location shortcuts. These additions follow the user’s request; the PDF leaves article copy and special-feature specifications blank.
+Firm facts and all nine service scopes follow the client checklist. The latest client feedback supersedes the earlier testimonial and long-section layout: remove testimonials and named-client placeholders; group supporting content in accessible tabs. Legal guides remain original general information subject to review. Social links stay in the footer, office facts appear once in Contact, and the preparation checklist stays available from Client resources and the hero shortcut.

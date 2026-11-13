@@ -524,93 +524,24 @@ h2 {
   font-size: 12px;
 }
 
-.approach {
-  background: #101e19;
-  padding-bottom: 90px;
-}
-.approach-layout {
-  display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  gap: 0 110px;
-  align-items: start;
-}
-.approach .section-heading {
-  position: sticky;
-  top: 137px;
-  display: block;
-  margin: 0;
-}
-.approach h2 {
-  font-size: clamp(54px, 5.3vw, 79px);
-  line-height: 1.02;
-}
-.approach .section-intro {
-  margin-top: 30px;
-  max-width: 360px;
-  font-size: 14px;
-}
-.approach-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
-  padding-top: 0;
-}
-.approach-grid .approach-step {
-  display: grid;
-  grid-template-columns: 155px 1fr;
-  gap: 25px;
-  padding: 48px 0 58px;
-  border-top: 1px solid #50614e;
-  min-height: 315px;
-  align-items: center;
-}
-.step-content {
-  min-width: 0;
-}
-.step-illustration svg {
-  width: 100%;
-  height: auto;
-  stroke-width: 1.1;
-}
-.step-track {
-  stroke: #4f6251;
-}
-.step-trace {
-  stroke: #c8daba;
-  stroke-width: 1.5;
-}
-.step-top {
-  position: static;
-  margin-bottom: 19px;
-  color: #b9cbae;
-}
-.step-number {
-  font-size: 36px;
-}
-.step-top > svg {
-  width: 18px;
-}
-.approach-grid .eyebrow {
-  font-size: 9px;
-  margin-bottom: 17px;
-}
-.approach-grid h3 {
-  font-size: 43px;
-  line-height: 1.05;
-  margin-bottom: 16px;
-}
-.approach-grid p {
-  font-size: 13px;
-  line-height: 1.9;
-}
-.approach-bottom {
-  grid-column: 1 / -1;
-  margin-top: 70px;
-  padding-top: 40px;
-}
-.approach-bottom > p {
-  font-size: 37px;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .insights-grid {
   gap: 28px;
@@ -844,16 +775,9 @@ h2 {
   .about-art blockquote {
     font-size: 39px;
   }
-  .approach-layout {
-    gap: 0 55px;
-  }
-  .approach-grid .approach-step {
-    grid-template-columns: 115px 1fr;
-    gap: 15px;
-  }
-  .approach-grid h3 {
-    font-size: 36px;
-  }
+
+
+
   .insight-art {
     height: 260px;
   }
@@ -966,28 +890,12 @@ h2 {
     grid-template-columns: 1fr 1fr;
     gap: 38px 28px;
   }
-  .approach-layout {
-    gap: 0 35px;
-  }
-  .approach h2 {
-    font-size: 54px;
-  }
-  .approach-grid .approach-step {
-    display: block;
-    min-height: 340px;
-    padding: 35px 0;
-  }
-  .step-illustration {
-    width: 130px;
-    margin-bottom: 10px;
-  }
-  .step-top {
-    position: static;
-    margin-bottom: 18px;
-  }
-  .approach-grid h3 {
-    font-size: 37px;
-  }
+
+
+
+
+
+
   .insights-grid {
     gap: 20px;
   }
@@ -1265,56 +1173,19 @@ h2 {
   .value-number {
     margin-bottom: 15px;
   }
-  .approach-layout {
-    display: block;
-  }
-  .approach .section-heading {
-    position: static;
-    margin-bottom: 45px;
-  }
-  .approach h2 {
-    font-size: 58px;
-  }
-  .approach .section-intro {
-    font-size: 13px;
-    max-width: 320px;
-  }
-  .approach-grid .approach-step {
-    display: grid;
-    grid-template-columns: 85px 1fr;
-    gap: 22px;
-    padding: 35px 0;
-    min-height: 250px;
-  }
-  .step-illustration {
-    width: 100%;
-    margin: 0;
-  }
-  .step-top {
-    margin-bottom: 12px;
-  }
-  .step-number {
-    font-size: 30px;
-  }
-  .approach-grid .eyebrow {
-    font-size: 8px;
-    margin-bottom: 13px;
-  }
-  .approach-grid h3 {
-    font-size: 35px;
-    padding: 0;
-    margin-bottom: 14px;
-  }
-  .approach-grid p {
-    font-size: 12px;
-  }
-  .approach-bottom {
-    margin-top: 40px;
-    padding-top: 30px;
-  }
-  .approach-bottom > p {
-    font-size: 33px;
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
   .insights-grid {
     grid-template-columns: 1fr;
     gap: 42px;
@@ -1408,16 +1279,9 @@ h2 {
   .art-caption {
     font-size: 23px;
   }
-  .approach-grid .approach-step {
-    grid-template-columns: 65px 1fr;
-    gap: 20px;
-  }
-  .approach h2 {
-    font-size: 52px;
-  }
-  .approach-grid h3 {
-    font-size: 32px;
-  }
+
+
+
   .about-art {
     min-height: 525px;
   }
@@ -1606,75 +1470,21 @@ h2 {
 .about-copy h2 {
   font-size: clamp(52px, 4.7vw, 73px);
 }
-.approach-layout {
-  gap: 0 85px;
-}
-.approach-grid {
-  display: block;
-  padding-bottom: 5px;
-}
-.approach-grid .approach-step {
-  position: sticky;
-  top: 122px;
-  display: block;
-  min-height: 425px;
-  margin-bottom: 145px;
-  padding: 35px 40px 40px;
-  background: #213d2d;
-  border: 1px solid #5d7456;
-  border-radius: 7px;
-  box-shadow: 0 -14px 32px #101e1940;
-}
-.approach-grid .approach-step:nth-child(2) {
-  top: 145px;
-  background: #2c4e38;
-}
-.approach-grid .approach-step:nth-child(3) {
-  top: 168px;
-  background: #d4dfc8;
-  color: #193020;
-  border-color: #d4dfc8;
-  margin-bottom: 0;
-}
-.step-illustration {
-  position: absolute;
-  top: 24px;
-  right: 25px;
-  width: 165px;
-  height: 145px;
-}
-.step-top {
-  margin-bottom: 74px;
-}
-.step-number {
-  font-size: 54px;
-  color: #d3dfc7;
-}
-.approach-grid h3 {
-  font-size: 48px;
-  max-width: 350px;
-  margin-bottom: 19px;
-}
-.approach-grid p {
-  font-size: 14px;
-  max-width: 380px;
-}
-.approach-grid .eyebrow {
-  font-size: 10px;
-  margin-bottom: 16px;
-}
-.approach-step:nth-child(3) :is(.step-number, .eyebrow, p) {
-  color: #294430;
-}
-.approach-step:nth-child(3) .step-track {
-  stroke: #8da080;
-}
-.approach-step:nth-child(3) .step-trace {
-  stroke: #234b32;
-}
-.approach-bottom {
-  margin-top: 90px;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @media (max-width: 1100px) {
   .about-grid {
     gap: 60px;
@@ -1688,19 +1498,10 @@ h2 {
   .about-art blockquote {
     font-size: 39px;
   }
-  .approach-layout {
-    gap: 0 45px;
-  }
-  .approach-grid .approach-step {
-    padding: 30px;
-  }
-  .approach-grid h3 {
-    font-size: 42px;
-  }
-  .step-illustration {
-    right: 12px;
-    width: 145px;
-  }
+
+
+
+
 }
 @media (max-width: 850px) {
   .kinetic-band {
@@ -1729,30 +1530,12 @@ h2 {
   .about-copy h2 {
     font-size: 60px;
   }
-  .approach-layout {
-    display: block;
-  }
-  .approach .section-heading {
-    position: static;
-    max-width: 600px;
-    margin-bottom: 65px;
-  }
-  .approach-grid .approach-step {
-    max-width: 660px;
-    margin-inline: auto;
-    min-height: 400px;
-  }
-  .approach-grid h3 {
-    font-size: 48px;
-    max-width: 460px;
-  }
-  .approach-grid p {
-    max-width: 430px;
-  }
-  .step-illustration {
-    width: 165px;
-    right: 30px;
-  }
+
+
+
+
+
+
 }
 @media (max-width: 600px) {
   .kinetic-band {
@@ -1788,46 +1571,18 @@ h2 {
   .about-grid {
     gap: 52px;
   }
-  .approach-grid .approach-step {
-    top: 100px;
-    padding: 29px 26px;
-    min-height: 400px;
-    margin-bottom: 105px;
-  }
-  .approach-grid .approach-step:nth-child(2) {
-    top: 116px;
-  }
-  .approach-grid .approach-step:nth-child(3) {
-    top: 132px;
-  }
-  .step-illustration {
-    right: 13px;
-    top: 20px;
-    width: 135px;
-  }
-  .step-number {
-    font-size: 47px;
-  }
-  .step-top {
-    margin-bottom: 78px;
-  }
-  .approach-grid h3 {
-    font-size: 42px;
-    line-height: 1.04;
-  }
-  .approach-grid p {
-    font-size: 13px;
-  }
-  .approach-grid .eyebrow {
-    font-size: 9px;
-  }
+
+
+
+
+
+
+
+
+
 }
 @media (prefers-reduced-motion: reduce) {
-  .approach-grid .approach-step {
-    position: relative;
-    top: auto !important;
-    margin-bottom: 30px;
-  }
+
 }
 
 /* Blend the original logo into dark surfaces without altering its geometry. */

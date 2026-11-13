@@ -215,13 +215,6 @@ export const practiceAreas = [
 
 export type PracticeArea = (typeof practiceAreas)[number];
 
-export const testimonialClients = [
-  "Afriavo Orchards Ltd",
-  "Apple Orchards Ltd",
-  "Femuro Management Ltd",
-  "Outrival Human Resource Services Ltd",
-] as const;
-
 export const consultationPreparation = [
   "A brief timeline of your matter",
   "Names of the people or organizations involved",
@@ -300,6 +293,7 @@ const guideDisclaimer =
 export const guides = [
   {
     id: "before-property-purchase",
+    image: "property.webp",
     category: "Land & Property",
     title: "Before you commit to a property purchase",
     description:
@@ -314,6 +308,7 @@ export const guides = [
   },
   {
     id: "prepare-legal-consultation",
+    image: "consultation.webp",
     category: "Practical Guidance",
     title: "Make the most of your first legal consultation",
     description:
@@ -328,6 +323,7 @@ export const guides = [
   },
   {
     id: "organize-debt-recovery",
+    image: "commercial.webp",
     category: "Business & Disputes",
     title: "Organizing the facts of an unpaid debt",
     description:
