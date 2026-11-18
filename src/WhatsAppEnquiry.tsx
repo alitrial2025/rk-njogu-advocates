@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { Check, MessageCircle } from "lucide-react";
 import { firm, practiceAreas } from "./data";
 
@@ -29,6 +29,9 @@ export function WhatsAppEnquiry({
     setCopyStatus("");
     setHandoff(false);
   }, [practiceId]);
+  useLayoutEffect(() => {
+    if (enquiry) preview.current?.focus();
+  }, [enquiry]);
   const area = practiceAreas.find((item) => item.id === enquiry?.practiceId);
   const text = enquiry
     ? `Hello R. K. Njogu & Company Advocates,\n\nI would like to arrange a consultation about ${area?.title ?? "a legal matter"}.\n\n${enquiry.message}\n\nName: ${enquiry.name}${enquiry.preferredTime ? `\nPreferred time: ${enquiry.preferredTime}` : ""}\n\nPlease confirm receipt, appointment availability and any consultation fee in this chat.`
@@ -64,7 +67,6 @@ export function WhatsAppEnquiry({
             practiceId,
             preferredTime: String(data.get("preferredTime") ?? "").trim(),
           });
-          setTimeout(() => preview.current?.focus(), 0);
         }}
         onInput={(event) => {
           const target = event.target;
