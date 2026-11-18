@@ -1,0 +1,482 @@
+/* The hero is a single composition, with the artwork between message and navigation. */
+.hero,
+.practice {
+  --hero-edge: #192d23;
+}
+
+.hero {
+  background:
+    linear-gradient(to bottom, transparent 77%, var(--hero-edge)),
+    radial-gradient(ellipse at 54% 60%, #304738 0%, #1c3026 34%, #101e19 72%);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr) minmax(170px, 0.57fr);
+  align-items: center;
+  gap: clamp(14px, 2vw, 32px);
+  padding-top: 18px;
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 1;
+  padding: 26px 0;
+  text-align: left;
+}
+
+.hero-copy > .hero-location {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  color: #c1d2b5;
+  margin: 0 0 26px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  font: 560 clamp(50px, 5.6vw, 81px)/0.98 "Bricolage Grotesque Variable", Inter, sans-serif;
+  letter-spacing: -0.055em;
+  text-align: left;
+  margin-bottom: 22px;
+}
+
+.hero .hero-accent {
+  font-size: 0.68em;
+  font-weight: 480;
+  line-height: 1.13;
+  letter-spacing: -0.05em;
+  color: #c1d2b5;
+  margin-top: 8px;
+}
+
+.hero-description {
+  max-width: 32ch;
+  color: #e0e8dc;
+  font-size: 15px;
+  line-height: 1.7;
+  text-align: left;
+}
+
+.hero-actions {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: auto;
+  margin: 26px 0 0;
+}
+
+.hero-actions .button {
+  min-height: 50px;
+  font-size: 13px;
+}
+
+.hero-art {
+  position: relative;
+  height: clamp(480px, 47vw, 665px);
+  background: transparent;
+  border-radius: 0;
+  overflow: clip;
+}
+
+.hero-art::after {
+  content: none;
+}
+
+.hero-art img {
+  position: absolute;
+  inset: 4% 0 auto;
+  width: 100%;
+  height: 90%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+.hero-matters {
+  position: relative;
+  z-index: 1;
+  justify-self: end;
+  width: min(100%, 226px);
+}
+
+.hero-matters .eyebrow {
+  color: #c1d2b5;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+.hero-matter-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.hero-matter-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 9px 15px;
+  border: 1px solid #819580;
+  border-radius: 999px;
+  color: #f4f3eb;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.hero-matter-links a:hover,
+.hero-matter-links a:focus-visible {
+  background: #395344;
+}
+
+.hero-matter-links svg {
+  color: #c1d2b5;
+}
+
+.hero-matters .text-link {
+  margin-top: 9px;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.hero-bottom {
+  position: relative;
+  z-index: 1;
+  border: 0;
+  border-top: 1px solid #546758;
+  padding-block: 5px;
+}
+
+.hero-shortcuts {
+  justify-content: center;
+  width: 100%;
+  padding-inline: 0;
+  gap: 0 32px;
+  font-size: 11px;
+  letter-spacing: 0;
+  color: #e0e8dc;
+}
+
+.hero-shortcuts a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.practice.section-pad {
+  --handoff-height: clamp(118px, 13vw, 190px);
+  position: relative;
+  padding-top: calc(var(--handoff-height) + clamp(10px, 1.8vw, 26px));
+}
+
+.practice::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--handoff-height);
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, var(--hero-edge), transparent 37% 43%, var(--paper) 96%),
+    radial-gradient(ellipse at 57% 84%, #cfdbc6 6%, #92a58c 35%, transparent 71%),
+    linear-gradient(to bottom, var(--hero-edge), #354d3d 41%, #849780 75%, var(--paper));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body.motion-ready .practice .section-heading.is-visible {
+    transition:
+      transform 1100ms cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 900ms ease-out;
+  }
+}
+
+/* Fine rules organize content while rounded controls mark the actions. */
+.button,
+.primary-nav .nav-contact,
+.floating-contact,
+.practice-card .practice-link {
+  border-radius: 999px;
+}
+
+.section-heading {
+  margin-bottom: 26px;
+}
+
+.section-heading h2,
+.about-copy h2 {
+  font-size: clamp(43px, 5.5vw, 77px);
+}
+
+.section-heading .section-intro {
+  margin-top: 0;
+}
+
+.tab-list {
+  border: 0;
+  gap: 8px;
+}
+
+.tab-list [role="tab"],
+.about-copy .tab-list [role="tab"] {
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 15px;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  font-size: 12px;
+  text-align: center;
+  transition: none;
+}
+
+.tab-list [aria-selected="true"],
+.tab-list [aria-selected="true"]:hover {
+  color: #f4f3eb;
+  background: var(--forest);
+}
+
+.tab-list [aria-selected="true"] .tab-count {
+  color: var(--forest);
+  background: #d9e3d3;
+}
+
+.practice .tab-panel {
+  padding-top: 10px;
+}
+
+.practice-card .practice-link,
+.practice-card:first-child .practice-link {
+  width: 44px;
+  height: 44px;
+}
+
+.practice-card .practice-link:hover {
+  background: #dfe7d8;
+}
+
+.about-art,
+.service-image {
+  border-radius: 0;
+}
+
+.about-art::after {
+  content: none;
+}
+
+.about-grid {
+  align-items: center;
+}
+
+.guide-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.5vw, 36px);
+}
+
+.guide-list .guide-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 0 20px;
+}
+
+.guide-list .guide-thumbnail {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.guide-row .guide-category {
+  font-size: 11px;
+}
+
+.guide-row h3 {
+  font-size: clamp(24px, 2.4vw, 34px);
+}
+
+.guide-row p {
+  font-size: 13px;
+}
+
+.contact-form-wrap,
+.resources .preparation-checklist,
+.service-preparation .preparation-checklist {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.contact-form-wrap input,
+.contact-form-wrap select,
+.preparation-select select {
+  border-radius: 999px;
+  padding-inline: 15px;
+}
+
+.contact-form-wrap textarea {
+  border-radius: 16px;
+  padding-inline: 15px;
+}
+
+.whatsapp-preview {
+  padding: 20px 0 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid #9db293;
+  border-radius: 0;
+}
+
+.site-footer .footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (max-width: 1050px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .hero-art {
+    height: clamp(360px, 54vw, 560px);
+  }
+
+  .hero-matters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 18px;
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    width: 100%;
+    padding-bottom: 18px;
+  }
+
+  .hero-matters .eyebrow,
+  .hero-matters .text-link {
+    margin: 0;
+  }
+
+  .about-grid {
+    align-items: start;
+  }
+}
+
+@media (max-width: 850px) {
+  .about-visual {
+    display: block;
+  }
+
+  .about-art {
+    height: clamp(230px, 48vw, 410px);
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-top: 12px;
+  }
+
+  .hero-copy {
+    padding: 18px 0 8px;
+  }
+
+  .hero-copy > .hero-location {
+    margin-bottom: 17px;
+  }
+
+  .hero h1 {
+    font-size: clamp(37px, 11.4vw, 57px);
+    margin-bottom: 15px;
+  }
+
+  .hero .hero-accent {
+    font-size: 0.84em;
+    margin-top: 3px;
+  }
+
+  .hero-description {
+    max-width: 40ch;
+    font-size: 14px;
+  }
+
+  .hero-actions {
+    margin-top: 19px;
+  }
+
+  .hero-actions .button {
+    min-height: 46px;
+  }
+
+  .hero-art {
+    height: clamp(282px, 83vw, 410px);
+  }
+
+  .hero-matters {
+    display: block;
+    padding-top: 14px;
+    padding-bottom: 10px;
+  }
+
+  .hero-matters .eyebrow {
+    margin-bottom: 10px;
+  }
+
+  .hero-matter-links a {
+    font-size: 11px;
+    padding-inline: 12px;
+  }
+
+  .hero-matters .text-link {
+    margin-top: 4px;
+  }
+
+  .hero-shortcuts {
+    justify-content: flex-start;
+    gap: 0 15px;
+  }
+
+  #practice .tab-list {
+    gap: 6px;
+  }
+
+  #practice .tab-list [role="tab"] {
+    padding-inline: 9px;
+    font-size: 11px;
+    justify-content: center;
+  }
+
+  .contact-information .tab-panel {
+    padding-top: 20px;
+  }
+
+  .contact-form-wrap {
+    padding-top: 23px;
+    border-top: 1px solid #aab8a4;
+  }
+
+  .guide-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .guide-list .guide-row {
+    display: grid;
+    grid-template-columns: minmax(80px, 0.62fr) minmax(0, 1fr);
+    gap: 15px;
+    align-items: start;
+  }
+
+  .guide-list .guide-thumbnail {
+    aspect-ratio: 1;
+  }
+}

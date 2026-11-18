@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "@fontsource-variable/bricolage-grotesque";
 import "@fontsource/cormorant-garamond/latin-400.css";
 import "@fontsource/cormorant-garamond/latin-400-italic.css";
 import "@fontsource/cormorant-garamond/latin-500.css";
@@ -12,6 +13,7 @@ import "./editorial.css";
 import "./motion.css";
 import "./refinements.css";
 import "./services.css";
+import "./identity.css";
 
 const root = document.getElementById("root")!;
 const base = import.meta.env.BASE_URL;

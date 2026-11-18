@@ -1,6 +1,6 @@
 # R. K. Njogu & Company Advocates
 
-A responsive React and TypeScript website built from the client's website checklist and the combined design references. Forest green and ivory frame expressive typography and a compact, tabbed homepage plus nine pre-rendered service pages, tailored preparation and a WhatsApp consultation flow. Testimonials are removed at the client’s request.
+A responsive React and TypeScript website built from the client's website checklist and the combined design references. Forest green and ivory frame an original Lady Justice centerpiece, pill navigation, a compact practice directory and nine pre-rendered service pages. Tailored preparation and WhatsApp enquiries support the consultation workflow. Testimonials are removed at the client’s request.
 
 ## Develop
 
@@ -44,7 +44,7 @@ See [docs/PERFORMANCE.md](docs/PERFORMANCE.md) for measured results and their li
 - `src/styles.css` and `src/editorial.css` provide the visual foundation; `src/refinements.css` defines the compact chapters, service directory, tabs and responsive refinements.
 - `src/useScrollMotion.ts` manages entrances, newly mounted tab content, keyboard focus and live motion preferences. Hero and firm photography retain subtle image drift; large kinetic-type sections and the sticky approach sequence have been removed. Reduced motion disables the remaining effects.
 - `src/scrollFallback.ts` supports browsers without CSS scroll timelines. Passive scroll events schedule a single animation frame, with geometry reads grouped before style writes. Scrolling stays native; no animation library, wheel interception or scroll-driven React render loop is used.
-- `public/legal/` contains five generated editorial legal photographs: hero still life, law library, property due diligence, consultation preparation and commercial records. Optimized WebP files total 432,920 bytes. The library and guide images load lazily; guide dialogs reuse the same images. These are illustrative scenes, not photographs of the firm’s office, staff or client matters. Original architectural assets are retained but no longer used in these sections.
+- `public/legal/` contains the original Lady Justice illustration in two WebP sizes, plus the law library and guide imagery. The library and guide images load lazily. The imagery is illustrative. The original still life and architectural assets remain available.
 
 `public/firm-logo.jpg` preserves the logo embedded in the latest client checklist, used at the user’s request. The original 291 × 290px JPEG is unchanged; it appears in the header, footer, favicon and sharing image. CSS screen blending removes its visible white background on green surfaces and presents the lettering in a light colour.
 
@@ -89,7 +89,7 @@ The browser harness can also run against the public URL by changing `BASE_URL`. 
 - **Contact:** contact details and office gallery tabs beside the persistent enquiry form. The seven supplied location photographs and every contact route remain available.
 - **Footer:** social profiles, concise navigation and working privacy/terms dialogs.
 
-Legacy links to `#approach`, `#insights`, `#tools`, `#faq`, `#news` and `#visit` select the corresponding tab and navigate to its chapter. Checklist selections survive tab changes in page memory and reset on reload. Office-tab changes preserve the enquiry form. The browser suite checks each panel, keyboard operation, repeated links, browser Back, WhatsApp enquiry review, all five generated images, native scrolling past the approach closing statement, motion and compact page-height budgets.
+Legacy links to `#approach`, `#insights`, `#tools`, `#faq`, `#news` and `#visit` select the corresponding tab and navigate to its chapter. Checklist selections survive tab changes in page memory and reset on reload. Office-tab changes preserve the enquiry form. The browser suite checks each panel, keyboard operation, repeated links, browser Back, WhatsApp enquiry review, the hero and four editorial photographs, native scrolling past the approach closing statement, motion and compact page-height budgets.
 
 Next client content: approved advocate biographies, portraits and professional credentials. These would add valuable personal context; none are invented. All factual content remains mapped in docs/CHECKLIST.md.
 

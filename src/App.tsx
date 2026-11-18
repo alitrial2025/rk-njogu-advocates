@@ -48,6 +48,11 @@ const icons = {
   book: BookOpen,
   coins: Coins,
 };
+const heroMatters = [
+  { id: "land-property", label: "Land & Property", Icon: Building2 },
+  { id: "family-law", label: "Family Law", Icon: UsersRound },
+  { id: "corporate-company", label: "Corporate & Company", Icon: BriefcaseBusiness },
+] as const;
 const filters = [
   "All services",
   "Individuals & families",
@@ -226,74 +231,63 @@ export default function App() {
         <section className="hero" id="home" aria-labelledby="hero-title">
           <div className="container hero-grid">
             <div className="hero-copy">
-              <p className="eyebrow light">
-                <span className="tiny-line" /> R. K. NJOGU & COMPANY ADVOCATES
+              <p className="eyebrow hero-location">
+                <MapPin size={15} aria-hidden="true" /> Kamulu, Nairobi
               </p>
               <h1 id="hero-title">
                 <span className="hero-line">
                   <span>Legal solutions.</span>
                 </span>
-                <span className="hero-line">
-                  <span>
-                    <em>Made practical.</em>
-                  </span>
+                <span className="hero-line hero-accent">
+                  <span>Made practical.</span>
                 </span>
               </h1>
-              <div className="hero-meta">
-                <p className="hero-description">
-                  Clear counsel for the moments that matter. Practical advice
-                  for your life, your business and what comes next.
-                </p>
-                <div className="hero-actions">
-                  <a className="button button-light" href="#contact">
-                    Discuss your matter
-                  </a>
-                  <a className="text-link inverse" href="#practice">
-                    Explore our expertise
-                  </a>
-                </div>
-                <div className="hero-location">
-                  <span className="location-marker" aria-hidden="true">
-                    <MapPin size={14} />
-                  </span>
-                  <span>
-                    ROOTED IN KAMULU
-                    <br />
-                    <span className="location-subline">
-                      Serving clients across Kenya
-                    </span>
-                  </span>
-                </div>
+              <p className="hero-description">
+                Legal advice and representation for individuals, families
+                and businesses across Kenya.
+              </p>
+              <div className="hero-actions">
+                <a className="button button-light" href="#contact">
+                  Discuss your matter
+                </a>
               </div>
             </div>
-            <div className="hero-visual">
+
+            <div className="hero-visual" aria-hidden="true">
               <div className="hero-art">
                 <img
-                  src={`${import.meta.env.BASE_URL}legal/hero.webp`}
+                  src={`${import.meta.env.BASE_URL}legal/justice.webp`}
+                  srcSet={`${import.meta.env.BASE_URL}legal/justice-small.webp 640w, ${import.meta.env.BASE_URL}legal/justice.webp 1024w`}
+                  sizes="(max-width: 600px) 80vw, (max-width: 1050px) 45vw, 36vw"
                   alt=""
-                  width="1800"
-                  height="600"
+                  width="1024"
+                  height="1536"
                   fetchPriority="high"
                 />
-                <div className="art-topline">
-                  <span>GROUNDED IN PRINCIPLE.</span>
-                  <span>GUIDED BY YOUR INTERESTS.</span>
-                </div>
-              </div>
-              <div className="art-caption">
-                <span>
-                  A considered path <em>forward.</em>
-                </span>
               </div>
             </div>
+
+            <nav className="hero-matters" aria-label="Featured practice areas">
+              <p className="eyebrow">Find legal support</p>
+              <div className="hero-matter-links">
+                {heroMatters.map(({ id, label, Icon }) => (
+                  <a key={id} href={servicePath(id, import.meta.env.BASE_URL)}>
+                    <Icon size={16} strokeWidth={1.6} aria-hidden="true" />
+                    {label}
+                  </a>
+                ))}
+              </div>
+              <a className="text-link inverse" href="#practice">
+                All practice areas
+              </a>
+            </nav>
           </div>
           <div className="container hero-bottom">
-            <span>YOUR NEXT STEP, WITH CLARITY.</span>
-            <div className="hero-shortcuts" aria-label="Quick links">
-              <a href="#practice">Find legal support</a>
+            <nav className="hero-shortcuts" aria-label="Quick links">
               <a href="#tools">Prepare for a consultation</a>
               <a href="#visit">Find our office</a>
-            </div>
+              <a href={firm.phoneLinks.mobile}>Call the firm</a>
+            </nav>
           </div>
         </section>
 
@@ -304,17 +298,10 @@ export default function App() {
         >
           <div className="container">
             <div className="section-heading" data-reveal>
-              <div>
-                <p className="eyebrow">01 / OUR EXPERTISE</p>
-                <h2 id="practice-title">
-                  The right expertise.
-                  <br />
-                  <em>For your next step.</em>
-                </h2>
-              </div>
+              <h2 id="practice-title">Practice <em>areas.</em></h2>
               <p className="section-intro">
-                Choose what matters to you. Explore our nine practice areas,
-                then open a service for the details.
+                Explore the firm’s services and find practical guidance for
+                your matter.
               </p>
             </div>
             <Tabs
@@ -339,11 +326,6 @@ export default function App() {
                         return (
                           <article className="practice-card" key={area.id}>
                             <div className="card-top">
-                              <span className="card-number">
-                                {String(
-                                  practiceAreas.indexOf(area) + 1,
-                                ).padStart(2, "0")}
-                              </span>
                               <Icon
                                 strokeWidth={1.3}
                                 size={24}
@@ -408,27 +390,10 @@ export default function App() {
                   height="1200"
                   loading="lazy"
                 />
-                <div className="about-art-inner">
-                  <span className="eyebrow light">ROOTED IN PRINCIPLE</span>
-                  <blockquote>
-                    Sound advice.
-                    <br />
-                    <em>Your interests first.</em>
-                  </blockquote>
-                  <span className="about-art-rule" />
-                  <span className="about-art-bottom">
-                    KAMULU · NAIROBI · ACROSS KENYA
-                  </span>
-                </div>
               </div>
             </div>
             <div className="about-copy">
-              <p className="eyebrow">02 / THE FIRM</p>
-              <h2 id="about-title">
-                A clear perspective.
-                <br />
-                <em>A practical partner.</em>
-              </h2>
+              <h2 id="about-title">The <em>firm.</em></h2>
               <Tabs
                 id="firm"
                 label="About the firm"
@@ -528,14 +493,7 @@ export default function App() {
         >
           <div className="container">
             <div className="section-heading" data-reveal>
-              <div>
-                <p className="eyebrow">03 / CLIENT RESOURCES</p>
-                <h2 id="resources-title">
-                  A better starting point.
-                  <br />
-                  <em>Before we begin.</em>
-                </h2>
-              </div>
+              <h2 id="resources-title">Client <em>resources.</em></h2>
               <p className="section-intro">
                 Know what to expect, prepare for your consultation, or explore a
                 practical legal guide.
@@ -552,57 +510,35 @@ export default function App() {
                   label: "Legal guides",
                   count: guides.length,
                   content: (
-                    <div id="insights" className="resource-layout">
-                      <div className="resource-note">
-                        <BookOpen
-                          size={26}
-                          strokeWidth={1.2}
-                          aria-hidden="true"
-                        />
-                        <h3>
-                          A little knowledge.
-                          <br />
-                          <em>A clearer conversation.</em>
-                        </h3>
-                        <p>
-                          Short introductions to common legal questions. General
-                          information, with your individual circumstances always
-                          in mind.
-                        </p>
-                      </div>
-                      <div className="guide-list">
-                        {guides.map((guide, index) => (
-                          <article className="guide-row" key={guide.id}>
-                            <span className="resource-number">
-                              0{index + 1}
-                            </span>
-                            <div>
-                              <p className="guide-category">
-                                {guide.category} · {guide.readingTime}
-                              </p>
-                              <h3>
-                                <button
-                                  onClick={() =>
-                                    setModal({ type: "guide", guide })
-                                  }
-                                >
-                                  {guide.title}
-                                </button>
-                              </h3>
-                              <p>{guide.description}</p>
-                            </div>
-                            <img
-                              className="guide-thumbnail"
-                              src={`${import.meta.env.BASE_URL}legal/${guide.image}`}
-                              alt=""
-                              width="720"
-                              height="540"
-                              loading="lazy"
-                              decoding="async"
-                            />
-                          </article>
-                        ))}
-                      </div>
+                    <div id="insights" className="guide-list">
+                      {guides.map((guide) => (
+                        <article className="guide-row" key={guide.id}>
+                          <img
+                            className="guide-thumbnail"
+                            src={`${import.meta.env.BASE_URL}legal/${guide.image}`}
+                            alt=""
+                            width="720"
+                            height="540"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <div>
+                            <p className="guide-category">
+                              {guide.category} · {guide.readingTime}
+                            </p>
+                            <h3>
+                              <button
+                                onClick={() =>
+                                  setModal({ type: "guide", guide })
+                                }
+                              >
+                                {guide.title}
+                              </button>
+                            </h3>
+                            <p>{guide.description}</p>
+                          </div>
+                        </article>
+                      ))}
                     </div>
                   ),
                 },
@@ -692,18 +628,9 @@ export default function App() {
         >
           <div className="container">
             <div className="section-heading" data-reveal>
-              <div>
-                <p className="eyebrow">04 / LET’S TALK</p>
-                <h2 id="contact-title">
-                  Your next chapter.
-                  <br />
-                  <em>Let’s make it clear.</em>
-                </h2>
-              </div>
+              <h2 id="contact-title">Contact <em>the firm.</em></h2>
               <p className="section-intro">
-                Tell us a little about your matter. We’ll help you understand
-                how to begin. Prefer a conversation? Call or reach us on
-                WhatsApp.
+                Call, email or prepare a WhatsApp enquiry for the team.
               </p>
             </div>
             <div className="contact-grid">
@@ -887,11 +814,6 @@ export default function App() {
         <div className="container">
           <div className="footer-top">
             <Wordmark footer />
-            <p>
-              Legal Solutions
-              <br />
-              <em>Made Practical.</em>
-            </p>
             <a className="footer-back" href="#home" aria-label="Back to top">
               Back to top
             </a>
